@@ -1,12 +1,18 @@
 [programs.localnet]
-poseidon = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+poseidon = "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
+
+[programs.devnet]
+poseidon = "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
+
+[programs.mainnet]
+poseidon = "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
-wallet = "./lib/SEA1xkZzPCUJBb5mcNb6ts9VExNr2kYMit3T5poqr94.json"
+cluster = "devnet"
+wallet = "./lib/TRTNuj8GgjnBSSohYgyJhxF4gkhSscxJ4kDELy9Hdh8.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

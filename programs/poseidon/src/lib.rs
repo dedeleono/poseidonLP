@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use config::*;
 mod config;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN");
 
 #[program]
 pub mod poseidon {
@@ -13,7 +13,8 @@ pub mod poseidon {
         psdn_bump: u8,
         usdc_bump: u8,
         trtn_bump: u8,
+        shell_bump: u8,
     ) -> ProgramResult {
-        config::handler(ctx, psdn_bump, usdc_bump, trtn_bump)
+        config::handler(ctx, psdn_bump, usdc_bump, trtn_bump, shell_bump)
     }
 }
