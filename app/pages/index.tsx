@@ -192,14 +192,14 @@ export default function Home() {
                     className="artboard phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
-                    <div className="grid grid-cols-3 gap-2 w-full ">
-                      <div className="badge badge-ghost badge-lg">
+                    <div className="grid grid-cols-3 gap-2 w-full h-8">
+                      <div className="col-span-2"></div>
+                      <div className="badge badge-ghost badge-lg  shadow-md">
                         {`TRITON: ${
                           psdnStats?.usdcAmount?.toNumber() /
                           psdnStats?.trtnAmount?.toNumber()
                         }$`}
                       </div>
-                      {/* <p></p> */}
                     </div>
                     <div className="navbar mb-2 shadow-lg bg-base-200 text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
