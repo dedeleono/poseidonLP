@@ -66,7 +66,7 @@ export default function Home() {
 
     // main data account generation (pda)
     const [poseidon, psdnBump] = await anchor.web3.PublicKey.findProgramAddress(
-      [Buffer.from("psdn_account")],
+      [Buffer.from("psdn_config")],
       program.programId
     );
 
@@ -158,6 +158,9 @@ export default function Home() {
     const psdnAccount = await psdnState.program.account.config.fetch(
       psdnState.poseidon
     );
+    console.log("psdnAccount", psdnAccount);
+    console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
+    console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
     setPsdnStats(psdnAccount);
   };
 
@@ -189,7 +192,16 @@ export default function Home() {
                     className="artboard phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
-                    <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box relative min-w-full justify-center">
+                    <div className="grid grid-cols-3 gap-2 w-full ">
+                      <div className="badge badge-ghost badge-lg">
+                        {`TRITON: ${
+                          psdnStats?.usdcAmount?.toNumber() /
+                          psdnStats?.trtnAmount?.toNumber()
+                        }$`}
+                      </div>
+                      {/* <p></p> */}
+                    </div>
+                    <div className="navbar mb-2 shadow-lg bg-base-200 text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
                         <span className="text-lg font-bold">Poseidon</span>
                       </div> */}
