@@ -261,8 +261,12 @@ export default function Home() {
                             <span className="bg-base-200">USDC</span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button className="btn btn-outline">swap</button>
-                            <button className="btn btn-primary">stake</button>
+                            <button className="btn btn-outline focus:animate-bounce ">
+                              swap
+                            </button>
+                            <button className="btn btn-primary focus:animate-bounce text-white">
+                              stake
+                            </button>
                           </div>
                         </div>
                       </div>
