@@ -14,7 +14,7 @@ import {
 } from "@solana/spl-token";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 type psdnState = {
   program: any;
   connection: any;
@@ -27,6 +27,7 @@ type psdnState = {
   psdnShellAccount: any;
   walletTrtnAccount: any;
   walletUsdcAccount: any;
+  walletShellAccount: any;
 };
 
 export default function Home() {
@@ -35,11 +36,38 @@ export default function Home() {
   const [psdnState, setPsdnState] = useState({} as psdnState);
   const [psdnStats, setPsdnStats] = useState({} as any);
   const [psdnRatio, setPsdnRatio] = useState(0);
-  const [swapAmounts, setSwapAmounts] = useState({ trtn: 0, usdc: 0 });
+  const [swapAmounts, setSwapAmounts] = useState({
+    trtn: 1,
+    usdc: 0,
+    type: "trtn",
+  });
+
+  const loaderRef = useRef<HTMLAnchorElement>(null);
+  const modalRef = useRef<HTMLAnchorElement>(null);
+  const [loader, setLoader] = useState(0);
+
+  const txTimeout = 10000;
+
+  const refresh = async () => {
+    setLoader(0);
+    loaderRef?.current?.click();
+    const downloadTimer = setInterval(() => {
+      if (loader >= 5000) {
+        clearInterval(downloadTimer);
+      }
+      setLoader((prevLoader) => prevLoader + 10);
+    }, 10);
+    setTimeout(() => {
+      modalRef?.current?.click();
+      // forceUpdate();
+      // setRefreshStateCounter(refreshStateCounter + 1);
+      window.location.reload();
+      // refreshData();
+    }, txTimeout + 10);
+  };
 
   const TOKEN_MULTIPLIER = 1e6;
   const psdnIdl = poseidonIDL as anchor.Idl;
-
   const setupPoseidon = async () => {
     const opts = {
       preflightCommitment: "processed" as ConfirmOptions,
@@ -137,12 +165,12 @@ export default function Home() {
     // console.log("psdnShellAccount", psdnShellAccount.toBase58());
     // console.log("psdnShellBump", psdnShellBump);
 
-    // const walletShellAccount = await Token.getAssociatedTokenAddress(
-    //   ASSOCIATED_TOKEN_PROGRAM_ID,
-    //   TOKEN_PROGRAM_ID,
-    //   shellToken,
-    //   program.provider.wallet.publicKey
-    // );
+    const walletShellAccount = await Token.getAssociatedTokenAddress(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
+      psdnShellAccount,
+      program.provider.wallet.publicKey
+    );
     // console.log("walletShellAccount", walletShellAccount.toBase58());
 
     setPsdnState({
@@ -157,6 +185,7 @@ export default function Home() {
       psdnShellAccount,
       walletTrtnAccount,
       walletUsdcAccount,
+      walletShellAccount,
     });
   };
   const getPsdnStats = async () => {
@@ -164,14 +193,13 @@ export default function Home() {
       psdnState.poseidon
     );
 
-    console.log("psdnAccount", psdnAccount);
-    console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
-    console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
+    // console.log("psdnAccount", psdnAccount);
+    // console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
+    // console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
 
     const psdnRatio =
       psdnAccount.usdcAmount.toNumber() / psdnAccount.trtnAmount.toNumber();
-    console.log("psdnRatio", psdnRatio);
-
+    // console.log("psdnRatio", psdnRatio);
     setPsdnRatio(psdnRatio);
     setPsdnStats(psdnAccount);
   };
@@ -179,18 +207,38 @@ export default function Home() {
   const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
     console.log("_trtnAmount", _trtnAmount);
     if (_trtnAmount) {
-      console.log("triton swap");
+      // console.log("triton swap");
       const usdcAmount = _trtnAmount * psdnRatio;
-      setSwapAmounts({ trtn: _trtnAmount, usdc: usdcAmount });
+      setSwapAmounts({ trtn: _trtnAmount, usdc: usdcAmount, type: "trtn" });
     } else if (_usdcAmount) {
-      console.log("usdc swap");
+      // console.log("usdc swap");
       const trtnAmount = _usdcAmount / psdnRatio;
-      setSwapAmounts({ trtn: trtnAmount, usdc: _usdcAmount });
-    } else {
-      console.log("initial swap setup");
-      const usdcAmount = 1 * psdnRatio;
-      setSwapAmounts({ trtn: 1, usdc: usdcAmount });
+      setSwapAmounts({ trtn: trtnAmount, usdc: _usdcAmount, type: "usdc" });
     }
+  };
+
+  const provideLiquidity = async () => {
+    await getPsdnStats();
+    const trtn = swapAmounts.trtn * TOKEN_MULTIPLIER;
+    const usdc = swapAmounts.usdc * TOKEN_MULTIPLIER;
+    await psdnState.program.rpc.provideLiquidity(trtn, usdc, {
+      accounts: {
+        config: psdnState.poseidon,
+        authority: psdnState.program.provider.wallet.publicKey,
+        usdcAccount: psdnState.psdnUsdcAccount,
+        trtnAccount: psdnState.psdnTrtnAccount,
+        usdcMint: psdnState.usdcToken,
+        trtnMint: psdnState.trtnToken,
+        shellMint: psdnState.psdnShellAccount,
+        authUsdcAccount: psdnState.walletUsdcAccount,
+        authTrtnAccount: psdnState.walletTrtnAccount,
+        authShellAccount: psdnState.walletShellAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+      },
+    });
   };
 
   useEffect(() => {
@@ -205,11 +253,14 @@ export default function Home() {
   }, [psdnState]);
 
   useEffect(() => {
-    if (psdnStats.authority) {
-      // console.log("calc swap");
-      calculateSwap(null, null);
+    if (psdnRatio > 0) {
+      if (swapAmounts.type === "trtn") {
+        calculateSwap(swapAmounts.trtn, null);
+      } else if (swapAmounts.type === "usdc") {
+        calculateSwap(null, swapAmounts.usdc);
+      }
     }
-  }, [psdnStats]);
+  }, [psdnRatio]);
 
   return (
     <div>
@@ -222,6 +273,37 @@ export default function Home() {
         <div className="grid grid-cols-1 min-h-screen bg-base-200">
           <div className="text-center hero-content">
             <div className="max-w-xl">
+              {/* Loading Modal */}
+              <a
+                href="#loader"
+                className="btn btn-primary hidden"
+                ref={loaderRef}
+              >
+                open loader
+              </a>
+              <div id="loader" className="modal">
+                <div className="modal-box stat">
+                  <div className="stat-figure text-primary">
+                    <button className="btn loading btn-circle btn-lg bg-base-200 btn-ghost"></button>
+                  </div>
+                  <p style={{ fontFamily: "Montserrat" }}>Loading...</p>
+                  <div className="stat-desc max-w-[90%]">
+                    <progress
+                      value={loader}
+                      max="5000"
+                      className="progress progress-black"
+                    ></progress>
+                  </div>
+                  <a
+                    href="#"
+                    style={{ fontFamily: "Montserrat" }}
+                    className="btn hidden"
+                    ref={modalRef}
+                  >
+                    Close
+                  </a>
+                </div>
+              </div>
               <div className="mockup-phone border-primary">
                 <div className="camera"></div>
                 <div className="display">
@@ -273,7 +355,7 @@ export default function Home() {
                     </div>
                     {/* swap section */}
                     <div className="flex flex-row w-full h-[16rem]">
-                      <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center">
+                      <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
                         <div>
                           <label className="input-group input-group-md">
                             <input
@@ -283,12 +365,12 @@ export default function Home() {
                               onChange={(e) => {
                                 const amount = parseFloat(e.target.value);
                                 if (amount > 0) {
-                                  calculateSwap(amount);
+                                  calculateSwap(amount, null);
                                 } else {
-                                  calculateSwap(0.000001);
+                                  calculateSwap(0.000001, null);
                                 }
                               }}
-                              className="input input-bordered input-md"
+                              className="input input-bordered input-md focus:input-primary"
                             />
                             <span className="bg-base-200">TRTN</span>
                           </label>
@@ -306,7 +388,7 @@ export default function Home() {
                                   calculateSwap(null, 0.000001);
                                 }
                               }}
-                              className="input input-bordered input-md"
+                              className="input input-bordered input-md focus:input-primary"
                             />
                             <span className="bg-base-200">USDC</span>
                           </label>
@@ -314,7 +396,13 @@ export default function Home() {
                             <button className="btn btn-outline focus:animate-bounce ">
                               swap
                             </button>
-                            <button className="btn btn-primary focus:animate-bounce text-white">
+                            <button
+                              className="btn btn-primary focus:animate-bounce text-white"
+                              onClick={async () => {
+                                await provideLiquidity();
+                                await refresh();
+                              }}
+                            >
                               stake
                             </button>
                           </div>

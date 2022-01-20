@@ -1,0 +1,457 @@
+{
+  "version": "0.1.0",
+  "name": "poseidon",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "usdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "shellMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "psdnBump",
+          "type": "u8"
+        },
+        {
+          "name": "usdcBump",
+          "type": "u8"
+        },
+        {
+          "name": "trtnBump",
+          "type": "u8"
+        },
+        {
+          "name": "shellBump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "swapToTriton",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "usdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "shellMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "usdcToSwap",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "swapToUsdc",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "usdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "shellMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "trtnToSwap",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "provideLiquidity",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "usdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "shellMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authShellAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "trtn",
+          "type": "u64"
+        },
+        {
+          "name": "usdc",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "removeLiquidity",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "usdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "trtnMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "shellMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authShellAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "shell",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "psdnBump",
+            "type": "u8"
+          },
+          {
+            "name": "usdcBump",
+            "type": "u8"
+          },
+          {
+            "name": "trtnBump",
+            "type": "u8"
+          },
+          {
+            "name": "shellBump",
+            "type": "u8"
+          },
+          {
+            "name": "shellAmount",
+            "type": "u64"
+          },
+          {
+            "name": "usdcAmount",
+            "type": "u64"
+          },
+          {
+            "name": "trtnAmount",
+            "type": "u64"
+          },
+          {
+            "name": "poolConstant",
+            "type": "u64"
+          },
+          {
+            "name": "poolInit",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "IncorrectRatio",
+      "msg": "Too much of a ratio difference between liquidity and current pool."
+    }
+  ],
+  "metadata": {
+    "address": "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
+  }
+}
