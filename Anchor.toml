@@ -11,7 +11,7 @@ poseidon = "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
+cluster = "mainnet"
 wallet = "./lib/TRTNuj8GgjnBSSohYgyJhxF4gkhSscxJ4kDELy9Hdh8.json"
 
 [scripts]

@@ -30,6 +30,7 @@ type psdnState = {
 };
 
 export default function Home() {
+  const TOKEN_MULTIPLIER = 1e6;
   const wallet = useAnchorWallet();
   const [psdnState, setPsdnState] = useState({} as psdnState);
   const [psdnStats, setPsdnStats] = useState({} as any);
