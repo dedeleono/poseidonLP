@@ -30,11 +30,16 @@ type psdnState = {
 };
 
 export default function Home() {
-  const TOKEN_MULTIPLIER = 1e6;
   const wallet = useAnchorWallet();
+
   const [psdnState, setPsdnState] = useState({} as psdnState);
   const [psdnStats, setPsdnStats] = useState({} as any);
+  const [psdnRatio, setPsdnRatio] = useState(0);
+  const [swapAmounts, setSwapAmounts] = useState({ trtn: 0, usdc: 0 });
+
+  const TOKEN_MULTIPLIER = 1e6;
   const psdnIdl = poseidonIDL as anchor.Idl;
+
   const setupPoseidon = async () => {
     const opts = {
       preflightCommitment: "processed" as ConfirmOptions,
@@ -158,10 +163,34 @@ export default function Home() {
     const psdnAccount = await psdnState.program.account.config.fetch(
       psdnState.poseidon
     );
+
     console.log("psdnAccount", psdnAccount);
     console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
     console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
+
+    const psdnRatio =
+      psdnAccount.usdcAmount.toNumber() / psdnAccount.trtnAmount.toNumber();
+    console.log("psdnRatio", psdnRatio);
+
+    setPsdnRatio(psdnRatio);
     setPsdnStats(psdnAccount);
+  };
+
+  const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
+    console.log("_trtnAmount", _trtnAmount);
+    if (_trtnAmount) {
+      console.log("triton swap");
+      const usdcAmount = _trtnAmount * psdnRatio;
+      setSwapAmounts({ trtn: _trtnAmount, usdc: usdcAmount });
+    } else if (_usdcAmount) {
+      console.log("usdc swap");
+      const trtnAmount = _usdcAmount / psdnRatio;
+      setSwapAmounts({ trtn: trtnAmount, usdc: _usdcAmount });
+    } else {
+      console.log("initial swap setup");
+      const usdcAmount = 1 * psdnRatio;
+      setSwapAmounts({ trtn: 1, usdc: usdcAmount });
+    }
   };
 
   useEffect(() => {
@@ -174,6 +203,14 @@ export default function Home() {
       getPsdnStats();
     }
   }, [psdnState]);
+
+  useEffect(() => {
+    if (psdnStats.authority) {
+      // console.log("calc swap");
+      calculateSwap(null, null);
+    }
+  }, [psdnStats]);
+
   return (
     <div>
       <Head>
@@ -195,10 +232,7 @@ export default function Home() {
                     <div className="grid grid-cols-3 gap-2 w-full h-8">
                       <div className="col-span-2"></div>
                       <div className="badge badge-ghost badge-lg  shadow-md">
-                        {`TRITON: ${
-                          psdnStats?.usdcAmount?.toNumber() /
-                          psdnStats?.trtnAmount?.toNumber()
-                        }$`}
+                        {`TRITON: ${psdnRatio}$`}
                       </div>
                     </div>
                     <div className="navbar mb-2 shadow-lg bg-base-200 text-neutral-content rounded-box relative min-w-full justify-center">
@@ -243,9 +277,17 @@ export default function Home() {
                         <div>
                           <label className="input-group input-group-md">
                             <input
-                              type="text"
-                              readOnly
-                              value="0.099"
+                              type="number"
+                              step="0.000001"
+                              value={swapAmounts.trtn}
+                              onChange={(e) => {
+                                const amount = parseFloat(e.target.value);
+                                if (amount > 0) {
+                                  calculateSwap(amount);
+                                } else {
+                                  calculateSwap(0.000001);
+                                }
+                              }}
                               className="input input-bordered input-md"
                             />
                             <span className="bg-base-200">TRTN</span>
@@ -253,9 +295,17 @@ export default function Home() {
                           <div className="divider"></div>
                           <label className="input-group input-group-md">
                             <input
-                              type="text"
-                              readOnly
-                              value="0.099"
+                              type="number"
+                              step="0.000001"
+                              value={swapAmounts.usdc}
+                              onChange={(e) => {
+                                const amount = parseFloat(e.target.value);
+                                if (amount > 0) {
+                                  calculateSwap(null, amount);
+                                } else {
+                                  calculateSwap(null, 0.000001);
+                                }
+                              }}
                               className="input input-bordered input-md"
                             />
                             <span className="bg-base-200">USDC</span>
