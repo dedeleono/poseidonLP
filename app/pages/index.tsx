@@ -285,6 +285,35 @@ export default function Home() {
     });
   };
 
+  const removeLiquidity = async () => {
+    await getPsdnStats();
+    const authShellBalance =
+      await psdnState.program.provider.connection.getTokenAccountBalance(
+        psdnState.psdnTrtnAccount
+      );
+    const shell = new BN(authShellBalance.value.amount);
+    console.log("shell", shell.toNumber());
+
+    // await psdnState.program.rpc.removeLiquidity(shell, {
+    //   accounts: {
+    //     config: psdnState.poseidon,
+    //     authority: psdnState.program.provider.wallet.publicKey,
+    //     usdcAccount: psdnState.psdnUsdcAccount,
+    //     trtnAccount: psdnState.psdnTrtnAccount,
+    //     usdcMint: psdnState.usdcToken,
+    //     trtnMint: psdnState.trtnToken,
+    //     shellMint: psdnState.psdnShellAccount,
+    //     authUsdcAccount: psdnState.walletUsdcAccount,
+    //     authShellAccount: psdnState.walletShellAccount,
+    //     authTrtnAccount: psdnState.walletTrtnAccount,
+    //     systemProgram: anchor.web3.SystemProgram.programId,
+    //     tokenProgram: TOKEN_PROGRAM_ID,
+    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+    //   },
+    // });
+  };
+
   const swap = async () => {
     if (swapAmounts.type === "usdc") {
       console.log("swapping usdc to trtn");
@@ -402,7 +431,8 @@ export default function Home() {
                 Poseidon LP
               </h1>
               <div className="border-primary align-middle">
-                <div className="display flex">=
+                <div className="display flex">
+                  =
                   <div
                     className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
@@ -528,24 +558,37 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="modal-box" style={{ backgroundColor: '#B96158', maxHeight: '420px', marginTop: '-1.5rem' }}>
+                  <div
+                    className="modal-box"
+                    style={{
+                      backgroundColor: "#B96158",
+                      maxHeight: "420px",
+                      marginTop: "-1.5rem",
+                    }}
+                  >
                     <div className="flex justify-around">
                       <h4
                         className="text-center text-xl font-bold"
-                        style={{ fontFamily: "Jangkuy", color: '#dbd7d5' }}
+                        style={{ fontFamily: "Jangkuy", color: "#dbd7d5" }}
                       >
                         Hi Fren,
                       </h4>
                     </div>
                     <div className="">
-                      <p className="font-extralight text-sm py-4" style={{ fontFamily: "Montserrat", color: "white" }}>If after staking you don't see your Shantie please keep refreshing and be patient, your Shantie should show up anytime soon! </p>
+                      <p
+                        className="font-extralight text-sm py-4"
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        If after staking you don't see your Shantie please keep
+                        refreshing and be patient, your Shantie should show up
+                        anytime soon!{" "}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </main>
     </div>

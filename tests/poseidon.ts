@@ -183,6 +183,36 @@ describe("poseidon", async () => {
   //   });
   // });
 
+  // it("Remove Liquidity", async () => {
+  //   // only run once to make the config
+  //   // initial ratio 12/8
+
+  //   const authShellBalance =
+  //     await program.provider.connection.getTokenAccountBalance(psdnTrtnAccount);
+  //   const shell = new BN(authShellBalance.value.amount);
+  //   console.log("shell", shell.toNumber());
+  //   console.log("psdnTrtnAccountBalance", psdnTrtnAccountBalance);
+
+  //   await program.rpc.removeLiquidity(shell, {
+  //     accounts: {
+  //       config: poseidon,
+  //       authority: program.provider.wallet.publicKey,
+  //       usdcAccount: psdnUsdcAccount,
+  //       trtnAccount: psdnTrtnAccount,
+  //       usdcMint: usdcToken,
+  //       trtnMint: trtnToken,
+  //       shellMint: psdnShellAccount,
+  //       authUsdcAccount: walletUsdcAccount,
+  //       authShellAccount: walletShellAccount,
+  //       authTrtnAccount: walletTrtnAccount,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+  //       rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+  //     },
+  //   });
+  // });
+
   // it("Update Config", async () => {
   //   console.log("ran config update");
   //   // only run once to make the config

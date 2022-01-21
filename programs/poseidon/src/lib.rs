@@ -40,19 +40,19 @@ pub mod poseidon {
 
     pub fn swap_to_triton(ctx: Context<SwapToTriton>, usdc_to_swap: u64) -> ProgramResult {
         let config = &mut ctx.accounts.config;
-        msg!("trtn: {}", config.trtn_amount);
-        msg!("usdc: {}", config.usdc_amount);
+        // msg!("trtn: {}", config.trtn_amount);
+        // msg!("usdc: {}", config.usdc_amount);
         let pool_constant = (config.usdc_amount as u128) * (config.trtn_amount as u128);
-        msg!("pool_constant: {}", pool_constant);
-        msg!("usdc_to_swap: {}", usdc_to_swap);
+        // msg!("pool_constant: {}", pool_constant);
+        // msg!("usdc_to_swap: {}", usdc_to_swap);
         let new_usdc_amount = config.usdc_amount + usdc_to_swap;
-        msg!("new_usdc_amount: {}", new_usdc_amount);
+        // msg!("new_usdc_amount: {}", new_usdc_amount);
         let new_trtn_amount = (pool_constant / new_usdc_amount as u128) as u64;
-        msg!("new_trtn_amount: {}", new_trtn_amount);
+        // msg!("new_trtn_amount: {}", new_trtn_amount);
         let trtn_to_send = config.trtn_amount - new_trtn_amount;
-        msg!("trtn_to_send: {}", trtn_to_send);
+        // msg!("trtn_to_send: {}", trtn_to_send);
         let trtn_after_fees = (trtn_to_send as f64 * 0.99) as u64;
-        msg!("trtn_after_fees: {}", trtn_after_fees);
+        // msg!("trtn_after_fees: {}", trtn_after_fees);
 
         config.usdc_amount = new_usdc_amount;
         config.trtn_amount = config.trtn_amount - trtn_after_fees;
@@ -88,19 +88,19 @@ pub mod poseidon {
 
     pub fn swap_to_usdc(ctx: Context<SwapToUsdc>, trtn_to_swap: u64) -> ProgramResult {
         let config = &mut ctx.accounts.config;
-        msg!("trtn: {}", config.trtn_amount);
-        msg!("usdc: {}", config.usdc_amount);
+        // msg!("trtn: {}", config.trtn_amount);
+        // msg!("usdc: {}", config.usdc_amount);
         let pool_constant = (config.usdc_amount as u128) * (config.trtn_amount as u128);
-        msg!("pool_constant: {}", pool_constant);
-        msg!("trtn_to_swap: {}", trtn_to_swap);
+        // msg!("pool_constant: {}", pool_constant);
+        // msg!("trtn_to_swap: {}", trtn_to_swap);
         let new_trtn_amount = config.trtn_amount + trtn_to_swap;
-        msg!("new_trtn_amount: {}", new_trtn_amount);
+        // msg!("new_trtn_amount: {}", new_trtn_amount);
         let new_usdc_amount = (pool_constant / new_trtn_amount as u128) as u64;
-        msg!("new_usdc_amount: {}", new_usdc_amount);
+        // msg!("new_usdc_amount: {}", new_usdc_amount);
         let usdc_to_send = config.usdc_amount - new_usdc_amount;
-        msg!("usdc_to_send: {}", usdc_to_send);
+        // msg!("usdc_to_send: {}", usdc_to_send);
         let usdc_after_fees = (usdc_to_send as f64 * 0.99) as u64;
-        msg!("usdc_after_fees: {}", usdc_after_fees);
+        // msg!("usdc_after_fees: {}", usdc_after_fees);
 
         config.trtn_amount = new_trtn_amount;
         config.usdc_amount = config.usdc_amount - usdc_after_fees;
@@ -223,7 +223,7 @@ pub mod poseidon {
         Ok(())
     }
 
-    pub fn remove_liquidity(ctx: Context<ProvideLiquidity>, shell: u64) -> ProgramResult {
+    pub fn remove_liquidity(ctx: Context<RemoveLiquidity>, shell: u64) -> ProgramResult {
         let config = &mut ctx.accounts.config;
         let trtn_to_send = config.trtn_amount * shell / config.shell_amount;
         let usdc_to_send = config.usdc_amount * shell / config.shell_amount;
