@@ -407,6 +407,23 @@ export default function Home() {
               </h1>
               <div className="border-primary align-middle">
                 <div className="display">
+                  
+                  <div className='flex mx-auto'>
+                    <div className="modal-box" style={{ backgroundColor: '#B96158' }}>
+                      <div className="flex justify-around">
+                        <h4
+                          className="text-center text-xl font-bold"
+                          style={{ fontFamily: "Jangkuy", color: '#dbd7d5' }}
+                        >
+                          Hi Fren,
+                        </h4>
+                      </div>
+                      <div className="">
+                        <p className="font-extralight text-sm py-4" style={{ fontFamily: "Montserrat", color: "white" }}>If after staking you don't see your Shantie please keep refreshing and be patient, your Shantie should show up anytime soon! </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div
                     className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
@@ -534,6 +551,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+
         </div>
       </main>
     </div>
