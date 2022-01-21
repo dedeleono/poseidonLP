@@ -433,6 +433,46 @@ export default function Home() {
               <div className="border-primary align-middle">
                 <div className="display flex">
                   =
+                  <div className="modal-box mr-8" style={{ backgroundColor: '#3DB489', maxHeight: '420px', marginTop: '-1.5rem' }}>
+                    <div className="flex justify-around">
+                      <h4
+                        className="text-center text-xl font-bold"
+                        style={{ fontFamily: "Jangkuy", color: 'white' }}
+                      >
+                        Important Info
+                      </h4>
+                    </div>
+                    <div className="align-left">
+                      <p 
+                        className="font-extralight text-sm py-2 text-justify" 
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        By depositing USDC and Triton liquidity with Poseidon LP, 
+                        you acknowledge that you understand the risks associated with 
+                        providing liquidity and impermanent loss.
+                        For more detail, please see <a className="inline underline" target="_blank" href={"https://medium.com/coinmonks/understanding-impermanent-loss-9ac6795e5baa"}>Medium Article</a> and <a className="inline underline" target="_blank" href={"https://academy.binance.com/en/articles/impermanent-loss-explained"}>Binance Academy</a>
+                      </p>
+                      <p
+                        className="font-extralight text-sm py-2 text-justify" 
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        Once you have deposited funds, you will begin earning a portion of the 1% fee 
+                        charged on every swap performed in the pool. Your share of the fee is proportional 
+                        to your share of the pool liquidity. So if you deposited $100 USDC and 100 $TRTN, 
+                        and the pool had $1000 USDC and 1000 $TRTN in total, you would receive 10% of the fee, 
+                        or 0.1% of every single swap executed in the pool. These fees simply accrue in your 
+                        pool and will be collected automatically when you withdraw your funds, you do not need 
+                        to claim them separately.
+                      </p> 
+                      <p 
+                        className="font-extralight text-sm py-2 text-justify" 
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        Tide Pool Shell Farm will be launching soon! Stake your $SHELL token for more $TRTN rewards!
+                      </p>
+
+                    </div>
+                  </div>
                   <div
                     className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
@@ -556,33 +596,6 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div
-                    className="modal-box"
-                    style={{
-                      backgroundColor: "#B96158",
-                      maxHeight: "420px",
-                      marginTop: "-1.5rem",
-                    }}
-                  >
-                    <div className="flex justify-around">
-                      <h4
-                        className="text-center text-xl font-bold"
-                        style={{ fontFamily: "Jangkuy", color: "#dbd7d5" }}
-                      >
-                        Hi Fren,
-                      </h4>
-                    </div>
-                    <div className="">
-                      <p
-                        className="font-extralight text-sm py-4"
-                        style={{ fontFamily: "Montserrat", color: "white" }}
-                      >
-                        If after staking you don't see your Shantie please keep
-                        refreshing and be patient, your Shantie should show up
-                        anytime soon!{" "}
-                      </p>
                     </div>
                   </div>
                 </div>
