@@ -279,14 +279,14 @@ export default function Home() {
               {/* Loading Modal */}
               <a
                 href="#loader"
-                className="btn btn-primary hidden"
+                className="btn btn-primary hidden text-[Montserrat]"
                 ref={loaderRef}
               >
                 open loader
               </a>
               <div id="loader" className="modal">
                 <div className="modal-box stat">
-                  <div className="stat-figure text-primary">
+                  <div className="stat-figure text-primary text-[Montserrat]">
                     <button className="btn loading btn-circle btn-lg bg-base-200 btn-ghost"></button>
                   </div>
                   <p style={{ fontFamily: "Montserrat" }}>Loading...</p>
@@ -307,7 +307,7 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <h1 className="font-[Jangkuy] text-4xl my-10" style={{color:'#0E3755', textShadow: 'white 1px 0 30px'}}>Poseidon LP</h1>
+              <h1 className="font-[Jangkuy] text-4xl mx-auto my-10" style={{color:'#0E3755', textShadow: 'white 1px 0 30px'}}>Poseidon LP</h1>
               <div className="border-primary align-middle">
               
                 <div className="display">
@@ -396,7 +396,7 @@ export default function Home() {
                             <span className="bg-stone-300 font-[Jangkuy]">USDC</span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button className="btn btn-outline border-[#3DB489] text-[#3DB489] hover:bg-[#3DB489] hover:text-white hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
+                            <button className="btn btn-outline border-[#3DB489] bg-[#3DB489] text-white hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
                               swap
                             </button>
                             <button
