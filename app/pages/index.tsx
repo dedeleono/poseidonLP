@@ -454,10 +454,6 @@ export default function Home() {
               </h1>
               <div className="border-primary align-middle">
                 <div className="display flex">
-<<<<<<< HEAD
-                  
-                  <div className="modal-box mr-8" style={{ backgroundColor: '#3DB489', maxHeight: '420px', marginTop: '-1.5rem' }}>
-=======
                   <div
                     className={`modal-box mr-8 ${infoState ? "" : "hidden"}`}
                     style={{
@@ -466,7 +462,6 @@ export default function Home() {
                       marginTop: "-1.5rem",
                     }}
                   >
->>>>>>> f0686ad70af96ed331ee16e17001fac4927775b8
                     <div className="flex justify-around">
                       <h4
                         className="text-center text-xl font-bold"
@@ -532,9 +527,6 @@ export default function Home() {
                     className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
-<<<<<<< HEAD
-                    <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
-=======
                     <div className="flex w-full h-8 mx-auto mt-2">
                       <div className="flex-none">
                         <button
@@ -580,7 +572,6 @@ export default function Home() {
                           </svg>
                         </button>
                       </div>
->>>>>>> f0686ad70af96ed331ee16e17001fac4927775b8
                     </div>
                     <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
