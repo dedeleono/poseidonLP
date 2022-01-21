@@ -41,10 +41,13 @@ export default function Home() {
   const [psdnStats, setPsdnStats] = useState({} as any);
   const [psdnRatio, setPsdnRatio] = useState(0);
   const [swapAmounts, setSwapAmounts] = useState({
-    trtn: 1,
-    usdc: 0,
+    trtn: 1.0,
+    usdc: 0.0,
     type: "trtn",
   });
+
+  const [infoState, setInfoState] = useState(true);
+  const [lpState, setLpState] = useState(false);
 
   const loaderRef = useRef<HTMLAnchorElement>(null);
   const modalRef = useRef<HTMLAnchorElement>(null);
@@ -251,11 +254,19 @@ export default function Home() {
     if (_trtnAmount) {
       // console.log("triton swap");
       const usdcAmount = _trtnAmount * psdnRatio;
-      setSwapAmounts({ trtn: _trtnAmount, usdc: usdcAmount, type: "trtn" });
+      setSwapAmounts({
+        trtn: _trtnAmount as any,
+        usdc: usdcAmount as any,
+        type: "trtn",
+      });
     } else if (_usdcAmount) {
       // console.log("usdc swap");
       const trtnAmount = _usdcAmount / psdnRatio;
-      setSwapAmounts({ trtn: trtnAmount, usdc: _usdcAmount, type: "usdc" });
+      setSwapAmounts({
+        trtn: trtnAmount as any,
+        usdc: _usdcAmount as any,
+        type: "usdc",
+      });
     }
   };
 
@@ -287,13 +298,18 @@ export default function Home() {
 
   const removeLiquidity = async () => {
     await getPsdnStats();
+    console.log("psdnStats", psdnStats);
+    console.log(
+      "psdnStats.shellAmount.toNumber()",
+      psdnStats.shellAmount.toNumber()
+    );
+
     const authShellBalance =
       await psdnState.program.provider.connection.getTokenAccountBalance(
         psdnState.psdnTrtnAccount
       );
     const shell = new BN(authShellBalance.value.amount);
     console.log("shell", shell.toNumber());
-
     // await psdnState.program.rpc.removeLiquidity(shell, {
     //   accounts: {
     //     config: psdnState.poseidon,
@@ -312,6 +328,12 @@ export default function Home() {
     //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
     //   },
     // });
+    await getPsdnStats();
+    console.log("psdnStats", psdnStats);
+    console.log(
+      "psdnStats.shellAmount.toNumber()",
+      psdnStats.shellAmount.toNumber()
+    );
   };
 
   const swap = async () => {
@@ -432,52 +454,133 @@ export default function Home() {
               </h1>
               <div className="border-primary align-middle">
                 <div className="display flex">
+<<<<<<< HEAD
                   
                   <div className="modal-box mr-8" style={{ backgroundColor: '#3DB489', maxHeight: '420px', marginTop: '-1.5rem' }}>
+=======
+                  <div
+                    className={`modal-box mr-8 ${infoState ? "" : "hidden"}`}
+                    style={{
+                      backgroundColor: "#3DB489",
+                      maxHeight: "420px",
+                      marginTop: "-1.5rem",
+                    }}
+                  >
+>>>>>>> f0686ad70af96ed331ee16e17001fac4927775b8
                     <div className="flex justify-around">
                       <h4
                         className="text-center text-xl font-bold"
-                        style={{ fontFamily: "Jangkuy", color: 'white' }}
+                        style={{ fontFamily: "Jangkuy", color: "white" }}
                       >
                         Important Info
                       </h4>
                     </div>
                     <div className="align-left">
-                      <p 
-                        className="font-extralight text-sm py-2 text-justify" 
+                      <p
+                        className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        By depositing USDC and Triton liquidity with Poseidon LP, 
-                        you acknowledge that you understand the risks associated with 
-                        providing liquidity and impermanent loss.
-                        For more detail, please see <a className="inline underline" target="_blank" href={"https://medium.com/coinmonks/understanding-impermanent-loss-9ac6795e5baa"}>Medium Article</a> and <a className="inline underline" target="_blank" href={"https://academy.binance.com/en/articles/impermanent-loss-explained"}>Binance Academy</a>
+                        By depositing USDC and Triton liquidity with Poseidon
+                        LP, you acknowledge that you understand the risks
+                        associated with providing liquidity and impermanent
+                        loss. For more detail, please see{" "}
+                        <a
+                          className="inline underline"
+                          target="_blank"
+                          href={
+                            "https://medium.com/coinmonks/understanding-impermanent-loss-9ac6795e5baa"
+                          }
+                        >
+                          Medium Article
+                        </a>{" "}
+                        and{" "}
+                        <a
+                          className="inline underline"
+                          target="_blank"
+                          href={
+                            "https://academy.binance.com/en/articles/impermanent-loss-explained"
+                          }
+                        >
+                          Binance Academy
+                        </a>
                       </p>
                       <p
-                        className="font-extralight text-sm py-2 text-justify" 
+                        className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Once you have deposited funds, you will begin earning a portion of the 1% fee 
-                        charged on every swap performed in the pool. Your share of the fee is proportional 
-                        to your share of the pool liquidity. So if you deposited $100 USDC and 100 $TRTN, 
-                        and the pool had $1000 USDC and 1000 $TRTN in total, you would receive 10% of the fee, 
-                        or 0.1% of every single swap executed in the pool. These fees simply accrue in your 
-                        pool and will be collected automatically when you withdraw your funds, you do not need 
-                        to claim them separately.
-                      </p> 
-                      <p 
-                        className="font-extralight text-sm py-2 text-justify" 
-                        style={{ fontFamily: "Montserrat", color: "white" }}
-                      >
-                        Tide Pool Shell Farm will be launching soon! Stake your $SHELL token for more $TRTN rewards!
+                        Once you have deposited funds, you will begin earning a
+                        portion of the 1% fee charged on every swap performed in
+                        the pool. Your share of the fee is proportional to your
+                        share of the pool liquidity. So if you deposited $100
+                        USDC and 100 $TRTN, and the pool had $1000 USDC and 1000
+                        $TRTN in total, you would receive 10% of the fee, or
+                        0.1% of every single swap executed in the pool. These
+                        fees simply accrue in your pool and will be collected
+                        automatically when you withdraw your funds, you do not
+                        need to claim them separately.
                       </p>
-
+                      <p
+                        className="font-extralight text-sm py-2 text-justify"
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        Tide Pool Shell Farm will be launching soon! Stake your
+                        $SHELL token for more $TRTN rewards!
+                      </p>
                     </div>
                   </div>
                   <div
                     className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
+<<<<<<< HEAD
                     <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
+=======
+                    <div className="flex w-full h-8 mx-auto mt-2">
+                      <div className="flex-none">
+                        <button
+                          className="btn btn-outline btn-circle btn-xs btn-info"
+                          onClick={() => {
+                            setInfoState(!infoState);
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="flex-1"></div>
+                      <div className="flex-none">
+                        <button
+                          className="btn btn-outline btn-circle btn-xs btn-error"
+                          onClick={() => {
+                            setLpState(!lpState);
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="inline-block w-4 h-4 stroke-current"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+>>>>>>> f0686ad70af96ed331ee16e17001fac4927775b8
                     </div>
                     <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
@@ -520,7 +623,7 @@ export default function Home() {
                         color: "white",
                       }}
                     >
-                      {`TRITON: $${Math.round(psdnRatio * 100) / 100}`}
+                      {`TRITON: $${psdnRatio.toFixed(6)}`}
                     </span>
                     {/* swap section */}
                     <div className="flex flex-row w-full h-[16rem] py-4">
@@ -578,6 +681,7 @@ export default function Home() {
                               style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await swap();
+                                await refresh();
                               }}
                             >
                               swap
@@ -587,7 +691,7 @@ export default function Home() {
                               style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await provideLiquidity();
-                                // await refresh();
+                                await refresh();
                               }}
                             >
                               stake
@@ -595,6 +699,51 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div
+                    className={`modal-box mr-8 ${lpState ? "" : "hidden"}`}
+                    style={{
+                      backgroundColor: "#0aafc1",
+                      maxHeight: "420px",
+                      marginTop: "-1.5rem",
+                    }}
+                  >
+                    <div className="flex justify-around">
+                      <h4
+                        className="text-center text-xl font-bold"
+                        style={{ fontFamily: "Jangkuy", color: "white" }}
+                      >
+                        Remove Liquidity
+                      </h4>
+                    </div>
+                    <div className="align-left">
+                      <p
+                        className="font-extralight text-sm py-2 text-justify"
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        Clicking unstake below will burn all your shell tokens
+                        and give you back the right amount of TRITON and USDC
+                        owed. You will have earned 1% trading fee on all swaps.
+                      </p>
+                      <p
+                        className="font-extralight text-sm py-2 text-justify"
+                        style={{ fontFamily: "Montserrat", color: "white" }}
+                      >
+                        Please note may have suffered impermamence loss. You can
+                        learn more about impermance loss by clicking the info
+                        button.
+                      </p>
+                      <button
+                        style={{ fontSize: "12px" }}
+                        className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce text-white"
+                        onClick={async () => {
+                          await removeLiquidity();
+                          await refresh();
+                        }}
+                      >
+                        unstake
+                      </button>
                     </div>
                   </div>
                 </div>
