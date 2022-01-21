@@ -16,31 +16,6 @@
           "isSigner": true
         },
         {
-          "name": "usdcAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "trtnAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "usdcMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "trtnMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "shellMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -76,6 +51,37 @@
       ]
     },
     {
+      "name": "updateConfig",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "swapToTriton",
       "accounts": [
         {
@@ -106,11 +112,6 @@
         {
           "name": "trtnMint",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "shellMint",
-          "isMut": true,
           "isSigner": false
         },
         {
@@ -182,11 +183,6 @@
         {
           "name": "trtnMint",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "shellMint",
-          "isMut": true,
           "isSigner": false
         },
         {
@@ -450,8 +446,5 @@
       "name": "IncorrectRatio",
       "msg": "Too much of a ratio difference between liquidity and current pool."
     }
-  ],
-  "metadata": {
-    "address": "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
-  }
+  ]
 }

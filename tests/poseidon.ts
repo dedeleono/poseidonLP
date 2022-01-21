@@ -151,13 +151,27 @@ describe("poseidon", async () => {
   //   });
   // });
 
+  // it("Update Config", async () => {
+  //   // only run once to make the config
+  //   // initial ratio 12/8
+
+  //   await program.rpc.updateConfig({
+  //     accounts: {
+  //       config: poseidon,
+  //       authority: program.provider.wallet.publicKey,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+  //     },
+  //   });
+  // });
+
   // it("Swap To Triton", async () => {
   //   // only run once to make the config
   //   // initial ratio 12/8
-  //   const trtn = new BN(8000 * TOKEN_MULTIPLIER);
-  //   const usdc = new BN(12000 * TOKEN_MULTIPLIER);
+  //   const usdcToSwap = new BN(1.5 * TOKEN_MULTIPLIER);
 
-  //   await program.rpc.provideLiquidity(trtn, usdc, {
+  //   await program.rpc.swapToTriton(usdcToSwap, {
   //     accounts: {
   //       config: poseidon,
   //       authority: program.provider.wallet.publicKey,
@@ -165,10 +179,8 @@ describe("poseidon", async () => {
   //       trtnAccount: psdnTrtnAccount,
   //       usdcMint: usdcToken,
   //       trtnMint: trtnToken,
-  //       shellMint: psdnShellAccount,
-  //       authUsdcAccount: walletUsdcAccount,
   //       authTrtnAccount: walletTrtnAccount,
-  //       authShellAccount: walletShellAccount,
+  //       authUsdcAccount: walletUsdcAccount,
   //       systemProgram: anchor.web3.SystemProgram.programId,
   //       tokenProgram: TOKEN_PROGRAM_ID,
   //       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,

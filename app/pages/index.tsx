@@ -4,18 +4,19 @@ import {
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 import * as anchor from "@project-serum/anchor";
-import { Program, Provider } from "@project-serum/anchor";
+import { Program, Provider, BN } from "@project-serum/anchor";
 import poseidonIDL from "../../target/idl/poseidon.json";
 import { PublicKey, ConfirmOptions } from "@solana/web3.js";
 import {
   Token,
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  u64,
 } from "@solana/spl-token";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
-import Bg from '../public/images/bg.gif';
-import arrows from '../public/images/arrows1.png'
+import Bg from "../public/images/bg.gif";
+import arrows from "../public/images/arrows1.png";
 
 import { useState, useEffect, useRef } from "react";
 type psdnState = {
@@ -197,18 +198,60 @@ export default function Home() {
     );
 
     // console.log("psdnAccount", psdnAccount);
+    // console.log("constant", psdnAccount.poolConstant.toString());
+    // console.log(
+    //   "amount owed",
+    //   parseFloat(psdnAccount.usdcAmount.toNumber() + 1.5) /
+    //     parseFloat(psdnAccount.poolConstant.toString())
+    // );
+
+    // const real_x = psdnAccount.trtnAmount.toNumber();
+    // const real_y = psdnAccount.usdcAmount.toNumber();
+    // console.log(
+    //   "psdnAccount.poolConstant.toNumber() ",
+    //   psdnAccount.poolConstant.toNumber()
+    // );
+    // const real_k = psdnAccount.poolConstant.toNumber() * 1e6;
+
+    // const real_new_x = real_x + 1 * 1e6;
+    // const real_new_y = real_k / real_new_x;
+
+    // const real_amount_owed = (real_y - real_new_y) / 1e6;
+
+    // console.log("real_x", real_x);
+    // console.log("real_y", real_y);
+    // console.log("real_k", real_k);
+    // console.log("real_new_x", real_new_x);
+    // console.log("real_new_y", real_new_y);
+    // console.log("real_amount_owed", real_amount_owed);
+
+    // const x = 8000 * 1e6;
+    // const y = 12001.5 * 1e6;
+    // const k = x * y;
+
+    // const newX = x + 1 * 1e6;
+    // const newY = k / newX;
+    // const amountOwed = (y - newY) / 1e6;
+
+    // console.log("x", x);
+    // console.log("y", y);
+    // console.log("k", k);
+    // console.log("newX", newX);
+    // console.log("newY", newY);
+    // console.log("amountOwed", amountOwed);
+
     // console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
     // console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
 
     const psdnRatio =
       psdnAccount.usdcAmount.toNumber() / psdnAccount.trtnAmount.toNumber();
-    // console.log("psdnRatio", psdnRatio);
+    // console.log("psdnqRatio", psdnRatio);
     setPsdnRatio(psdnRatio);
     setPsdnStats(psdnAccount);
   };
 
   const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
-    console.log("_trtnAmount", _trtnAmount);
+    // console.log("_trtnAmount", _trtnAmount);
     if (_trtnAmount) {
       // console.log("triton swap");
       const usdcAmount = _trtnAmount * psdnRatio;
@@ -222,8 +265,10 @@ export default function Home() {
 
   const provideLiquidity = async () => {
     await getPsdnStats();
-    const trtn = swapAmounts.trtn * TOKEN_MULTIPLIER;
-    const usdc = swapAmounts.usdc * TOKEN_MULTIPLIER;
+    const trtn = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
+    const usdc = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
+    console.log("trtn", trtn.toNumber());
+    console.log("usdc", usdc.toNumber());
     await psdnState.program.rpc.provideLiquidity(trtn, usdc, {
       accounts: {
         config: psdnState.poseidon,
@@ -242,6 +287,50 @@ export default function Home() {
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       },
     });
+  };
+
+  const swap = async () => {
+    if (swapAmounts.type === "usdc") {
+      console.log("swapping usdc to trtn");
+      const usdcToSwap = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
+      console.log("usdcToSwap", usdcToSwap.toNumber());
+      await psdnState.program.rpc.swapToTriton(usdcToSwap, {
+        accounts: {
+          config: psdnState.poseidon,
+          authority: psdnState.program.provider.wallet.publicKey,
+          usdcAccount: psdnState.psdnUsdcAccount,
+          trtnAccount: psdnState.psdnTrtnAccount,
+          usdcMint: psdnState.usdcToken,
+          trtnMint: psdnState.trtnToken,
+          authTrtnAccount: psdnState.walletTrtnAccount,
+          authUsdcAccount: psdnState.walletUsdcAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+    } else if (swapAmounts.type === "trtn") {
+      console.log("swapping triton to usdc");
+      const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
+      console.log("trtnToSwap", trtnToSwap.toNumber());
+      await psdnState.program.rpc.swapToUsdc(trtnToSwap, {
+        accounts: {
+          config: psdnState.poseidon,
+          authority: psdnState.program.provider.wallet.publicKey,
+          usdcAccount: psdnState.psdnUsdcAccount,
+          trtnAccount: psdnState.psdnTrtnAccount,
+          usdcMint: psdnState.usdcToken,
+          trtnMint: psdnState.trtnToken,
+          authUsdcAccount: psdnState.walletUsdcAccount,
+          authTrtnAccount: psdnState.walletTrtnAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -272,8 +361,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main style={{backgroundImage: `url(${Bg.src})`}} className="justify-center bg-no-repeat bg-cover">
-        <div className="grid grid-cols-1 min-h-screen mx-auto" >
+      <main
+        style={{ backgroundImage: `url(${Bg.src})` }}
+        className="justify-center bg-no-repeat bg-cover"
+      >
+        <div className="grid grid-cols-1 min-h-screen mx-auto">
           <div className="text-center hero-content mx-auto block">
             <div className="max-w-xl">
               {/* Loading Modal */}
@@ -307,9 +399,13 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <h1 className="font-[Jangkuy] text-4xl mx-auto my-10" style={{color:'#0E3755', textShadow: 'white 1px 0 30px'}}>Poseidon LP</h1>
+              <h1
+                className="font-[Jangkuy] text-4xl my-10"
+                style={{ color: "#0E3755", textShadow: "white 1px 0 30px" }}
+              >
+                Poseidon LP
+              </h1>
               <div className="border-primary align-middle">
-              
                 <div className="display">
                   <div
                     className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"
@@ -351,9 +447,16 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                    <span className="badge badge-ghost badge-lg mt-4 w-auto bg-transparent border-0 font-[Jangkuy] shadow-xs" style={{fontSize: '1rem', letterSpacing: '1px', color: 'white'}}>
-                        {`TRITON: $${psdnRatio}`}
-                      </span>
+                    <span
+                      className="badge badge-ghost badge-lg mt-4 w-auto bg-transparent border-0 font-[Jangkuy] shadow-xs"
+                      style={{
+                        fontSize: "1rem",
+                        letterSpacing: "1px",
+                        color: "white",
+                      }}
+                    >
+                      {`TRITON: $${psdnRatio}`}
+                    </span>
                     {/* swap section */}
                     <div className="flex flex-row w-full h-[16rem] py-4">
                       <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
@@ -373,10 +476,15 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-stone-300 font-[Jangkuy]">TRTN</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">
+                              TRTN
+                            </span>
                           </label>
                           <div className="divider">
-                            <img src={arrows.src} className="h-[17px] w-[17px]"></img>
+                            <img
+                              src={arrows.src}
+                              className="h-[17px] w-[17px]"
+                            ></img>
                           </div>
                           <label className="input-group input-group-md">
                             <input
@@ -393,18 +501,26 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-stone-300 font-[Jangkuy]">USDC</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">
+                              USDC
+                            </span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button className="btn btn-outline border-[#3DB489] bg-[#3DB489] text-white hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
+                            <button
+                              className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                              style={{ fontSize: "12px" }}
+                              onClick={async () => {
+                                await swap();
+                              }}
+                            >
                               swap
                             </button>
                             <button
                               className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
-                              style={{fontSize: '12px'}}
+                              style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await provideLiquidity();
-                                await refresh();
+                                // await refresh();
                               }}
                             >
                               stake
