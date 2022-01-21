@@ -721,8 +721,8 @@ export default function Home() {
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Please note may have suffered impermamence loss. You can
-                        learn more about impermance loss by clicking the info
+                        Please note may have suffered impermanence loss. You can
+                        learn more about impermanence loss by clicking the info
                         button.
                       </p>
                       <button
