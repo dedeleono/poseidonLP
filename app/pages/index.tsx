@@ -15,6 +15,9 @@ import {
 } from "@solana/spl-token";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
+import Bg from "../public/images/bg.gif";
+import arrows from "../public/images/arrows1.png";
+
 import { useState, useEffect, useRef } from "react";
 type psdnState = {
   program: any;
@@ -358,9 +361,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <div className="grid grid-cols-1 min-h-screen bg-base-200">
-          <div className="text-center hero-content">
+      <main
+        style={{ backgroundImage: `url(${Bg.src})` }}
+        className="justify-center bg-no-repeat bg-cover"
+      >
+        <div className="grid grid-cols-1 min-h-screen mx-auto">
+          <div className="text-center hero-content mx-auto block">
             <div className="max-w-xl">
               {/* Loading Modal */}
               <a
@@ -393,39 +399,40 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <div className="mockup-phone border-primary">
-                <div className="camera"></div>
+              <h1
+                className="font-[Jangkuy] text-4xl my-10"
+                style={{ color: "#0E3755", textShadow: "white 1px 0 30px" }}
+              >
+                Poseidon LP
+              </h1>
+              <div className="border-primary align-middle">
                 <div className="display">
                   <div
-                    className="artboard phone-3 artboard-demo px-4"
+                    className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
-                    <div className="grid grid-cols-3 gap-2 w-full h-8">
+                    <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
                       <div className="col-span-2"></div>
-                      <div className="badge badge-ghost badge-lg  shadow-md">
-                        {`TRITON: ${psdnRatio}$`}
-                      </div>
                     </div>
-                    <div className="navbar mb-2 shadow-lg bg-base-200 text-neutral-content rounded-box relative min-w-full justify-center">
+                    <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
                         <span className="text-lg font-bold">Poseidon</span>
                       </div> */}
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="btn gap-4 hover:bg-transparent hover:border-0 p-0">
+                        <div className="btn gap-4 m-0 p-0 bg-transparent hover:bg-transparent border-0 w-auto">
                           <WalletMultiButton
                             style={{
                               all: "unset",
                               height: "100%",
-                              width: "100%",
+                              width: "auto",
                               zIndex: "10",
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              fontFamily: "Montserrat",
                             }}
                           />
                         </div>
-                        <div className="btn gap-4 hover:bg-transparent hover:border-0 p-0">
+                        <div className="btn hover:bg-transparent gap-4 m-0 p-0 bg-transparent border-0 w-auto">
                           <WalletDisconnectButton
                             style={{
                               all: "unset",
@@ -435,15 +442,23 @@ export default function Home() {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              fontFamily: "Montserrat",
-                              padding: "0px !important",
                             }}
                           />
                         </div>
                       </div>
                     </div>
+                    <span
+                      className="badge badge-ghost badge-lg mt-4 w-auto bg-transparent border-0 font-[Jangkuy] shadow-xs"
+                      style={{
+                        fontSize: "1rem",
+                        letterSpacing: "1px",
+                        color: "white",
+                      }}
+                    >
+                      {`TRITON: $${psdnRatio}`}
+                    </span>
                     {/* swap section */}
-                    <div className="flex flex-row w-full h-[16rem]">
+                    <div className="flex flex-row w-full h-[16rem] py-4">
                       <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
                         <div>
                           <label className="input-group input-group-md">
@@ -461,9 +476,16 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-base-200">TRTN</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">
+                              TRTN
+                            </span>
                           </label>
-                          <div className="divider"></div>
+                          <div className="divider">
+                            <img
+                              src={arrows.src}
+                              className="h-[17px] w-[17px]"
+                            ></img>
+                          </div>
                           <label className="input-group input-group-md">
                             <input
                               type="number"
@@ -479,11 +501,14 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-base-200">USDC</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">
+                              USDC
+                            </span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
                             <button
-                              className="btn btn-outline focus:animate-bounce"
+                              className="btn btn-outline border-[#3DB489] text-[#3DB489] hover:bg-[#3DB489] hover:text-white hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                              style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await swap();
                               }}
@@ -491,7 +516,8 @@ export default function Home() {
                               swap
                             </button>
                             <button
-                              className="btn btn-primary focus:animate-bounce text-white"
+                              className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
+                              style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await provideLiquidity();
                                 // await refresh();
