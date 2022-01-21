@@ -367,7 +367,7 @@ export default function Home() {
       >
         <div className="grid grid-cols-1 min-h-screen mx-auto">
           <div className="text-center hero-content mx-auto block">
-            <div className="max-w-xl">
+            <div>
               {/* Loading Modal */}
               <a
                 href="#loader"
@@ -406,10 +406,9 @@ export default function Home() {
                 Poseidon LP
               </h1>
               <div className="border-primary align-middle">
-                <div className="display">
-
+                <div className="display flex">=
                   <div
-                    className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"
+                    className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
                     <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
@@ -531,23 +530,19 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  
-                  <div className='flex mx-auto'>
-                    <div className="modal-box" style={{ backgroundColor: '#B96158' }}>
-                      <div className="flex justify-around">
-                        <h4
-                          className="text-center text-xl font-bold"
-                          style={{ fontFamily: "Jangkuy", color: '#dbd7d5' }}
-                        >
-                          Hi Fren,
-                        </h4>
-                      </div>
-                      <div className="">
-                        <p className="font-extralight text-sm py-4" style={{ fontFamily: "Montserrat", color: "white" }}>If after staking you don't see your Shantie please keep refreshing and be patient, your Shantie should show up anytime soon! </p>
-                      </div>
+                  <div className="modal-box" style={{ backgroundColor: '#B96158', maxHeight: '420px', marginTop: '-1.5rem' }}>
+                    <div className="flex justify-around">
+                      <h4
+                        className="text-center text-xl font-bold"
+                        style={{ fontFamily: "Jangkuy", color: '#dbd7d5' }}
+                      >
+                        Hi Fren,
+                      </h4>
+                    </div>
+                    <div className="">
+                      <p className="font-extralight text-sm py-4" style={{ fontFamily: "Montserrat", color: "white" }}>If after staking you don't see your Shantie please keep refreshing and be patient, your Shantie should show up anytime soon! </p>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
