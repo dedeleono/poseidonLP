@@ -432,7 +432,7 @@ export default function Home() {
               </h1>
               <div className="border-primary align-middle">
                 <div className="display flex">
-                  =
+                  
                   <div className="modal-box mr-8" style={{ backgroundColor: '#3DB489', maxHeight: '420px', marginTop: '-1.5rem' }}>
                     <div className="flex justify-around">
                       <h4
@@ -478,7 +478,6 @@ export default function Home() {
                     style={{ height: "420px" }}
                   >
                     <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
-                      <div className="col-span-2"></div>
                     </div>
                     <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
