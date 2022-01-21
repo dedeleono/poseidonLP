@@ -308,7 +308,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="border-primary">
-                
+              
                 <div className="display">
                   <div
                     className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"

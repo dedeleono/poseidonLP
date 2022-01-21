@@ -16,3 +16,11 @@
     font-family: 'Scratchy';
     src: local('Scratchy'), url('../public/fonts/Scratchy.ttf') format('opentype');
   }
+
+  @layer utilities {
+    @variants responsive {
+        .text-shadow-lg {
+          text-shadow: 2px 2px 4px rgba(40,114,143,0.25);
+        }
+    }
+}
