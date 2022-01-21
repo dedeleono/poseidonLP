@@ -363,18 +363,18 @@ export default function Home() {
       >
         <div className="grid grid-cols-1 min-h-screen mx-auto">
           <div className="text-center hero-content mx-auto block">
-            <div className="max-w-xl">
+            <div>
               {/* Loading Modal */}
               <a
                 href="#loader"
-                className="btn btn-primary hidden"
+                className="btn btn-primary hidden text-[Montserrat]"
                 ref={loaderRef}
               >
                 open loader
               </a>
               <div id="loader" className="modal">
                 <div className="modal-box stat">
-                  <div className="stat-figure text-primary">
+                  <div className="stat-figure text-primary text-[Montserrat]">
                     <button className="btn loading btn-circle btn-lg bg-base-200 btn-ghost"></button>
                   </div>
                   <p style={{ fontFamily: "Montserrat" }}>Loading...</p>
@@ -402,9 +402,9 @@ export default function Home() {
                 Poseidon LP
               </h1>
               <div className="border-primary align-middle">
-                <div className="display">
+                <div className="display flex">=
                   <div
-                    className="artboard  bg-sky-900/[0.9] phone-3 artboard-demo px-4"
+                    className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "420px" }}
                   >
                     <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
@@ -505,7 +505,7 @@ export default function Home() {
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
                             <button
-                              className="btn btn-outline border-[#3DB489] text-[#3DB489] hover:bg-[#3DB489] hover:text-white hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                              className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
                               style={{ fontSize: "12px" }}
                               onClick={async () => {
                                 await swap();
@@ -528,10 +528,24 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+                  <div className="modal-box" style={{ backgroundColor: '#B96158', maxHeight: '420px', marginTop: '-1.5rem' }}>
+                    <div className="flex justify-around">
+                      <h4
+                        className="text-center text-xl font-bold"
+                        style={{ fontFamily: "Jangkuy", color: '#dbd7d5' }}
+                      >
+                        Hi Fren,
+                      </h4>
+                    </div>
+                    <div className="">
+                      <p className="font-extralight text-sm py-4" style={{ fontFamily: "Montserrat", color: "white" }}>If after staking you don't see your Shantie please keep refreshing and be patient, your Shantie should show up anytime soon! </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </main>
     </div>
