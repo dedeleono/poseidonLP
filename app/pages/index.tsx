@@ -307,7 +307,8 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              <div className="border-primary">
+              <h1 className="font-[Jangkuy] text-4xl my-10" style={{color:'#0E3755', textShadow: 'white 1px 0 30px'}}>Poseidon LP</h1>
+              <div className="border-primary align-middle">
               
                 <div className="display">
                   <div

@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require('tailwindcss-textshadow')],
   daisyui: {
     themes: ["corporate"],
   },
