@@ -373,7 +373,7 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-base-200 font-[Jangkuy]">TRTN</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">TRTN</span>
                           </label>
                           <div className="divider">
                             <img src={arrows.src} className="h-[17px] w-[17px]"></img>
@@ -393,7 +393,7 @@ export default function Home() {
                               }}
                               className="input input-bordered input-md focus:input-primary"
                             />
-                            <span className="bg-base-200 font-[Jangkuy]">USDC</span>
+                            <span className="bg-stone-300 font-[Jangkuy]">USDC</span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
                             <button className="btn btn-outline font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
