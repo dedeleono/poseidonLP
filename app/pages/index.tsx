@@ -700,7 +700,7 @@ export default function Home() {
                       marginTop: "-1.5rem",
                     }}
                   >
-                    <div className="flex justify-around">
+                    <div className="flex justify-around my-8">
                       <h4
                         className="text-center text-xl font-bold"
                         style={{ fontFamily: "Jangkuy", color: "white" }}
@@ -727,7 +727,7 @@ export default function Home() {
                       </p>
                       <button
                         style={{ fontSize: "12px" }}
-                        className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce text-white"
+                        className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
                         onClick={async () => {
                           await removeLiquidity();
                           await refresh();
