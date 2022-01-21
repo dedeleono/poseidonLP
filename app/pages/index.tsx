@@ -274,7 +274,7 @@ export default function Home() {
 
       <main style={{backgroundImage: `url(${Bg.src})`}} className="justify-center bg-no-repeat bg-cover">
         <div className="grid grid-cols-1 min-h-screen mx-auto" >
-          <div className="text-center hero-content">
+          <div className="text-center hero-content mx-auto block">
             <div className="max-w-xl">
               {/* Loading Modal */}
               <a
