@@ -521,7 +521,7 @@ export default function Home() {
                         color: "white",
                       }}
                     >
-                      {`TRITON: $${psdnRatio}`}
+                      {`TRITON: $${Math.round(psdnRatio * 100) / 100}`}
                     </span>
                     {/* swap section */}
                     <div className="flex flex-row w-full h-[16rem] py-4">
