@@ -4,13 +4,14 @@ import {
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 import * as anchor from "@project-serum/anchor";
-import { Program, Provider } from "@project-serum/anchor";
+import { Program, Provider, BN } from "@project-serum/anchor";
 import poseidonIDL from "../../target/idl/poseidon.json";
 import { PublicKey, ConfirmOptions } from "@solana/web3.js";
 import {
   Token,
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+  u64,
 } from "@solana/spl-token";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
@@ -194,18 +195,60 @@ export default function Home() {
     );
 
     // console.log("psdnAccount", psdnAccount);
+    // console.log("constant", psdnAccount.poolConstant.toString());
+    // console.log(
+    //   "amount owed",
+    //   parseFloat(psdnAccount.usdcAmount.toNumber() + 1.5) /
+    //     parseFloat(psdnAccount.poolConstant.toString())
+    // );
+
+    // const real_x = psdnAccount.trtnAmount.toNumber();
+    // const real_y = psdnAccount.usdcAmount.toNumber();
+    // console.log(
+    //   "psdnAccount.poolConstant.toNumber() ",
+    //   psdnAccount.poolConstant.toNumber()
+    // );
+    // const real_k = psdnAccount.poolConstant.toNumber() * 1e6;
+
+    // const real_new_x = real_x + 1 * 1e6;
+    // const real_new_y = real_k / real_new_x;
+
+    // const real_amount_owed = (real_y - real_new_y) / 1e6;
+
+    // console.log("real_x", real_x);
+    // console.log("real_y", real_y);
+    // console.log("real_k", real_k);
+    // console.log("real_new_x", real_new_x);
+    // console.log("real_new_y", real_new_y);
+    // console.log("real_amount_owed", real_amount_owed);
+
+    // const x = 8000 * 1e6;
+    // const y = 12001.5 * 1e6;
+    // const k = x * y;
+
+    // const newX = x + 1 * 1e6;
+    // const newY = k / newX;
+    // const amountOwed = (y - newY) / 1e6;
+
+    // console.log("x", x);
+    // console.log("y", y);
+    // console.log("k", k);
+    // console.log("newX", newX);
+    // console.log("newY", newY);
+    // console.log("amountOwed", amountOwed);
+
     // console.log("psdnAccount.usdcAmount", psdnAccount.usdcAmount.toNumber());
     // console.log("psdnAccount.trtnAmount", psdnAccount.trtnAmount.toNumber());
 
     const psdnRatio =
       psdnAccount.usdcAmount.toNumber() / psdnAccount.trtnAmount.toNumber();
-    // console.log("psdnRatio", psdnRatio);
+    // console.log("psdnqRatio", psdnRatio);
     setPsdnRatio(psdnRatio);
     setPsdnStats(psdnAccount);
   };
 
   const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
-    console.log("_trtnAmount", _trtnAmount);
+    // console.log("_trtnAmount", _trtnAmount);
     if (_trtnAmount) {
       // console.log("triton swap");
       const usdcAmount = _trtnAmount * psdnRatio;
@@ -219,8 +262,10 @@ export default function Home() {
 
   const provideLiquidity = async () => {
     await getPsdnStats();
-    const trtn = swapAmounts.trtn * TOKEN_MULTIPLIER;
-    const usdc = swapAmounts.usdc * TOKEN_MULTIPLIER;
+    const trtn = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
+    const usdc = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
+    console.log("trtn", trtn.toNumber());
+    console.log("usdc", usdc.toNumber());
     await psdnState.program.rpc.provideLiquidity(trtn, usdc, {
       accounts: {
         config: psdnState.poseidon,
@@ -239,6 +284,50 @@ export default function Home() {
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       },
     });
+  };
+
+  const swap = async () => {
+    if (swapAmounts.type === "usdc") {
+      console.log("swapping usdc to trtn");
+      const usdcToSwap = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
+      console.log("usdcToSwap", usdcToSwap.toNumber());
+      await psdnState.program.rpc.swapToTriton(usdcToSwap, {
+        accounts: {
+          config: psdnState.poseidon,
+          authority: psdnState.program.provider.wallet.publicKey,
+          usdcAccount: psdnState.psdnUsdcAccount,
+          trtnAccount: psdnState.psdnTrtnAccount,
+          usdcMint: psdnState.usdcToken,
+          trtnMint: psdnState.trtnToken,
+          authTrtnAccount: psdnState.walletTrtnAccount,
+          authUsdcAccount: psdnState.walletUsdcAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+    } else if (swapAmounts.type === "trtn") {
+      console.log("swapping triton to usdc");
+      const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
+      console.log("trtnToSwap", trtnToSwap.toNumber());
+      await psdnState.program.rpc.swapToUsdc(trtnToSwap, {
+        accounts: {
+          config: psdnState.poseidon,
+          authority: psdnState.program.provider.wallet.publicKey,
+          usdcAccount: psdnState.psdnUsdcAccount,
+          trtnAccount: psdnState.psdnTrtnAccount,
+          usdcMint: psdnState.usdcToken,
+          trtnMint: psdnState.trtnToken,
+          authUsdcAccount: psdnState.walletUsdcAccount,
+          authTrtnAccount: psdnState.walletTrtnAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -393,14 +482,19 @@ export default function Home() {
                             <span className="bg-base-200">USDC</span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button className="btn btn-outline focus:animate-bounce ">
+                            <button
+                              className="btn btn-outline focus:animate-bounce"
+                              onClick={async () => {
+                                await swap();
+                              }}
+                            >
                               swap
                             </button>
                             <button
                               className="btn btn-primary focus:animate-bounce text-white"
                               onClick={async () => {
                                 await provideLiquidity();
-                                await refresh();
+                                // await refresh();
                               }}
                             >
                               stake
