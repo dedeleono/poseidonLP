@@ -42,6 +42,15 @@ describe("poseidon", async () => {
   console.log("psdnTrtnAccount", psdnTrtnAccount.toBase58());
   console.log("psdnTrtnBump", psdnTrtnBump);
 
+  const psdnTrtnAccountBalance =
+    await program.provider.connection.getTokenAccountBalance(psdnTrtnAccount);
+  console.log("psdnTrtnAccountBalance", psdnTrtnAccountBalance);
+
+  // console.log(
+  //   "psdnTrtnAccount balance: ",
+  //   await program.provider.connection.getTokenAccountBalance(psdnTrtnAccount)
+  // );
+
   const walletTrtnAccount = await Token.getAssociatedTokenAddress(
     ASSOCIATED_TOKEN_PROGRAM_ID,
     TOKEN_PROGRAM_ID,
@@ -62,6 +71,11 @@ describe("poseidon", async () => {
       [poseidon.toBuffer(), Buffer.from("psdn_usdc_account")],
       program.programId
     );
+
+  const psdnUsdcAccountBalance =
+    await program.provider.connection.getTokenAccountBalance(psdnUsdcAccount);
+  console.log("psdnUsdcAccountBalance", psdnUsdcAccountBalance);
+
   console.log("psdnUsdcAccount", psdnUsdcAccount.toBase58());
   console.log("psdnUsdcBump", psdnUsdcBump);
 
@@ -97,6 +111,24 @@ describe("poseidon", async () => {
   console.log("walletShellAccount", walletShellAccount.toBase58());
 
   let psdnAccount;
+
+  // console.log("ran config update");
+  // // only run once to make the config
+  // // initial ratio 12/8
+  // const trtn = new BN(psdnTrtnAccountBalance.value.amount);
+  // console.log("trtn", trtn.toNumber());
+  // const usdc = new BN(psdnUsdcAccountBalance.value.amount);
+  // console.log("usdc", usdc.toNumber());
+
+  // await program.rpc.updateConfig(trtn, usdc, {
+  //   accounts: {
+  //     config: poseidon,
+  //     authority: program.provider.wallet.publicKey,
+  //     systemProgram: anchor.web3.SystemProgram.programId,
+  //     tokenProgram: TOKEN_PROGRAM_ID,
+  //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+  //   },
+  // });
 
   it("Is initialized!", async () => {
     // only run once to make the config
@@ -152,10 +184,15 @@ describe("poseidon", async () => {
   // });
 
   // it("Update Config", async () => {
+  //   console.log("ran config update");
   //   // only run once to make the config
   //   // initial ratio 12/8
+  //   const trtn = new BN(psdnTrtnAccountBalance.value.amount);
+  //   console.log("trtn", trtn.toNumber());
+  //   const usdc = new BN(psdnUsdcAccountBalance.value.amount);
+  //   console.log("usdc", usdc.toNumber());
 
-  //   await program.rpc.updateConfig({
+  //   await program.rpc.updateConfig(trtn, usdc, {
   //     accounts: {
   //       config: poseidon,
   //       authority: program.provider.wallet.publicKey,

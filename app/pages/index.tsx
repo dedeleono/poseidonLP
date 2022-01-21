@@ -198,7 +198,7 @@ export default function Home() {
     );
 
     // console.log("psdnAccount", psdnAccount);
-    // console.log("constant", psdnAccount.poolConstant.toString());
+    // console.log("constant", psdnAccount.poolConstant.toNumber());
     // console.log(
     //   "amount owed",
     //   parseFloat(psdnAccount.usdcAmount.toNumber() + 1.5) /
@@ -207,19 +207,15 @@ export default function Home() {
 
     // const real_x = psdnAccount.trtnAmount.toNumber();
     // const real_y = psdnAccount.usdcAmount.toNumber();
-    // console.log(
-    //   "psdnAccount.poolConstant.toNumber() ",
-    //   psdnAccount.poolConstant.toNumber()
-    // );
-    // const real_k = psdnAccount.poolConstant.toNumber() * 1e6;
+    // const real_k = real_x * real_y;
 
     // const real_new_x = real_x + 1 * 1e6;
     // const real_new_y = real_k / real_new_x;
 
     // const real_amount_owed = (real_y - real_new_y) / 1e6;
 
-    // console.log("real_x", real_x);
-    // console.log("real_y", real_y);
+    // console.log("real_trtn", real_x);
+    // console.log("real_usdc", real_y);
     // console.log("real_k", real_k);
     // console.log("real_new_x", real_new_x);
     // console.log("real_new_y", real_new_y);
@@ -481,10 +477,12 @@ export default function Home() {
                             </span>
                           </label>
                           <div className="divider">
-                            <img
-                              src={arrows.src}
-                              className="h-[17px] w-[17px]"
-                            ></img>
+                            <button className="btn btn-outline btn-circle btn-sm">
+                              <img
+                                src={arrows.src}
+                                className="h-[17px] w-[17px]"
+                              ></img>
+                            </button>
                           </div>
                           <label className="input-group input-group-md">
                             <input
