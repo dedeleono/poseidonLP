@@ -317,11 +317,8 @@ export default function Home() {
                   >
                     <div className="grid grid-cols-2 gap-2 w-full h-8 mx-auto">
                       <div className="col-span-2"></div>
-                      <span className="badge badge-ghost badge-lg py-2 w-auto bg-transparent border-0 font-[Jangkuy] shadow-md" style={{fontSize: '1rem', letterSpacing: '1px', color: 'white'}}>
-                        {`TRITON: $${psdnRatio}`}
-                      </span>
                     </div>
-                    <div className="navbar mb-2 shadow-lg bg-transparent text-neutral-content rounded-box relative min-w-full mt-5 justify-center">
+                    <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
                         <span className="text-lg font-bold">Poseidon</span>
                       </div> */}
@@ -354,8 +351,11 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
+                    <span className="badge badge-ghost badge-lg mt-4 w-auto bg-transparent border-0 font-[Jangkuy] shadow-xs" style={{fontSize: '1rem', letterSpacing: '1px', color: 'white'}}>
+                        {`TRITON: $${psdnRatio}`}
+                      </span>
                     {/* swap section */}
-                    <div className="flex flex-row w-full h-[16rem] pt-4">
+                    <div className="flex flex-row w-full h-[16rem] py-4">
                       <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
                         <div>
                           <label className="input-group input-group-md">
@@ -396,11 +396,11 @@ export default function Home() {
                             <span className="bg-stone-300 font-[Jangkuy]">USDC</span>
                           </label>
                           <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button className="btn btn-outline font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
+                            <button className="btn btn-outline border-[#3DB489] text-[#3DB489] hover:bg-[#3DB489] hover:text-white hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce" style={{fontSize: '12px'}}>
                               swap
                             </button>
                             <button
-                              className="btn btn-primary font-[Montserrat] focus:animate-bounce text-white"
+                              className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
                               style={{fontSize: '12px'}}
                               onClick={async () => {
                                 await provideLiquidity();
