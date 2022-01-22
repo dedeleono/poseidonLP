@@ -49,6 +49,10 @@ export default function Home() {
   const [infoState, setInfoState] = useState(false);
   const [lpState, setLpState] = useState(false);
 
+  const openSlippageRef = useRef<HTMLAnchorElement>(null);
+  const closeSlippageRef = useRef<HTMLAnchorElement>(null);
+  const swapRef = useRef<HTMLButtonElement>(null);
+
   const loaderRef = useRef<HTMLAnchorElement>(null);
   const modalRef = useRef<HTMLAnchorElement>(null);
   const [loader, setLoader] = useState(0);
@@ -344,48 +348,57 @@ export default function Home() {
     );
   };
 
-  const swap = async () => {
-    if (swapAmounts.type === "usdc") {
-      console.log("swapping usdc to trtn");
-      const usdcToSwap = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
-      console.log("usdcToSwap", usdcToSwap.toNumber());
-      const events = await psdnState.program.simulate.swapToTriton(usdcToSwap, {
-        accounts: {
-          config: psdnState.poseidon,
-          authority: psdnState.program.provider.wallet.publicKey,
-          usdcAccount: psdnState.psdnUsdcAccount,
-          trtnAccount: psdnState.psdnTrtnAccount,
-          usdcMint: psdnState.usdcToken,
-          trtnMint: psdnState.trtnToken,
-          authTrtnAccount: psdnState.walletTrtnAccount,
-          authUsdcAccount: psdnState.walletUsdcAccount,
-          systemProgram: anchor.web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-        },
-      });
-      console.log("events", events);
-    } else if (swapAmounts.type === "trtn") {
-      console.log("swapping triton to usdc");
-      const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
-      console.log("trtnToSwap", trtnToSwap.toNumber());
-      await psdnState.program.simulate.swapToUsdc(trtnToSwap, {
-        accounts: {
-          config: psdnState.poseidon,
-          authority: psdnState.program.provider.wallet.publicKey,
-          usdcAccount: psdnState.psdnUsdcAccount,
-          trtnAccount: psdnState.psdnTrtnAccount,
-          usdcMint: psdnState.usdcToken,
-          trtnMint: psdnState.trtnToken,
-          authUsdcAccount: psdnState.walletUsdcAccount,
-          authTrtnAccount: psdnState.walletTrtnAccount,
-          systemProgram: anchor.web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-        },
-      });
+  const swap = async (confirmed?: any) => {
+    await getPsdnStats();
+    if (
+      Math.abs(1 - swapAmounts.usdc / swapAmounts.trtn / psdnRatio) > 0.01 &&
+      !confirmed
+    ) {
+      openSlippageRef.current?.click();
+    } else {
+      closeSlippageRef.current?.click();
+      swapRef.current?.focus();
+      if (swapAmounts.type === "usdc") {
+        // console.log("swapping usdc to trtn");
+        const usdcToSwap = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
+        // console.log("usdcToSwap", usdcToSwap.toNumber());
+        await psdnState.program.rpc.swapToTriton(usdcToSwap, {
+          accounts: {
+            config: psdnState.poseidon,
+            authority: psdnState.program.provider.wallet.publicKey,
+            usdcAccount: psdnState.psdnUsdcAccount,
+            trtnAccount: psdnState.psdnTrtnAccount,
+            usdcMint: psdnState.usdcToken,
+            trtnMint: psdnState.trtnToken,
+            authTrtnAccount: psdnState.walletTrtnAccount,
+            authUsdcAccount: psdnState.walletUsdcAccount,
+            systemProgram: anchor.web3.SystemProgram.programId,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          },
+        });
+      } else if (swapAmounts.type === "trtn") {
+        // console.log("swapping triton to usdc");
+        const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
+        // console.log("trtnToSwap", trtnToSwap.toNumber());
+        await psdnState.program.rpc.swapToUsdc(trtnToSwap, {
+          accounts: {
+            config: psdnState.poseidon,
+            authority: psdnState.program.provider.wallet.publicKey,
+            usdcAccount: psdnState.psdnUsdcAccount,
+            trtnAccount: psdnState.psdnTrtnAccount,
+            usdcMint: psdnState.usdcToken,
+            trtnMint: psdnState.trtnToken,
+            authUsdcAccount: psdnState.walletUsdcAccount,
+            authTrtnAccount: psdnState.walletTrtnAccount,
+            systemProgram: anchor.web3.SystemProgram.programId,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          },
+        });
+      }
     }
   };
 
@@ -409,31 +422,6 @@ export default function Home() {
       }
     }
   }, [psdnRatio]);
-
-  // function Modal({usd, trtn}){
-  //   return(
-
-  //     <div className="">
-  //     <div className="modal-box stat">
-  //       <div className="stat-desc max-w-[90%]">
-  //         <p>Do you want to confirm the transaction for usd to trtn</p>
-  //       </div>
-  //       <div>
-  //         <button
-  //           className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
-  //           style={{ fontSize: "12px" }}
-  //           onClick={async () => {
-  //             await swap();
-  //             await refresh();
-  //           }}
-  //         >
-  //           confirm
-  //         </button>
-  //         </div>
-  //     </div>
-  //   </div>
-  //   )
-  // }
 
   return (
     <div>
@@ -471,6 +459,53 @@ export default function Home() {
           </div>
           <div className="text-center hero-content mx-auto block">
             <div>
+              {/* Slippage Modal */}
+              <a
+                href="#loader"
+                className="btn btn-primary hidden"
+                ref={openSlippageRef}
+              >
+                open slippage
+              </a>
+              <div id="loader" className="modal">
+                <div className="modal-box">
+                  <h4
+                    className="text-center text-xl font-bold"
+                    style={{ fontFamily: "Jangkuy", color: "black" }}
+                  >
+                    Slippage Warning
+                  </h4>
+                  <div className="align-left">
+                    <p
+                      className="font-extralight text-sm py-2 text-justify"
+                      style={{ fontFamily: "Montserrat", color: "black" }}
+                    >
+                      The price of TRITON has changed more than 1% since you've
+                      clicked swap! Make sure you are confortable swapping at
+                      the latest prices provided by your wallets approve pop up
+                      otherwise refresh the page for updated swap rates.
+                    </p>
+                    <button
+                      style={{ fontSize: "12px" }}
+                      className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
+                      onClick={async () => {
+                        await swap("confirmed");
+                        await refresh();
+                      }}
+                    >
+                      confirm swap
+                    </button>
+                    <a
+                      href="#"
+                      style={{ fontFamily: "Montserrat" }}
+                      className="btn hidden"
+                      ref={closeSlippageRef}
+                    >
+                      Close Slippage
+                    </a>
+                  </div>
+                </div>
+              </div>
               {/* Loading Modal */}
               <a
                 href="#loader"
@@ -791,10 +826,11 @@ export default function Home() {
                             <div className="grid mt-4">
                               <button
                                 className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                                ref={swapRef}
                                 style={{ fontSize: "12px" }}
                                 onClick={async () => {
                                   await swap();
-                                  // await refresh();
+                                  await refresh();
                                 }}
                               >
                                 swap

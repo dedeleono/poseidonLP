@@ -156,8 +156,10 @@ pub mod poseidon {
         // shell lp
         if config.pool_init {
             let shell_to_mint = cmp::min(
-                trtn * config.shell_amount / config.trtn_amount,
-                usdc * config.shell_amount / config.usdc_amount,
+                (((trtn as u128) * (config.shell_amount as u128)) / (config.trtn_amount as u128))
+                    as u64,
+                (((usdc as u128) * (config.shell_amount as u128)) / (config.usdc_amount as u128))
+                    as u64,
             );
             anchor_spl::token::mint_to(
                 CpiContext::new_with_signer(
@@ -225,8 +227,10 @@ pub mod poseidon {
 
     pub fn remove_liquidity(ctx: Context<RemoveLiquidity>, shell: u64) -> ProgramResult {
         let config = &mut ctx.accounts.config;
-        let trtn_to_send = config.trtn_amount * shell / config.shell_amount;
-        let usdc_to_send = config.usdc_amount * shell / config.shell_amount;
+        let trtn_to_send =
+            ((config.trtn_amount as u128) * (shell as u128) / (config.shell_amount as u128)) as u64;
+        let usdc_to_send =
+            ((config.usdc_amount as u128) * (shell as u128) / config.shell_amount as u128) as u64;
         config.trtn_amount = config.trtn_amount - trtn_to_send;
         config.usdc_amount = config.usdc_amount - usdc_to_send;
         config.shell_amount = config.shell_amount - shell;
