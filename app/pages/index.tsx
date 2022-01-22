@@ -409,6 +409,32 @@ export default function Home() {
     }
   }, [psdnRatio]);
 
+
+  function Modal({usd, trtn}){
+    return(
+
+      <div className="">
+      <div className="modal-box stat">
+        <div className="stat-desc max-w-[90%]">
+          <p>Do you want to confirm the transaction for usd to trtn</p>
+        </div>
+        <div>
+          <button
+            className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
+            style={{ fontSize: "12px" }}
+            onClick={async () => {
+              await swap();
+              await refresh();
+            }}
+          >
+            confirm
+          </button>
+          </div>
+      </div>
+    </div> 
+    )
+  }
+
   return (
     <div>
       <Head>
@@ -419,7 +445,10 @@ export default function Home() {
       <main
         style={{ backgroundImage: `url(${Bg.src})` }}
         className="justify-center bg-no-repeat bg-cover"
-      >
+      >     
+
+        <Modal />
+
         <div className="grid grid-cols-1 min-h-screen mx-auto">
           <div className="text-center hero-content mx-auto block">
             <div>
