@@ -483,13 +483,18 @@ export default function Home() {
               </div>
               <h1
                 className="font-[Jangkuy] text-4xl my-5"
-                style={{ color: "#0E3755", textShadow: "white 1px 0 30px",  }}
+                style={{ color: "#0E3755", textShadow: "white 1px 0 30px" }}
               >
                 Poseidon LP
               </h1>
-              <div 
-                className="lpsize mx-auto  border-primary align-middle py-4 bg-sky-900/[0.9] rounded-md" 
-                style={{ color: "white", width: "478px", fontFamily: "Jangkuy"}}>
+              <div
+                className="lpsize mx-auto  border-primary align-middle py-4 bg-sky-900/[0.9] rounded-md"
+                style={{
+                  color: "white",
+                  width: "478px",
+                  fontFamily: "Jangkuy",
+                }}
+              >
                 <p className="text-center">
                   {wallet?.publicKey
                     ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
@@ -861,7 +866,7 @@ export default function Home() {
                         className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
                         onClick={async () => {
                           await removeLiquidity();
-                          // await refresh();
+                          await refresh();
                         }}
                       >
                         confirm unstaking
