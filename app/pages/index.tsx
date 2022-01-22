@@ -482,12 +482,14 @@ export default function Home() {
                 </div>
               </div>
               <h1
-                className="font-[Jangkuy] text-4xl my-10"
-                style={{ color: "#0E3755", textShadow: "white 1px 0 30px" }}
+                className="font-[Jangkuy] text-4xl my-5"
+                style={{ color: "#0E3755", textShadow: "white 1px 0 30px",  }}
               >
                 Poseidon LP
               </h1>
-              <div className="lpsize">
+              <div 
+                className="lpsize mx-auto  border-primary align-middle py-4 bg-sky-900/[0.9] rounded-md" 
+                style={{ color: "white", width: "478px", fontFamily: "Jangkuy"}}>
                 <p className="text-center">
                   {wallet?.publicKey
                     ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
@@ -501,7 +503,7 @@ export default function Home() {
               <div className="border-primary align-middle">
                 <div className="display flex">
                   <div
-                    className={`modal-box mr-8 ${infoState ? "" : "hidden"}`}
+                    className={`modal-box ${infoState ? "" : "hidden"}`}
                     style={{
                       backgroundColor: "#3DB489",
                       maxHeight: "600px",
@@ -581,7 +583,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div
-                    className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
+                    className="artboard mx-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
                     style={{ height: "600px" }}
                   >
                     <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
@@ -822,7 +824,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div
-                    className={`modal-box mr-8 ${lpState ? "" : "hidden"}`}
+                    className={`modal-box ${lpState ? "" : "hidden"}`}
                     style={{
                       backgroundColor: "#0aafc1",
                       maxHeight: "600px",
