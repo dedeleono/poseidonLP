@@ -853,14 +853,14 @@ export default function Home() {
                         and give you back the right amount of TRITON and USDC
                         owed. You will have earned 1% trading fee on all swaps.
                       </p>
-                      <p
+                      {/* <p
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
                         Please note may have suffered impermanence loss. You can
                         learn more about impermanence loss by clicking the info
                         button.
-                      </p>
+                      </p> */}
                       <button
                         style={{ fontSize: "12px" }}
                         className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
