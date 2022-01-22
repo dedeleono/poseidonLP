@@ -501,10 +501,10 @@ export default function Home() {
                   >
                     <div className="flex justify-around">
                       <h4
-                        className="text-center text-xl font-bold"
+                        className="text-center text-xl font-bold mt-6"
                         style={{ fontFamily: "Jangkuy", color: "white" }}
                       >
-                        Important Info
+                        ADD LIQUIDITY
                       </h4>
                     </div>
                     <div className="align-left">
