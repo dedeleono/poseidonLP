@@ -849,9 +849,9 @@ export default function Home() {
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Clicking unstake below will burn all your shell tokens
-                        and give you back the right amount of TRITON and USDC
-                        owed. You will have earned 1% trading fee on all swaps.
+                        Clicking unstake below will burn all your shell tokens and give you back
+                        the amount of TRITON and USDC you own in the pool. 
+                        This includes your share of the 1% trading fee charged on all swaps since you deposited.
                       </p>
                       {/* <p
                         className="font-extralight text-sm py-2 text-justify"
