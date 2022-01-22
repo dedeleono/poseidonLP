@@ -487,7 +487,17 @@ export default function Home() {
               >
                 Poseidon LP
               </h1>
-              <div className="lpsize"></div>
+              <div className="lpsize">
+                <p className="text-center">
+                  {wallet?.publicKey
+                    ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
+                        0
+                      )} | USDC: ${(psdnStats.usdcAmount / 1e6).toFixed(
+                        0
+                      )} | SHELL: ${(psdnStats.shellAmount / 1e6).toFixed(0)}`
+                    : `Connect Wallet Below`}
+                </p>
+              </div>
               <div className="border-primary align-middle">
                 <div className="display flex">
                   <div
