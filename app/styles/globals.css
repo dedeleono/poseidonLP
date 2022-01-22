@@ -3,24 +3,61 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Jangkuy';
-    src: local('Jangkuy'), url('../public/fonts/jangkuy.otf') format('opentype');
-  }
-  
-  @font-face {
-    font-family: 'Montserrat';
-    src: local('Montserrat'), url('../public/fonts/mont.ttf') format('opentype');
-  }
-  
-  @font-face {
-    font-family: 'Scratchy';
-    src: local('Scratchy'), url('../public/fonts/Scratchy.ttf') format('opentype');
-  }
+  font-family: "Jangkuy";
+  src: local("Jangkuy"), url("../public/fonts/jangkuy.otf") format("opentype");
+}
 
-  @layer utilities {
-    @variants responsive {
-        .text-shadow-lg {
-          text-shadow: 2px 2px 4px rgba(40,114,143,0.25);
-        }
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("../public/fonts/mont.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "Scratchy";
+  src: local("Scratchy"), url("../public/fonts/Scratchy.ttf") format("opentype");
+}
+
+@layer utilities {
+  @variants responsive {
+    .text-shadow-lg {
+      text-shadow: 2px 2px 4px rgba(40, 114, 143, 0.25);
     }
+  }
+}
+
+.wallet-adapter-button .wallet-adapter-button-trigger {
+  background-color: red !important;
+  font-size: 14px !important;
+}
+
+#__next
+  > div
+  > main
+  > div
+  > div
+  > div
+  > div.border-primary.align-middle
+  > div
+  > div.artboard.mr-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
+  > div
+  > div.btn.gap-4.m-0.p-0.bg-transparent.hover\:bg-transparent.border-0.w-auto.text-sm
+  > button {
+  font-size: 14px !important;
+}
+
+#__next
+  > div
+  > main
+  > div
+  > div
+  > div
+  > div.border-primary.align-middle
+  > div
+  > div.artboard.mr-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
+  > div
+  > div:nth-child(2)
+  > button {
+  font-size: 14px !important;
 }
