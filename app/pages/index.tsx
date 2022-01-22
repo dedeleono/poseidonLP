@@ -255,18 +255,26 @@ export default function Home() {
       // console.log("triton swap");
       const usdcAmount = _trtnAmount * psdnRatio;
       setSwapAmounts({
+        ...swapAmounts,
         trtn: _trtnAmount as any,
         usdc: usdcAmount as any,
-        type: "trtn",
       });
     } else if (_usdcAmount) {
       // console.log("usdc swap");
       const trtnAmount = _usdcAmount / psdnRatio;
       setSwapAmounts({
+        ...swapAmounts,
         trtn: trtnAmount as any,
         usdc: _usdcAmount as any,
-        type: "usdc",
       });
+    }
+  };
+
+  const changeSwapType = () => {
+    if (swapAmounts.type === "trtn") {
+      setSwapAmounts({ ...swapAmounts, type: "usdc" });
+    } else if (swapAmounts.type === "usdc") {
+      setSwapAmounts({ ...swapAmounts, type: "trtn" });
     }
   };
 
@@ -578,7 +586,7 @@ export default function Home() {
                         <span className="text-lg font-bold">Poseidon</span>
                       </div> */}
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="btn gap-4 m-0 p-0 bg-transparent hover:bg-transparent border-0 w-auto">
+                        <div className="btn gap-4 m-0 p-0 bg-transparent hover:bg-transparent border-0 w-auto text-sm">
                           <WalletMultiButton
                             style={{
                               all: "unset",
@@ -615,81 +623,166 @@ export default function Home() {
                         color: "white",
                       }}
                     >
-                      {`TRITON: $${psdnRatio.toFixed(6)}`}
+                      {wallet?.publicKey
+                        ? `TRITON: $${psdnRatio.toFixed(6)}`
+                        : `Connect Wallet Above`}
                     </span>
                     {/* swap section */}
                     <div className="flex flex-row w-full h-[16rem] py-4">
                       <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
-                        <div>
-                          <label className="input-group input-group-md">
-                            <input
-                              type="number"
-                              step="0.000001"
-                              value={swapAmounts.trtn}
-                              onChange={(e) => {
-                                const amount = parseFloat(e.target.value);
-                                if (amount > 0) {
-                                  calculateSwap(amount, null);
-                                } else {
-                                  calculateSwap(0.000001, null);
-                                }
-                              }}
-                              className="input input-bordered input-md focus:input-primary"
-                            />
-                            <span className="bg-stone-300 font-[Jangkuy]">
-                              TRTN
-                            </span>
-                          </label>
-                          <div className="divider">
-                            <button className="btn btn-outline btn-circle btn-sm">
-                              <img
-                                src={arrows.src}
-                                className="h-[17px] w-[17px]"
-                              ></img>
-                            </button>
+                        {swapAmounts.type === "trtn" ? (
+                          <div>
+                            <label className="input-group input-group-md">
+                              <input
+                                type="number"
+                                step="0.000001"
+                                value={swapAmounts.trtn}
+                                onChange={(e) => {
+                                  const amount = parseFloat(e.target.value);
+                                  if (amount > 0) {
+                                    calculateSwap(amount, null);
+                                  } else {
+                                    calculateSwap(0.000001, null);
+                                  }
+                                }}
+                                className="input input-bordered input-md focus:input-primary"
+                              />
+                              <span className="bg-stone-300 font-[Jangkuy]">
+                                TRTN
+                              </span>
+                            </label>
+                            <div className="divider">
+                              <button
+                                className="btn btn-outline btn-circle btn-sm"
+                                onClick={() => {
+                                  changeSwapType();
+                                }}
+                              >
+                                <img
+                                  src={arrows.src}
+                                  className="h-[17px] w-[17px]"
+                                ></img>
+                              </button>
+                            </div>
+                            <label className="input-group input-group-md">
+                              <input
+                                type="number"
+                                step="0.000001"
+                                value={swapAmounts.usdc}
+                                onChange={(e) => {
+                                  const amount = parseFloat(e.target.value);
+                                  if (amount > 0) {
+                                    calculateSwap(null, amount);
+                                  } else {
+                                    calculateSwap(null, 0.000001);
+                                  }
+                                }}
+                                className="input input-bordered input-md focus:input-primary"
+                              />
+                              <span className="bg-stone-300 font-[Jangkuy]">
+                                USDC
+                              </span>
+                            </label>
+                            <div className="grid grid-cols-2 mt-4 gap-2">
+                              <button
+                                className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                                style={{ fontSize: "12px" }}
+                                onClick={async () => {
+                                  await swap();
+                                  await refresh();
+                                }}
+                              >
+                                swap
+                              </button>
+                              <button
+                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
+                                style={{ fontSize: "12px" }}
+                                onClick={async () => {
+                                  await provideLiquidity();
+                                  await refresh();
+                                }}
+                              >
+                                stake
+                              </button>
+                            </div>
                           </div>
-                          <label className="input-group input-group-md">
-                            <input
-                              type="number"
-                              step="0.000001"
-                              value={swapAmounts.usdc}
-                              onChange={(e) => {
-                                const amount = parseFloat(e.target.value);
-                                if (amount > 0) {
-                                  calculateSwap(null, amount);
-                                } else {
-                                  calculateSwap(null, 0.000001);
-                                }
-                              }}
-                              className="input input-bordered input-md focus:input-primary"
-                            />
-                            <span className="bg-stone-300 font-[Jangkuy]">
-                              USDC
-                            </span>
-                          </label>
-                          <div className="grid grid-cols-2 mt-4 gap-2">
-                            <button
-                              className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
-                              style={{ fontSize: "12px" }}
-                              onClick={async () => {
-                                await swap();
-                                await refresh();
-                              }}
-                            >
-                              swap
-                            </button>
-                            <button
-                              className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
-                              style={{ fontSize: "12px" }}
-                              onClick={async () => {
-                                await provideLiquidity();
-                                await refresh();
-                              }}
-                            >
-                              stake
-                            </button>
+                        ) : (
+                          <div>
+                            <label className="input-group input-group-md">
+                              <input
+                                type="number"
+                                step="0.000001"
+                                value={swapAmounts.usdc}
+                                onChange={(e) => {
+                                  const amount = parseFloat(e.target.value);
+                                  if (amount > 0) {
+                                    calculateSwap(null, amount);
+                                  } else {
+                                    calculateSwap(null, 0.000001);
+                                  }
+                                }}
+                                className="input input-bordered input-md focus:input-primary"
+                              />
+                              <span className="bg-stone-300 font-[Jangkuy]">
+                                USDC
+                              </span>
+                            </label>
+                            <div className="divider">
+                              <button
+                                className="btn btn-outline btn-circle btn-sm"
+                                onClick={() => {
+                                  changeSwapType();
+                                }}
+                              >
+                                <img
+                                  src={arrows.src}
+                                  className="h-[17px] w-[17px]"
+                                ></img>
+                              </button>
+                            </div>
+                            <label className="input-group input-group-md">
+                              <input
+                                type="number"
+                                step="0.000001"
+                                value={swapAmounts.trtn}
+                                onChange={(e) => {
+                                  const amount = parseFloat(e.target.value);
+                                  if (amount > 0) {
+                                    calculateSwap(amount, null);
+                                  } else {
+                                    calculateSwap(0.000001, null);
+                                  }
+                                }}
+                                className="input input-bordered input-md focus:input-primary"
+                              />
+                              <span className="bg-stone-300 font-[Jangkuy]">
+                                TRTN
+                              </span>
+                            </label>
+                            <div className="grid grid-cols-2 mt-4 gap-2">
+                              <button
+                                className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
+                                style={{ fontSize: "12px" }}
+                                onClick={async () => {
+                                  await swap();
+                                  await refresh();
+                                }}
+                              >
+                                swap
+                              </button>
+                              <button
+                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
+                                style={{ fontSize: "12px" }}
+                                onClick={async () => {
+                                  await provideLiquidity();
+                                  await refresh();
+                                }}
+                              >
+                                stake
+                              </button>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -722,8 +815,8 @@ export default function Home() {
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Please note may have suffered impermamence loss. You can
-                        learn more about impermance loss by clicking the info
+                        Please note may have suffered impermanence loss. You can
+                        learn more about impermanence loss by clicking the info
                         button.
                       </p>
                       <button
