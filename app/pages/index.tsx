@@ -487,6 +487,7 @@ export default function Home() {
               >
                 Poseidon LP
               </h1>
+              <div className="lpsize"></div>
               <div className="border-primary align-middle">
                 <div className="display flex">
                   <div
