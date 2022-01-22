@@ -793,7 +793,7 @@ export default function Home() {
                               </button>
                             </div>
                             <div className="divider mt-6" />
-                            <h3 className="mt-4 font-[Montserrat] ">
+                            <h3 className="mt-4 font-[Montserrat]">
                               Add / Remove Liquidity
                             </h3>
                             <div className="grid grid-cols-2 mt-4 gap-2">
