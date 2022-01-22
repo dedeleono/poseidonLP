@@ -41,9 +41,9 @@
   > div
   > div
   > div
-  > div.border-primary.align-middle
+  > div:nth-child(5)
   > div
-  > div.artboard.mr-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
   > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
   > div
   > div.btn.gap-4.m-0.p-0.bg-transparent.hover\:bg-transparent.border-0.w-auto.text-sm
@@ -57,9 +57,9 @@
   > div
   > div
   > div
-  > div.border-primary.align-middle
+  > div:nth-child(5)
   > div
-  > div.artboard.mr-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
+  > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
   > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
   > div
   > div:nth-child(2)
