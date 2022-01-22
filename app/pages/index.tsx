@@ -391,6 +391,7 @@ export default function Home() {
   useEffect(() => {
     if (wallet?.publicKey) {
       setupPoseidon();
+
     }
   }, [wallet]);
   useEffect(() => {
@@ -448,6 +449,24 @@ export default function Home() {
         {/* <Modal /> */}
 
         <div className="grid grid-cols-1 min-h-screen mx-auto">
+        <div
+                className="lpsize mx-auto block border-primary align-middle py-4 bg-sky-900/[0.9]"
+                style={{
+                  color: "white",
+                  width: "100%",
+                  fontFamily: "Jangkuy",
+                }}
+              >
+                <p className="text-center">
+                  {wallet?.publicKey
+                    ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
+                        0
+                      )} \xa0 | \xa0 USDC: ${(psdnStats.usdcAmount / 1e6).toFixed(
+                        0
+                      )} \xa0 \xa0 \xa0 \xa0 \xa0 \xa0 \xa0 \xa0 SHELL ISSUED: ${(psdnStats.shellAmount / 1e6).toFixed(0)}`
+                    : `Connect Wallet Below`}
+                </p>
+              </div>
           <div className="text-center hero-content mx-auto block">
             <div>
               {/* Loading Modal */}
@@ -487,24 +506,6 @@ export default function Home() {
               >
                 Poseidon LP
               </h1>
-              <div
-                className="lpsize mx-auto  border-primary align-middle py-4 bg-sky-900/[0.9] rounded-md"
-                style={{
-                  color: "white",
-                  width: "478px",
-                  fontFamily: "Jangkuy",
-                }}
-              >
-                <p className="text-center">
-                  {wallet?.publicKey
-                    ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
-                        0
-                      )} | USDC: ${(psdnStats.usdcAmount / 1e6).toFixed(
-                        0
-                      )} | SHELL: ${(psdnStats.shellAmount / 1e6).toFixed(0)}`
-                    : `Connect Wallet Below`}
-                </p>
-              </div>
               <div className="border-primary align-middle">
                 <div className="display flex">
                   <div
@@ -849,9 +850,9 @@ export default function Home() {
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Clicking unstake below will burn all your shell tokens and give you back
-                        the amount of TRITON and USDC you own in the pool. 
-                        This includes your share of the 1% trading fee charged on all swaps since you deposited.
+                        Clicking unstake below will burn all your shell tokens and give 
+                        you back the amount of TRITON and USDC you own in the pool. This 
+                        includes your share of the 1% trading fee charged on all swaps since you deposited.
                       </p>
                       {/* <p
                         className="font-extralight text-sm py-2 text-justify"
