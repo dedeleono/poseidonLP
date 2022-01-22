@@ -231,14 +231,43 @@ pub mod poseidon {
         config.usdc_amount = config.usdc_amount - usdc_to_send;
         config.shell_amount = config.shell_amount - shell;
 
+        // anchor_spl::token::transfer(
+        //     CpiContext::new(
+        //         ctx.accounts.token_program.to_account_info(),
+        //         Transfer {
+        //             from: ctx.accounts.auth_shell_account.to_account_info(),
+        //             to: ctx.accounts.shell_mint.to_account_info(),
+        //             authority: ctx.accounts.authority.to_account_info(),
+        //         },
+        //     ),
+        //     shell,
+        // )?;
+
+        // anchor_spl::token::burn(
+        //     CpiContext::new(
+        //         ctx.accounts.token_program.to_account_info(),
+        //         anchor_spl::token::Burn {
+        //             mint: ctx.accounts.shell_mint.to_account_info(),
+        //             to: ctx.accounts.shell_mint.to_account_info(),
+        //             authority: ctx.accounts.shell_mint.to_account_info(),
+        //         },
+        //     ),
+        //     shell,
+        // )?;
+
         anchor_spl::token::burn(
-            CpiContext::new(
+            CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
                 anchor_spl::token::Burn {
                     mint: ctx.accounts.shell_mint.to_account_info(),
                     to: ctx.accounts.auth_shell_account.to_account_info(),
-                    authority: ctx.accounts.auth_shell_account.to_account_info(),
+                    authority: ctx.accounts.authority.to_account_info(),
                 },
+                &[&[
+                    config.key().as_ref(),
+                    b"psdn_shell_account".as_ref(),
+                    &[config.shell_bump],
+                ]],
             ),
             shell,
         )?;
@@ -273,7 +302,7 @@ pub mod poseidon {
                     &[config.usdc_bump],
                 ]],
             ),
-            trtn_to_send,
+            usdc_to_send,
         )?;
         Ok(())
     }

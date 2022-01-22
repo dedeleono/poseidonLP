@@ -309,38 +309,38 @@ export default function Home() {
     console.log("psdnStats", psdnStats);
     console.log(
       "psdnStats.shellAmount.toNumber()",
-      psdnStats.shellAmount.toNumber()
+      psdnStats.shellAmount.toNumber() / TOKEN_MULTIPLIER
     );
 
     const authShellBalance =
       await psdnState.program.provider.connection.getTokenAccountBalance(
-        psdnState.psdnTrtnAccount
+        psdnState.walletShellAccount
       );
     const shell = new BN(authShellBalance.value.amount);
-    console.log("shell", shell.toNumber());
-    // await psdnState.program.rpc.removeLiquidity(shell, {
-    //   accounts: {
-    //     config: psdnState.poseidon,
-    //     authority: psdnState.program.provider.wallet.publicKey,
-    //     usdcAccount: psdnState.psdnUsdcAccount,
-    //     trtnAccount: psdnState.psdnTrtnAccount,
-    //     usdcMint: psdnState.usdcToken,
-    //     trtnMint: psdnState.trtnToken,
-    //     shellMint: psdnState.psdnShellAccount,
-    //     authUsdcAccount: psdnState.walletUsdcAccount,
-    //     authShellAccount: psdnState.walletShellAccount,
-    //     authTrtnAccount: psdnState.walletTrtnAccount,
-    //     systemProgram: anchor.web3.SystemProgram.programId,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-    //   },
-    // });
+    console.log("shell", shell.toNumber() / TOKEN_MULTIPLIER);
+    await psdnState.program.rpc.removeLiquidity(shell, {
+      accounts: {
+        config: psdnState.poseidon,
+        authority: psdnState.program.provider.wallet.publicKey,
+        usdcAccount: psdnState.psdnUsdcAccount,
+        trtnAccount: psdnState.psdnTrtnAccount,
+        usdcMint: psdnState.usdcToken,
+        trtnMint: psdnState.trtnToken,
+        shellMint: psdnState.psdnShellAccount,
+        authUsdcAccount: psdnState.walletUsdcAccount,
+        authShellAccount: psdnState.walletShellAccount,
+        authTrtnAccount: psdnState.walletTrtnAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+      },
+    });
     await getPsdnStats();
     console.log("psdnStats", psdnStats);
     console.log(
       "psdnStats.shellAmount.toNumber()",
-      psdnStats.shellAmount.toNumber()
+      psdnStats.shellAmount.toNumber() / TOKEN_MULTIPLIER
     );
   };
 
@@ -409,30 +409,28 @@ export default function Home() {
     }
   }, [psdnRatio]);
 
-
-  function Modal({usd, trtn}){
-    return(
-
+  function Modal({ usd, trtn }) {
+    return (
       <div className="">
-      <div className="modal-box stat">
-        <div className="stat-desc max-w-[90%]">
-          <p>Do you want to confirm the transaction for usd to trtn</p>
-        </div>
-        <div>
-          <button
-            className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
-            style={{ fontSize: "12px" }}
-            onClick={async () => {
-              await swap();
-              await refresh();
-            }}
-          >
-            confirm
-          </button>
+        <div className="modal-box stat">
+          <div className="stat-desc max-w-[90%]">
+            <p>Do you want to confirm the transaction for usd to trtn</p>
           </div>
+          <div>
+            <button
+              className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
+              style={{ fontSize: "12px" }}
+              onClick={async () => {
+                await swap();
+                await refresh();
+              }}
+            >
+              confirm
+            </button>
+          </div>
+        </div>
       </div>
-    </div> 
-    )
+    );
   }
 
   return (
@@ -445,9 +443,8 @@ export default function Home() {
       <main
         style={{ backgroundImage: `url(${Bg.src})` }}
         className="justify-center bg-no-repeat bg-cover"
-      >     
-
-        <Modal />
+      >
+        {/* <Modal /> */}
 
         <div className="grid grid-cols-1 min-h-screen mx-auto">
           <div className="text-center hero-content mx-auto block">
@@ -625,7 +622,7 @@ export default function Home() {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              justifyItems: 'center',
+                              justifyItems: "center",
                             }}
                           />
                         </div>
@@ -853,7 +850,7 @@ export default function Home() {
                         className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
                         onClick={async () => {
                           await removeLiquidity();
-                          await refresh();
+                          // await refresh();
                         }}
                       >
                         unstake
