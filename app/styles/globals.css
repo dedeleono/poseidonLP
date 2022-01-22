@@ -17,6 +17,11 @@
   src: local("Scratchy"), url("../public/fonts/Scratchy.ttf") format("opentype");
 }
 
+@font-face {
+  font-family: "MontserratL";
+  src: local("MontserratL"), url("../public/fonts/Montserrat-Thin.ttf") format("opentype");
+}
+
 @layer utilities {
   @variants responsive {
     .text-shadow-lg {
