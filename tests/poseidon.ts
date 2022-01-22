@@ -130,6 +130,27 @@ describe("poseidon", async () => {
   //   },
   // });
 
+  // await program.simulate.initialize(
+  //   psdnBump,
+  //   psdnUsdcBump,
+  //   psdnTrtnBump,
+  //   psdnShellBump,
+  //   {
+  //     accounts: {
+  //       config: poseidon,
+  //       authority: program.provider.wallet.publicKey,
+  //       usdcAccount: psdnUsdcAccount,
+  //       trtnAccount: psdnTrtnAccount,
+  //       usdcMint: usdcToken,
+  //       trtnMint: trtnToken,
+  //       shellMint: psdnShellAccount,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+  //     },
+  //   }
+  // );
+
   it("Is initialized!", async () => {
     // only run once to make the config
     // await program.rpc.initialize(

@@ -455,5 +455,8 @@
       "name": "IncorrectRatio",
       "msg": "Too much of a ratio difference between liquidity and current pool."
     }
-  ]
+  ],
+  "metadata": {
+    "address": "H2Z5eh9ddxcdLkEzpmzcVMKB5gD7H1A8EZ4B3dqbVSZN"
+  }
 }

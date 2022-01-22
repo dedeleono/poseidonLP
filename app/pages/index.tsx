@@ -349,7 +349,7 @@ export default function Home() {
       console.log("swapping usdc to trtn");
       const usdcToSwap = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
       console.log("usdcToSwap", usdcToSwap.toNumber());
-      await psdnState.program.rpc.swapToTriton(usdcToSwap, {
+      const events = await psdnState.program.simulate.swapToTriton(usdcToSwap, {
         accounts: {
           config: psdnState.poseidon,
           authority: psdnState.program.provider.wallet.publicKey,
@@ -365,11 +365,12 @@ export default function Home() {
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         },
       });
+      console.log("events", events);
     } else if (swapAmounts.type === "trtn") {
       console.log("swapping triton to usdc");
       const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
       console.log("trtnToSwap", trtnToSwap.toNumber());
-      await psdnState.program.rpc.swapToUsdc(trtnToSwap, {
+      await psdnState.program.simulate.swapToUsdc(trtnToSwap, {
         accounts: {
           config: psdnState.poseidon,
           authority: psdnState.program.provider.wallet.publicKey,
@@ -791,7 +792,7 @@ export default function Home() {
                                 style={{ fontSize: "12px" }}
                                 onClick={async () => {
                                   await swap();
-                                  await refresh();
+                                  // await refresh();
                                 }}
                               >
                                 swap
@@ -849,9 +850,10 @@ export default function Home() {
                         className="font-extralight text-sm py-2 text-justify"
                         style={{ fontFamily: "Montserrat", color: "white" }}
                       >
-                        Clicking unstake below will burn all your shell tokens and give you back
-                        the amount of TRITON and USDC you own in the pool. 
-                        This includes your share of the 1% trading fee charged on all swaps since you deposited.
+                        Clicking unstake below will burn all your shell tokens
+                        and give you back the amount of TRITON and USDC you own
+                        in the pool. This includes your share of the 1% trading
+                        fee charged on all swaps since you deposited.
                       </p>
                       {/* <p
                         className="font-extralight text-sm py-2 text-justify"
