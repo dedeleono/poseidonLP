@@ -309,38 +309,38 @@ export default function Home() {
     console.log("psdnStats", psdnStats);
     console.log(
       "psdnStats.shellAmount.toNumber()",
-      psdnStats.shellAmount.toNumber()
+      psdnStats.shellAmount.toNumber() / TOKEN_MULTIPLIER
     );
 
     const authShellBalance =
       await psdnState.program.provider.connection.getTokenAccountBalance(
-        psdnState.psdnTrtnAccount
+        psdnState.walletShellAccount
       );
     const shell = new BN(authShellBalance.value.amount);
-    console.log("shell", shell.toNumber());
-    // await psdnState.program.rpc.removeLiquidity(shell, {
-    //   accounts: {
-    //     config: psdnState.poseidon,
-    //     authority: psdnState.program.provider.wallet.publicKey,
-    //     usdcAccount: psdnState.psdnUsdcAccount,
-    //     trtnAccount: psdnState.psdnTrtnAccount,
-    //     usdcMint: psdnState.usdcToken,
-    //     trtnMint: psdnState.trtnToken,
-    //     shellMint: psdnState.psdnShellAccount,
-    //     authUsdcAccount: psdnState.walletUsdcAccount,
-    //     authShellAccount: psdnState.walletShellAccount,
-    //     authTrtnAccount: psdnState.walletTrtnAccount,
-    //     systemProgram: anchor.web3.SystemProgram.programId,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-    //   },
-    // });
+    console.log("shell", shell.toNumber() / TOKEN_MULTIPLIER);
+    await psdnState.program.rpc.removeLiquidity(shell, {
+      accounts: {
+        config: psdnState.poseidon,
+        authority: psdnState.program.provider.wallet.publicKey,
+        usdcAccount: psdnState.psdnUsdcAccount,
+        trtnAccount: psdnState.psdnTrtnAccount,
+        usdcMint: psdnState.usdcToken,
+        trtnMint: psdnState.trtnToken,
+        shellMint: psdnState.psdnShellAccount,
+        authUsdcAccount: psdnState.walletUsdcAccount,
+        authShellAccount: psdnState.walletShellAccount,
+        authTrtnAccount: psdnState.walletTrtnAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+      },
+    });
     await getPsdnStats();
     console.log("psdnStats", psdnStats);
     console.log(
       "psdnStats.shellAmount.toNumber()",
-      psdnStats.shellAmount.toNumber()
+      psdnStats.shellAmount.toNumber() / TOKEN_MULTIPLIER
     );
   };
 
@@ -409,7 +409,6 @@ export default function Home() {
     }
   }, [psdnRatio]);
 
-
   // function Modal({usd, trtn}){
   //   return(
 
@@ -431,7 +430,7 @@ export default function Home() {
   //         </button>
   //         </div>
   //     </div>
-  //   </div> 
+  //   </div>
   //   )
   // }
 
@@ -445,8 +444,7 @@ export default function Home() {
       <main
         style={{ backgroundImage: `url(${Bg.src})` }}
         className="justify-center bg-no-repeat bg-cover"
-      >     
-
+      >
         {/* <Modal /> */}
 
         <div className="grid grid-cols-1 min-h-screen mx-auto">
@@ -590,7 +588,7 @@ export default function Home() {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              justifyItems: 'center',
+                              justifyItems: "center",
                             }}
                           />
                         </div>
@@ -689,15 +687,17 @@ export default function Home() {
                                 swap
                               </button>
                             </div>
-                            <div className="divider mt-6"/>
-                            <h3 className="mt-4 font-[Montserrat] ">Add / Remove Liquidity</h3>
+                            <div className="divider mt-6" />
+                            <h3 className="mt-4 font-[Montserrat] ">
+                              Add / Remove Liquidity
+                            </h3>
                             <div className="grid grid-cols-2 mt-4 gap-2">
                               <button
                                 className="btn border-[#deb42c] text-white bg-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat]"
                                 style={{ fontSize: "12px" }}
                                 onClick={() => {
                                   setInfoState(!infoState);
-                                  if (lpState) setLpState(!lpState)
+                                  if (lpState) setLpState(!lpState);
                                 }}
                               >
                                 stake
@@ -707,7 +707,7 @@ export default function Home() {
                                 style={{ fontSize: "12px" }}
                                 onClick={() => {
                                   setLpState(!lpState);
-                                  if (infoState) setInfoState(!infoState)
+                                  if (infoState) setInfoState(!infoState);
                                 }}
                               >
                                 unstake
@@ -779,15 +779,17 @@ export default function Home() {
                                 swap
                               </button>
                             </div>
-                            <div className="divider mt-6"/>
-                            <h3 className="mt-4 font-[Montserrat] ">Add / Remove Liquidity</h3>
+                            <div className="divider mt-6" />
+                            <h3 className="mt-4 font-[Montserrat] ">
+                              Add / Remove Liquidity
+                            </h3>
                             <div className="grid grid-cols-2 mt-4 gap-2">
                               <button
                                 className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
                                 style={{ fontSize: "12px" }}
                                 onClick={() => {
                                   setInfoState(!infoState);
-                                  if (lpState) setLpState(!lpState)
+                                  if (lpState) setLpState(!lpState);
                                 }}
                               >
                                 stake
@@ -797,7 +799,7 @@ export default function Home() {
                                 style={{ fontSize: "12px" }}
                                 onClick={() => {
                                   setLpState(!lpState);
-                                  if (infoState) setInfoState(!infoState)
+                                  if (infoState) setInfoState(!infoState);
                                 }}
                               >
                                 unstake
@@ -846,7 +848,7 @@ export default function Home() {
                         className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
                         onClick={async () => {
                           await removeLiquidity();
-                          await refresh();
+                          // await refresh();
                         }}
                       >
                         confirm unstaking
