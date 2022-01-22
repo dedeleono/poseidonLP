@@ -46,7 +46,7 @@ export default function Home() {
     type: "trtn",
   });
 
-  const [infoState, setInfoState] = useState(true);
+  const [infoState, setInfoState] = useState(false);
   const [lpState, setLpState] = useState(false);
 
   const loaderRef = useRef<HTMLAnchorElement>(null);
@@ -409,29 +409,30 @@ export default function Home() {
     }
   }, [psdnRatio]);
 
-  function Modal({ usd, trtn }) {
-    return (
-      <div className="">
-        <div className="modal-box stat">
-          <div className="stat-desc max-w-[90%]">
-            <p>Do you want to confirm the transaction for usd to trtn</p>
-          </div>
-          <div>
-            <button
-              className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
-              style={{ fontSize: "12px" }}
-              onClick={async () => {
-                await swap();
-                await refresh();
-              }}
-            >
-              confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // function Modal({usd, trtn}){
+  //   return(
+
+  //     <div className="">
+  //     <div className="modal-box stat">
+  //       <div className="stat-desc max-w-[90%]">
+  //         <p>Do you want to confirm the transaction for usd to trtn</p>
+  //       </div>
+  //       <div>
+  //         <button
+  //           className="btn bg-[#0E3755] border-[#0E3755] hover:bg-transparent hover:text-[#0E3755] hover:border-[#0E3755] font-[Montserrat] focus:animate-bounce text-white"
+  //           style={{ fontSize: "12px" }}
+  //           onClick={async () => {
+  //             await swap();
+  //             await refresh();
+  //           }}
+  //         >
+  //           confirm
+  //         </button>
+  //         </div>
+  //     </div>
+  //   </div>
+  //   )
+  // }
 
   return (
     <div>
@@ -492,7 +493,7 @@ export default function Home() {
                     className={`modal-box mr-8 ${infoState ? "" : "hidden"}`}
                     style={{
                       backgroundColor: "#3DB489",
-                      maxHeight: "420px",
+                      maxHeight: "600px",
                       marginTop: "-1.5rem",
                     }}
                   >
@@ -555,58 +556,23 @@ export default function Home() {
                         Tide Pool Shell Farm will be launching soon! Stake your
                         $SHELL token for more $TRTN rewards!
                       </p>
+
+                      <button
+                        style={{ fontSize: "12px" }}
+                        className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
+                        onClick={async () => {
+                          await provideLiquidity();
+                          await refresh();
+                        }}
+                      >
+                        confirm staking
+                      </button>
                     </div>
                   </div>
                   <div
                     className="artboard mr-8 mt-4 bg-sky-900/[0.9] phone-3 artboard-demo px-4"
-                    style={{ height: "420px" }}
+                    style={{ height: "600px" }}
                   >
-                    <div className="flex w-full h-8 mx-auto mt-2">
-                      <div className="flex-none">
-                        <button
-                          className="btn btn-outline btn-circle btn-xs btn-info"
-                          onClick={() => {
-                            setInfoState(!infoState);
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="flex-1"></div>
-                      <div className="flex-none">
-                        <button
-                          className="btn btn-outline btn-circle btn-xs btn-error"
-                          onClick={() => {
-                            setLpState(!lpState);
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            className="inline-block w-4 h-4 stroke-current"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M6 18L18 6M6 6l12 12"
-                            ></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
                     <div className="navbar pb-5 shadow-xs bg-transparent text-neutral-content rounded-box relative min-w-full justify-center">
                       {/* <div className="px-2 mx-2 navbar-start">
                         <span className="text-lg font-bold">Poseidon</span>
@@ -654,7 +620,7 @@ export default function Home() {
                         : `Connect Wallet Above`}
                     </span>
                     {/* swap section */}
-                    <div className="flex flex-row w-full h-[16rem] py-4">
+                    <div className="flex flex-row w-full h-[28rem] py-4">
                       <div className="grid flex-grow h-full card bg-base-300 rounded-box place-items-center shadow-md">
                         {swapAmounts.type === "trtn" ? (
                           <div>
@@ -709,7 +675,7 @@ export default function Home() {
                                 USDC
                               </span>
                             </label>
-                            <div className="grid grid-cols-2 mt-4 gap-2">
+                            <div className="grid mt-4">
                               <button
                                 className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
                                 style={{ fontSize: "12px" }}
@@ -720,15 +686,31 @@ export default function Home() {
                               >
                                 swap
                               </button>
+                            </div>
+                            <div className="divider mt-6" />
+                            <h3 className="mt-4 font-[Montserrat] ">
+                              Add / Remove Liquidity
+                            </h3>
+                            <div className="grid grid-cols-2 mt-4 gap-2">
                               <button
-                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
+                                className="btn border-[#deb42c] text-white bg-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat]"
                                 style={{ fontSize: "12px" }}
-                                onClick={async () => {
-                                  await provideLiquidity();
-                                  await refresh();
+                                onClick={() => {
+                                  setInfoState(!infoState);
+                                  if (lpState) setLpState(!lpState);
                                 }}
                               >
                                 stake
+                              </button>
+                              <button
+                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
+                                style={{ fontSize: "12px" }}
+                                onClick={() => {
+                                  setLpState(!lpState);
+                                  if (infoState) setInfoState(!infoState);
+                                }}
+                              >
+                                unstake
                               </button>
                             </div>
                           </div>
@@ -785,7 +767,7 @@ export default function Home() {
                                 TRTN
                               </span>
                             </label>
-                            <div className="grid grid-cols-2 mt-4 gap-2">
+                            <div className="grid mt-4">
                               <button
                                 className="btn border-[#3DB489] text-white bg-[#3DB489] hover:bg-transparent hover:text-[#3DB489] hover:border-[#3DB489] font-[Montserrat] focus:animate-bounce"
                                 style={{ fontSize: "12px" }}
@@ -796,15 +778,31 @@ export default function Home() {
                               >
                                 swap
                               </button>
+                            </div>
+                            <div className="divider mt-6" />
+                            <h3 className="mt-4 font-[Montserrat] ">
+                              Add / Remove Liquidity
+                            </h3>
+                            <div className="grid grid-cols-2 mt-4 gap-2">
                               <button
-                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] focus:animate-bounce text-white"
+                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
                                 style={{ fontSize: "12px" }}
-                                onClick={async () => {
-                                  await provideLiquidity();
-                                  await refresh();
+                                onClick={() => {
+                                  setInfoState(!infoState);
+                                  if (lpState) setLpState(!lpState);
                                 }}
                               >
                                 stake
+                              </button>
+                              <button
+                                className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
+                                style={{ fontSize: "12px" }}
+                                onClick={() => {
+                                  setLpState(!lpState);
+                                  if (infoState) setInfoState(!infoState);
+                                }}
+                              >
+                                unstake
                               </button>
                             </div>
                           </div>
@@ -816,7 +814,7 @@ export default function Home() {
                     className={`modal-box mr-8 ${lpState ? "" : "hidden"}`}
                     style={{
                       backgroundColor: "#0aafc1",
-                      maxHeight: "420px",
+                      maxHeight: "600px",
                       marginTop: "-1.5rem",
                     }}
                   >
@@ -853,7 +851,7 @@ export default function Home() {
                           // await refresh();
                         }}
                       >
-                        unstake
+                        confirm unstaking
                       </button>
                     </div>
                   </div>
