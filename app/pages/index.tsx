@@ -445,7 +445,7 @@ export default function Home() {
               fontFamily: "Jangkuy",
             }}
           >
-            <p className="text-center">
+            <p className="text-center text-xs sm:text-base">
               {wallet?.publicKey
                 ? `TRTN: ${(psdnStats.trtnAmount / 1e6).toFixed(
                     0

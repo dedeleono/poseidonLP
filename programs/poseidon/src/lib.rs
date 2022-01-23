@@ -155,12 +155,22 @@ pub mod poseidon {
 
         // shell lp
         if config.pool_init {
-            let shell_to_mint = cmp::min(
-                (((trtn as u128) * (config.shell_amount as u128)) / (config.trtn_amount as u128))
-                    as u64,
-                (((usdc as u128) * (config.shell_amount as u128)) / (config.usdc_amount as u128))
-                    as u64,
-            );
+            let upcasted_trtn = trtn as u128;
+            msg!("upcasted_trtn: {}", upcasted_trtn);
+            let upcasted_usdc = usdc as u128;
+            msg!("upcasted_usdc: {}", upcasted_usdc);
+            let upcasted_trtn_config = config.trtn_amount as u128;
+            msg!("upcasted_trtn_config: {}", upcasted_trtn_config);
+            let upcasted_usdc_config = config.usdc_amount as u128;
+            msg!("upcasted_usdc_config: {}", upcasted_usdc_config);
+            let upcasted_shell_config = config.shell_amount as u128;
+            msg!("upcasted_shell_config: {}", upcasted_shell_config);
+            let parsed_trtn = (upcasted_trtn * upcasted_trtn_config / upcasted_shell_config) as u64;
+            msg!("parsed_trtn: {}", parsed_trtn);
+            let parsed_usdc = (upcasted_usdc * upcasted_usdc_config / upcasted_shell_config) as u64;
+            msg!("parsed_usdc: {}", parsed_usdc);
+            let shell_to_mint = cmp::min(parsed_trtn, parsed_usdc);
+            msg!("shell_to_mint: {}", shell_to_mint);
             anchor_spl::token::mint_to(
                 CpiContext::new_with_signer(
                     ctx.accounts.token_program.to_account_info(),
@@ -227,10 +237,18 @@ pub mod poseidon {
 
     pub fn remove_liquidity(ctx: Context<RemoveLiquidity>, shell: u64) -> ProgramResult {
         let config = &mut ctx.accounts.config;
-        let trtn_to_send =
-            ((config.trtn_amount as u128) * (shell as u128) / (config.shell_amount as u128)) as u64;
-        let usdc_to_send =
-            ((config.usdc_amount as u128) * (shell as u128) / config.shell_amount as u128) as u64;
+        let upcasted_shell = shell as u128;
+        msg!("upcasted_shell: {}", upcasted_shell);
+        let upcasted_trtn_config = config.trtn_amount as u128;
+        msg!("upcasted_trtn_config: {}", upcasted_trtn_config);
+        let upcasted_usdc_config = config.usdc_amount as u128;
+        msg!("upcasted_usdc_config: {}", upcasted_usdc_config);
+        let upcasted_shell_config = config.shell_amount as u128;
+        msg!("upcasted_shell_config: {}", upcasted_shell_config);
+        let trtn_to_send = (upcasted_shell * upcasted_trtn_config / upcasted_shell_config) as u64;
+        msg!("trtn_to_send: {}", trtn_to_send);
+        let usdc_to_send = (upcasted_shell * upcasted_usdc_config / upcasted_shell_config) as u64;
+        msg!("usdc_to_send: {}", usdc_to_send);
         config.trtn_amount = config.trtn_amount - trtn_to_send;
         config.usdc_amount = config.usdc_amount - usdc_to_send;
         config.shell_amount = config.shell_amount - shell;
