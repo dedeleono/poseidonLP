@@ -40,6 +40,7 @@ export default function Home() {
   const [psdnState, setPsdnState] = useState({} as psdnState);
   const [psdnStats, setPsdnStats] = useState({} as any);
   const [psdnRatio, setPsdnRatio] = useState(0);
+  const [slippageAmount, setSlippageAmount] = useState(0);
   const [swapAmounts, setSwapAmounts] = useState({
     trtn: 1.0,
     usdc: 0.0,
@@ -286,30 +287,27 @@ export default function Home() {
     await getPsdnStats();
     const trtn = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
     const usdc = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
-    console.log("trtn", trtn.toNumber());
-    console.log("usdc", usdc.toNumber());
-    const events = await psdnState.program.simulate.provideLiquidity(
-      trtn,
-      usdc,
-      {
-        accounts: {
-          config: psdnState.poseidon,
-          authority: psdnState.program.provider.wallet.publicKey,
-          usdcAccount: psdnState.psdnUsdcAccount,
-          trtnAccount: psdnState.psdnTrtnAccount,
-          usdcMint: psdnState.usdcToken,
-          trtnMint: psdnState.trtnToken,
-          shellMint: psdnState.psdnShellAccount,
-          authUsdcAccount: psdnState.walletUsdcAccount,
-          authTrtnAccount: psdnState.walletTrtnAccount,
-          authShellAccount: psdnState.walletShellAccount,
-          systemProgram: anchor.web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-        },
-      }
-    );
+    // console.log("trtn", trtn.toNumber());
+    // console.log("usdc", usdc.toNumber());
+    // console.log("run simulate");
+    const events = await psdnState.program.rpc.provideLiquidity(trtn, usdc, {
+      accounts: {
+        config: psdnState.poseidon,
+        authority: psdnState.program.provider.wallet.publicKey,
+        usdcAccount: psdnState.psdnUsdcAccount,
+        trtnAccount: psdnState.psdnTrtnAccount,
+        usdcMint: psdnState.usdcToken,
+        trtnMint: psdnState.trtnToken,
+        shellMint: psdnState.psdnShellAccount,
+        authUsdcAccount: psdnState.walletUsdcAccount,
+        authTrtnAccount: psdnState.walletTrtnAccount,
+        authShellAccount: psdnState.walletShellAccount,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+      },
+    });
     console.log("events", events);
   };
 
@@ -354,13 +352,33 @@ export default function Home() {
   };
 
   const swap = async (confirmed?: any) => {
-    // const onePercent =
-    // const calculateSlippage =
     await getPsdnStats();
-    if (
-      Math.abs(1 - swapAmounts.usdc / swapAmounts.trtn / psdnRatio) > 0.01 &&
-      !confirmed /*|| ( && !confirmed)*/
-    ) {
+    const pool_constant =
+      psdnStats.usdcAmount.toNumber() * psdnStats.trtnAmount.toNumber();
+    let slippage = 0;
+    if (swapAmounts.type === "trtn") {
+      const new_trtn_amount =
+        psdnStats.trtnAmount.toNumber() + swapAmounts.trtn * TOKEN_MULTIPLIER;
+      const new_usdc_amount = pool_constant / new_trtn_amount;
+      const usdc_to_send = psdnStats.usdcAmount.toNumber() - new_usdc_amount;
+      console.log("swapAmounts.usdc", swapAmounts.usdc);
+      console.log("usdc_to_send", usdc_to_send / TOKEN_MULTIPLIER);
+      slippage = Math.abs(
+        1 - usdc_to_send / TOKEN_MULTIPLIER / swapAmounts.usdc
+      );
+    } else if (swapAmounts.type === "usdc") {
+      const new_usdc_amount =
+        psdnStats.usdcAmount.toNumber() + swapAmounts.usdc * TOKEN_MULTIPLIER;
+      const new_trtn_amount = pool_constant / new_usdc_amount;
+      const trtn_to_send = psdnStats.trtnAmount.toNumber() - new_trtn_amount;
+      console.log("trtn_to_send", trtn_to_send / TOKEN_MULTIPLIER);
+      console.log("swapAmounts.usdc", swapAmounts.trtn);
+      slippage = Math.abs(
+        1 - trtn_to_send / TOKEN_MULTIPLIER / swapAmounts.trtn
+      );
+    }
+    setSlippageAmount(slippage);
+    if (slippage > 0.01 && !confirmed /*|| ( && !confirmed)*/) {
       openSlippageRef.current?.click();
     } else {
       closeSlippageRef.current?.click();
@@ -385,6 +403,7 @@ export default function Home() {
             rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           },
         });
+        await refresh();
       } else if (swapAmounts.type === "trtn") {
         // console.log("swapping triton to usdc");
         const trtnToSwap = new BN(swapAmounts.trtn * TOKEN_MULTIPLIER);
@@ -405,6 +424,7 @@ export default function Home() {
             rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           },
         });
+        await refresh();
       }
     }
   };
@@ -487,17 +507,19 @@ export default function Home() {
                       className="font-extralight text-sm py-2 text-justify"
                       style={{ fontFamily: "Montserrat", color: "black" }}
                     >
-                      The price of TRITON has changed more than 1% since you've
-                      clicked swap! Make sure you are confortable swapping at
-                      the latest prices provided by your wallets approve pop up
-                      otherwise refresh the page for updated swap rates.
+                      The amount you're tryin to swap will change the price of
+                      the pool by over 1%. You'll only recive{" "}
+                      {((1 - slippageAmount) * 100).toFixed(2)}% of what was
+                      shown for a trade that large. Make sure you are
+                      confortable swapping for the amount provided by your
+                      wallets approve pop up otherwise do not proceed.
                     </p>
                     <button
                       style={{ fontSize: "12px" }}
                       className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
                       onClick={async () => {
                         await swap("confirmed");
-                        await refresh();
+                        // await refresh();
                       }}
                     >
                       confirm swap
@@ -744,7 +766,7 @@ export default function Home() {
                                 style={{ fontSize: "12px" }}
                                 onClick={async () => {
                                   await swap();
-                                  await refresh();
+                                  // await refresh();
                                 }}
                               >
                                 swap
@@ -837,7 +859,7 @@ export default function Home() {
                                 style={{ fontSize: "12px" }}
                                 onClick={async () => {
                                   await swap();
-                                  await refresh();
+                                  // await refresh();
                                 }}
                               >
                                 swap

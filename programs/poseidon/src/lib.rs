@@ -150,11 +150,14 @@ pub mod poseidon {
             }
         }
 
-        config.trtn_amount = config.trtn_amount + trtn;
-        config.usdc_amount = config.usdc_amount + usdc;
-
         // shell lp
         if config.pool_init {
+            msg!("trtn: {}", trtn);
+            msg!("usdc: {}", usdc);
+            msg!("config.trtn_amount : {}", config.trtn_amount);
+            msg!("config.usdc_amount: {}", config.usdc_amount);
+            msg!("config.shell_amount: {}", config.shell_amount);
+
             let upcasted_trtn = trtn as u128;
             msg!("upcasted_trtn: {}", upcasted_trtn);
             let upcasted_usdc = usdc as u128;
@@ -165,11 +168,11 @@ pub mod poseidon {
             msg!("upcasted_usdc_config: {}", upcasted_usdc_config);
             let upcasted_shell_config = config.shell_amount as u128;
             msg!("upcasted_shell_config: {}", upcasted_shell_config);
-            let parsed_trtn = (upcasted_trtn * upcasted_trtn_config / upcasted_shell_config) as u64;
+            let parsed_trtn = upcasted_trtn * upcasted_trtn_config / upcasted_shell_config;
             msg!("parsed_trtn: {}", parsed_trtn);
-            let parsed_usdc = (upcasted_usdc * upcasted_usdc_config / upcasted_shell_config) as u64;
+            let parsed_usdc = upcasted_usdc * upcasted_usdc_config / upcasted_shell_config;
             msg!("parsed_usdc: {}", parsed_usdc);
-            let shell_to_mint = cmp::min(parsed_trtn, parsed_usdc);
+            let shell_to_mint = cmp::min(parsed_trtn, parsed_usdc) as u64;
             msg!("shell_to_mint: {}", shell_to_mint);
             anchor_spl::token::mint_to(
                 CpiContext::new_with_signer(
@@ -232,6 +235,10 @@ pub mod poseidon {
             ),
             usdc,
         )?;
+
+        config.trtn_amount = config.trtn_amount + trtn;
+        config.usdc_amount = config.usdc_amount + usdc;
+
         Ok(())
     }
 
