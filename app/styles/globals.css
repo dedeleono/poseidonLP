@@ -19,7 +19,8 @@
 
 @font-face {
   font-family: "MontserratL";
-  src: local("MontserratL"), url("../public/fonts/Montserrat-Thin.ttf") format("opentype");
+  src: local("MontserratL"),
+    url("../public/fonts/Montserrat-Thin.ttf") format("opentype");
 }
 
 @layer utilities {
@@ -39,9 +40,9 @@
   > div
   > main
   > div
+  > div.text-center.hero-content.mx-auto.block
   > div
-  > div
-  > div:nth-child(5)
+  > div.border-primary.align-middle
   > div
   > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
   > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
@@ -55,9 +56,9 @@
   > div
   > main
   > div
+  > div.text-center.hero-content.mx-auto.block
   > div
-  > div
-  > div:nth-child(5)
+  > div.border-primary.align-middle
   > div
   > div.artboard.mx-8.mt-4.bg-sky-900\/\[0\.9\].phone-3.artboard-demo.px-4
   > div.navbar.pb-5.shadow-xs.bg-transparent.text-neutral-content.rounded-box.relative.min-w-full.justify-center
