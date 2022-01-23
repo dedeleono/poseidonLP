@@ -288,24 +288,29 @@ export default function Home() {
     const usdc = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
     console.log("trtn", trtn.toNumber());
     console.log("usdc", usdc.toNumber());
-    await psdnState.program.simulate.provideLiquidity(trtn, usdc, {
-      accounts: {
-        config: psdnState.poseidon,
-        authority: psdnState.program.provider.wallet.publicKey,
-        usdcAccount: psdnState.psdnUsdcAccount,
-        trtnAccount: psdnState.psdnTrtnAccount,
-        usdcMint: psdnState.usdcToken,
-        trtnMint: psdnState.trtnToken,
-        shellMint: psdnState.psdnShellAccount,
-        authUsdcAccount: psdnState.walletUsdcAccount,
-        authTrtnAccount: psdnState.walletTrtnAccount,
-        authShellAccount: psdnState.walletShellAccount,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
+    const events = await psdnState.program.simulate.provideLiquidity(
+      trtn,
+      usdc,
+      {
+        accounts: {
+          config: psdnState.poseidon,
+          authority: psdnState.program.provider.wallet.publicKey,
+          usdcAccount: psdnState.psdnUsdcAccount,
+          trtnAccount: psdnState.psdnTrtnAccount,
+          usdcMint: psdnState.usdcToken,
+          trtnMint: psdnState.trtnToken,
+          shellMint: psdnState.psdnShellAccount,
+          authUsdcAccount: psdnState.walletUsdcAccount,
+          authTrtnAccount: psdnState.walletTrtnAccount,
+          authShellAccount: psdnState.walletShellAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      }
+    );
+    console.log("events", events);
   };
 
   const removeLiquidity = async () => {
