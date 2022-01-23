@@ -288,7 +288,7 @@ export default function Home() {
     const usdc = new BN(swapAmounts.usdc * TOKEN_MULTIPLIER);
     console.log("trtn", trtn.toNumber());
     console.log("usdc", usdc.toNumber());
-    await psdnState.program.rpc.provideLiquidity(trtn, usdc, {
+    await psdnState.program.simulate.provideLiquidity(trtn, usdc, {
       accounts: {
         config: psdnState.poseidon,
         authority: psdnState.program.provider.wallet.publicKey,
@@ -349,10 +349,12 @@ export default function Home() {
   };
 
   const swap = async (confirmed?: any) => {
+    // const onePercent =
+    // const calculateSlippage =
     await getPsdnStats();
     if (
       Math.abs(1 - swapAmounts.usdc / swapAmounts.trtn / psdnRatio) > 0.01 &&
-      !confirmed
+      !confirmed /*|| ( && !confirmed)*/
     ) {
       openSlippageRef.current?.click();
     } else {
