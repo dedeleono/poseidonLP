@@ -650,7 +650,7 @@ export default function Home() {
                           await refresh();
                         }}
                       >
-                        confirm staking
+                        confirm deposit
                       </button>
                     </div>
                   </div>
@@ -787,7 +787,7 @@ export default function Home() {
                                   if (lpState) setLpState(!lpState);
                                 }}
                               >
-                                stake
+                                deposit
                               </button>
                               <button
                                 className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
@@ -797,7 +797,7 @@ export default function Home() {
                                   if (infoState) setInfoState(!infoState);
                                 }}
                               >
-                                unstake 
+                                withdraw 
                               </button>
                             </div>
                           </div>
@@ -882,7 +882,7 @@ export default function Home() {
                                   if (lpState) setLpState(!lpState);
                                 }}
                               >
-                                stake
+                                deposit
                               </button>
                               <button
                                 className="btn bg-[#deb42c] border-[#deb42c] hover:bg-transparent hover:text-[#deb42c] hover:border-[#deb42c] font-[Montserrat] text-white"
@@ -892,7 +892,7 @@ export default function Home() {
                                   if (infoState) setInfoState(!infoState);
                                 }}
                               >
-                                unstake
+                                withdraw
                               </button>
                             </div>
                           </div>
@@ -942,7 +942,7 @@ export default function Home() {
                           await refresh();
                         }}
                       >
-                        confirm unstaking
+                        confirm withdraw
                       </button>
                     </div>
                   </div>
