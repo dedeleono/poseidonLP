@@ -508,7 +508,7 @@ export default function Home() {
                       style={{ fontFamily: "Montserrat", color: "black" }}
                     >
                       The amount you're tryin to swap will change the price of
-                      the pool by over 1%. You'll only recive{" "}
+                      the pool by over 1%. You'll only receive{" "}
                       {((1 - slippageAmount) * 100).toFixed(2)}% of what was
                       shown for a trade that large. Make sure you are
                       confortable swapping for the amount provided by your
