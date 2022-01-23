@@ -361,8 +361,8 @@ export default function Home() {
         psdnStats.trtnAmount.toNumber() + swapAmounts.trtn * TOKEN_MULTIPLIER;
       const new_usdc_amount = pool_constant / new_trtn_amount;
       const usdc_to_send = psdnStats.usdcAmount.toNumber() - new_usdc_amount;
-      console.log("swapAmounts.usdc", swapAmounts.usdc);
-      console.log("usdc_to_send", usdc_to_send / TOKEN_MULTIPLIER);
+      // console.log("swapAmounts.usdc", swapAmounts.usdc);
+      // console.log("usdc_to_send", usdc_to_send / TOKEN_MULTIPLIER);
       slippage = Math.abs(
         1 - usdc_to_send / TOKEN_MULTIPLIER / swapAmounts.usdc
       );
@@ -371,8 +371,8 @@ export default function Home() {
         psdnStats.usdcAmount.toNumber() + swapAmounts.usdc * TOKEN_MULTIPLIER;
       const new_trtn_amount = pool_constant / new_usdc_amount;
       const trtn_to_send = psdnStats.trtnAmount.toNumber() - new_trtn_amount;
-      console.log("trtn_to_send", trtn_to_send / TOKEN_MULTIPLIER);
-      console.log("swapAmounts.usdc", swapAmounts.trtn);
+      // console.log("trtn_to_send", trtn_to_send / TOKEN_MULTIPLIER);
+      // console.log("swapAmounts.usdc", swapAmounts.trtn);
       slippage = Math.abs(
         1 - trtn_to_send / TOKEN_MULTIPLIER / swapAmounts.trtn
       );
@@ -488,13 +488,13 @@ export default function Home() {
             <div>
               {/* Slippage Modal */}
               <a
-                href="#loader"
+                href="#slippage"
                 className="btn btn-primary hidden"
                 ref={openSlippageRef}
               >
                 open slippage
               </a>
-              <div id="loader" className="modal">
+              <div id="slippage" className="modal">
                 <div className="modal-box">
                   <h4
                     className="text-center text-xl font-bold"
