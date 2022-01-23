@@ -514,6 +514,14 @@ export default function Home() {
                       confortable swapping for the amount provided by your
                       wallets approve pop up otherwise do not proceed.
                     </p>
+                    <a
+                      href="#"
+                      style={{ fontFamily: "Montserrat" }}
+                      className="btn mr-2"
+                      ref={closeSlippageRef}
+                    >
+                      cancel
+                    </a>
                     <button
                       style={{ fontSize: "12px" }}
                       className="btn bg-[#ff5723] border-[#ff5723] hover:bg-transparent hover:text-[#ff5723] hover:border-[#ff5723] font-[Montserrat] focus:animate-bounce my-8 text-white"
@@ -524,14 +532,6 @@ export default function Home() {
                     >
                       confirm swap
                     </button>
-                    <a
-                      href="#"
-                      style={{ fontFamily: "Montserrat" }}
-                      className="btn hidden"
-                      ref={closeSlippageRef}
-                    >
-                      Close Slippage
-                    </a>
                   </div>
                 </div>
               </div>
