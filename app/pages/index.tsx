@@ -710,6 +710,7 @@ export default function Home() {
                         {swapAmounts.type === "trtn" ? (
                           <div>
                             <label className="input-group input-group-md">
+                              <span className="trade-label">Trade</span>
                               <input
                                 type="number"
                                 step="0.000001"
@@ -742,6 +743,7 @@ export default function Home() {
                               </button>
                             </div>
                             <label className="input-group input-group-md">
+                              <span className="trade-label">For</span>
                               <input
                                 type="number"
                                 step="0.000001"
@@ -795,13 +797,14 @@ export default function Home() {
                                   if (infoState) setInfoState(!infoState);
                                 }}
                               >
-                                unstake
+                                unstake 
                               </button>
                             </div>
                           </div>
                         ) : (
                           <div>
                             <label className="input-group input-group-md">
+                              <span className="trade-label">Trade</span>  
                               <input
                                 type="number"
                                 step="0.000001"
@@ -834,6 +837,7 @@ export default function Home() {
                               </button>
                             </div>
                             <label className="input-group input-group-md">
+                              <span className="trade-label">For</span>
                               <input
                                 type="number"
                                 step="0.000001"
