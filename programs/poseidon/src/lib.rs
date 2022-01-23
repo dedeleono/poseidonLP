@@ -168,9 +168,9 @@ pub mod poseidon {
             msg!("upcasted_usdc_config: {}", upcasted_usdc_config);
             let upcasted_shell_config = config.shell_amount as u128;
             msg!("upcasted_shell_config: {}", upcasted_shell_config);
-            let parsed_trtn = upcasted_trtn * upcasted_trtn_config / upcasted_shell_config;
+            let parsed_trtn = upcasted_shell_config * upcasted_trtn / upcasted_trtn_config;
             msg!("parsed_trtn: {}", parsed_trtn);
-            let parsed_usdc = upcasted_usdc * upcasted_usdc_config / upcasted_shell_config;
+            let parsed_usdc = upcasted_shell_config * upcasted_usdc / upcasted_usdc_config;
             msg!("parsed_usdc: {}", parsed_usdc);
             let shell_to_mint = cmp::min(parsed_trtn, parsed_usdc) as u64;
             msg!("shell_to_mint: {}", shell_to_mint);
