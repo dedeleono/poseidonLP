@@ -62,8 +62,9 @@ export default function Home() {
         <Navigation activeId="poseidon-lp"/>
         <main
             style={{backgroundImage: `url(${Bg.src})`}}
-            className="justify-center bg-no-repeat bg-cover min-h-screen"
+            className="justify-center bg-no-repeat bg-cover min-h-screen relative"
         >
+          <img src="/images/long.jpg" className="mix-blend-lighten w-full absolute bottom-0 left-0 right-0" />
           <div style={{backgroundImage: `url(${WavesBg.src})`}} className="bg-bottom bg-no-repeat bg-cover pt-16 md:pt-20">
             <div className="px-4 pt-8 pb-14 md:pb-20 container mx-auto max-w-screen-xl text-neutral-content bg-center">
               <div className="flex flex-col lg:flex-row pb-10 md:pt-6 lg:items-center place-content-center">
@@ -110,8 +111,8 @@ export default function Home() {
               <div className="md:flex-1">
                 <LiquidPool/>
               </div>
-              <div className="flex flex-col lg:w-[440px] backdrop-blur-sm ">
-                <div className="tabs divide-x divide-black divide-opacity-10 bg-black bg-opacity-25 rounded-box rounded-b-none w-full grid grid-cols-3">
+              <div className="flex flex-col lg:w-[440px] ">
+                <div className="tabs divide-x divide-black divide-opacity-10 bg-black bg-opacity-25 rounded-box rounded-b-none w-full grid grid-cols-3 backdrop-blur-sm">
                   {Object.entries(Tabs).map(([key, value]) => (
                       <div
                           key={key}
@@ -136,6 +137,10 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <footer className="h-[180px] lg:h-[300px] relative">
+            <img src="/images/squid.png" className="w-[200px] lg:w-[400px]  absolute -bottom-5 lg:-bottom-10" />
+            <img src="/images/solplayboy.png" className="w-[120px] lg:w-[300px] absolute top-16 lg:top-10 left-1/2" />
+          </footer>
         </main>
       </div>
   );
