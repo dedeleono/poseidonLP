@@ -61,7 +61,7 @@ export default function Stake() {
             </div>
             <div>
                 <h2>Stake $SHELL</h2>
-                <p>
+                <p className="text-base w-9/12">
                     Stake your $SHELL in the Tide Pool and start harvesting $TRTN
                 </p>
                 <div className="text-right pb-1 text-sm opacity-50 mt-4">
@@ -86,7 +86,7 @@ export default function Stake() {
                                 setShellAmount(0.000001);
                             }
                         }}
-                        className="input input-lg w-full rounded-3xl bg-opacity-50 spin-button-none"
+                        className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
                     />
                 </label>
                 <div className="mt-4 gap-2">

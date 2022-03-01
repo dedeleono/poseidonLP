@@ -71,7 +71,7 @@ export default function Deposit() {
             }} />
             <div>
                 <h2>Deposit Liquidity</h2>
-                <p>
+                <p className="text-base w-10/12">
                     Deposit $TRTN + $USDC and receive $SHELL to stake in the Tide Pool
                 </p>
                 <div className="text-right pb-1 text-sm opacity-50 mt-4">
@@ -97,7 +97,7 @@ export default function Deposit() {
                                 calculateSwap(0.000001, null);
                             }
                         }}
-                        className="input input-lg w-full rounded-3xl bg-opacity-50 spin-button-none"
+                        className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
                     />
                 </label>
                 <div className="text-right pb-1 text-sm opacity-50">
@@ -125,7 +125,7 @@ export default function Deposit() {
                                 calculateSwap(null, 0.000001);
                             }
                         }}
-                        className="input input-lg w-full rounded-3xl bg-opacity-50 spin-button-none"
+                        className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
                     />
                 </label>
                 <div className="mt-4 gap-2">

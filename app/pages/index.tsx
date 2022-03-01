@@ -15,9 +15,9 @@ import Stake from "../components/lp/Stake";
 import CountUp from "react-countup";
 
 enum Tabs {
+  Exchange = "Exchange",
   Deposit = "Deposit",
   Stake = "Stake",
-  Exchange = "Exchange",
 }
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
   let refreshStatsTimer: any;
   const psdnState = useLPStore((state => state.psdnState));
   const psdnRatio = useLPStore((state => state.psdnRatio));
-  const [activeTab, setActiveTab] = useState(Tabs.Deposit);
+  const [activeTab, setActiveTab] = useState(Tabs.Exchange);
   const setupPoseidon = useLPStore(state => state.setupPoseidon)
   const getPsdnStats = useLPStore(state => state.getPsdnStats)
   const getAccountStats = useLPStore(state => state.getAccountStats)
@@ -61,9 +61,11 @@ export default function Home() {
         </Head>
         <Navigation activeId="poseidon-lp"/>
         <main
-            style={{backgroundImage: `url(${Bg.src})`}}
-            className="justify-center bg-no-repeat bg-cover min-h-screen relative"
+            className="justify-center min-h-screen relative"
         >
+          <video autoPlay muted loop id="myVideo" className="absolute inset-0 max-w-none w-full h-full object-cover -z-10 ">
+            <source src="/videos/bg.mp4" type="video/mp4" />
+          </video>
           <img src="/images/long.jpg" className="mix-blend-lighten w-full absolute bottom-0 left-0 right-0" />
           <div style={{backgroundImage: `url(${WavesBg.src})`}} className="bg-bottom bg-no-repeat bg-cover pt-16 md:pt-20">
             <div className="px-4 pt-8 pb-14 md:pb-20 container mx-auto max-w-screen-xl text-neutral-content bg-center">
@@ -71,13 +73,13 @@ export default function Home() {
                 <div className="flex items-center basis-10/12 flex-col lg:flex-row">
                   <div className="flex md:place-content-center pb-6 lg:pb-0">
                     <div>
-                      <img src="/logo-poseidon-lp.png" className="w-32 md:w-40 lg:w-52 xl:w-60 pr-6" />
+                      <img src="/logo-poseidon-lp.png" className="w-32 md:w-40 pr-6" />
                     </div>
 
                   </div>
                   <div className="flex flex-grow md:pt-4 md:pt-0">
-                    <div className="font-jangkuy text-xl md:text-2xl mx-auto lg:text-3xl flex-auto text-secondary-content">
-                      <div className="max-w-sm text-center lg:text-left">STAKE $shell <br />and EARN $TRTN</div>
+                    <div className="font-jangkuy text-xl md:text-2xl mx-auto flex-auto text-secondary-content">
+                      <div className="max-w-sm text-center text-2xl md:text-3xl lg:text-left">STAKE $shell <br />and EARN $TRTN</div>
                       <div className="flex flex-row gap-4 md:gap-7 pt-3">
                         <div className="flex flex-col lg:basis-1/3">
                           <div className="text-xs md:text-base opacity-50">TRTN price</div>
@@ -94,7 +96,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="pt-4 lg:pt-0 lg:flex text-center lg:text-left ">
-                  <p className="lg:pl-10 lg:pt-0 text-sm lg:text-base opacity-90">
+                  <p className="lg:pl-10 lg:pt-0 opacity-90">
                                     <span>Welcome to the Poseidon Liquidity Pool.<br />
                                         1. Deposit $TRTN + $USDC and receive $SHELL.<br />
                                         2. Stake your $SHELL in the Tide Pool and start earning $TRTN.<br />
@@ -111,7 +113,7 @@ export default function Home() {
               <div className="md:flex-1">
                 <LiquidPool/>
               </div>
-              <div className="flex flex-col lg:w-[440px] ">
+              <div className="flex flex-col lg:w-[380px] ">
                 <div className="tabs divide-x divide-black divide-opacity-10 bg-black bg-opacity-25 rounded-box rounded-b-none w-full grid grid-cols-3 backdrop-blur-sm">
                   {Object.entries(Tabs).map(([key, value]) => (
                       <div
@@ -125,14 +127,14 @@ export default function Home() {
                       </div>
                   ))}
                 </div>
+                <div className={`bg-green rounded-box rounded-t-none p-5 xl:p-8 ${activeTab == Tabs.Deposit ? '' : 'hidden'}`}>
+                  <Deposit/>
+                </div>
                 <div className={`bg-green rounded-box rounded-t-none p-5 xl:p-8 ${activeTab == Tabs.Exchange ? '' : 'hidden'}`}>
                   <Exchange/>
                 </div>
                 <div className={`bg-green rounded-box rounded-t-none p-5 xl:p-8 ${activeTab == Tabs.Stake ? '' : 'hidden'}`}>
                   <Stake/>
-                </div>
-                <div className={`bg-green rounded-box rounded-t-none p-5 xl:p-8 ${activeTab == Tabs.Deposit ? '' : 'hidden'}`}>
-                  <Deposit/>
                 </div>
               </div>
             </div>

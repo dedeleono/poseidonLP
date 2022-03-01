@@ -92,7 +92,7 @@ export default function Exchange() {
                         calculateSwap(0.000001, null);
                     }
                 }}
-                className="input input-lg w-full rounded-3xl bg-opacity-50 spin-button-none"
+                className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
             />
         </label>
     )
@@ -113,7 +113,7 @@ export default function Exchange() {
                         calculateSwap(null, 0.000001);
                     }
                 }}
-                className="input input-lg w-full rounded-3xl bg-opacity-50 spin-button-none"
+                className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
             />
         </label>
     )
@@ -133,8 +133,8 @@ export default function Exchange() {
             }} />
             <div>
                 <h2>Exchange</h2>
-                <p>
-                    Swap or buy $TRTN to deposit in the poseidon pool, breed/catch pets, participate in DAO raffles
+                <p className="text-base">
+                    Buy $TRTN to deposit in the poseidon pool, breed/catch pets, participate in DAO raffles
                 </p>
                 <div className="-mb-3 mt-4">Trade</div>
                 <div className="text-right pb-1 text-sm opacity-50">

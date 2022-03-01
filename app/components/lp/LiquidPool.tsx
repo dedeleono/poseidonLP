@@ -50,7 +50,7 @@ const LiquidPool: FC  = () => {
                         <span> Liquidity Pool</span>
                     </h2>
                 </div>
-                <div className="flex flex-row gap-4 md:gap-20">
+                <div className="flex flex-row gap-4 md:gap-12">
                     <div>
                         <div className="text-xs md:text-base opacity-50">Total liquidity</div>
                         <div className="text-base md:text-2xl">
@@ -78,7 +78,7 @@ const LiquidPool: FC  = () => {
                 </div>
             </div>
             <div className="mt-3 p-5 xl:p-8">
-                <div className="flex flex-row flex-wrap  gap-4 md:gap-20">
+                <div className="flex flex-row flex-wrap  gap-4 md:gap-12">
                     <div>
                         <div className="text-xs md:text-base opacity-50">Your Liquidity</div>
                         <div className="text-base md:text-2xl">-</div>

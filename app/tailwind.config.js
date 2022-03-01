@@ -15,6 +15,26 @@ module.exports = {
         jangkuy: ['Jangkuy', 'serif'],
       },
     },
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '976px',
+      xl: '1100px',
+    },
+    fontSize: {
+      'xs': '.75rem',
+      'sm': '.875rem',
+      'tiny': '.875rem',
+      'base': '0.90rem',
+      'lg': '1.1rem',
+      'xl': '1.2rem',
+      '2xl': '1.45rem',
+      '3xl': '1.8rem',
+      '4xl': '2.2rem',
+      '5xl': '3rem',
+      '6xl': '4rem',
+      '7xl': '5rem',
+    }
   },
   plugins: [require("daisyui"), require('tailwindcss-textshadow')],
   daisyui: {
