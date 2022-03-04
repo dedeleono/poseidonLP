@@ -600,9 +600,14 @@ const useLPStore = create((set: any, get: any) => ({
     const tideAccount = await get().tideState.program.account.config.fetch(
       get().tideState.tide
     );
-    const stakeAccount = await get().tideState.program.account.stake.fetch(
-      get().tideState.stake
-    );
+    let stakeAccount = null;
+    try {
+      stakeAccount = await get().tideState.program.account.stake.fetch(
+        get().tideState.stake
+      );
+    } catch (e) {
+      console.log("no stake account");
+    }
     set({ tideStats: { tideAccount, stakeAccount } });
   },
   getAccountStats: async () => {
