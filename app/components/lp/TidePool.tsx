@@ -1,7 +1,8 @@
 import {FC} from "react";
+import HarvestButton from "./HarvestButton";
+import UnstakeButton from "./UnstakeButton";
 
 const TidePool: FC  = () => {
-    // TODO Harvest
     return (
         <div className="pb-6 card bg-neutral/50">
             <div className="card bg-primary-content/80 p-5 xl:p-8 rounded-b-none">
@@ -35,11 +36,8 @@ const TidePool: FC  = () => {
                         <div className="text-base md:text-2xl">-</div>
                     </div>
                     <div className="">
-                        <button
-                            className="btn rounded-full btn-outline btn-md btn-accent relative shadow"
-                        >
-                            Harvest
-                        </button>
+                        <HarvestButton />
+                        <UnstakeButton />
                     </div>
                 </div>
             </div>

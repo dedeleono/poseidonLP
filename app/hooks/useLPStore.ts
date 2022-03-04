@@ -317,29 +317,12 @@ const useLPStore = create((set: any, get: any) => ({
       },
     });
   },
-  stakeInit: async (shellAmount: number) => {
-    await get().getTideStats();
-    const _tideState = get().tideState;
-    const _shell = new BN(shellAmount * TOKEN_MULTIPLIER);
-    const stakeInit = await _tideState.program.rpc.stakeInit(_shell, {
-      accounts: {
-        config: _tideState.tide,
-        stake: _tideState.stake,
-        authority: _tideState.program.provider.wallet.publicKey,
-        authShellAccount: _tideState.walletShellAccount,
-        tideShellAccount: _tideState.tideShellAccount,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
-    console.log("stakeInit", stakeInit);
-  },
   stakeDeposit: async (shellAmount: number) => {
     await get().getTideStats();
     const _tideState = get().tideState;
+    const _tideStats = get().tideStats;
     const _shell = new BN(shellAmount * TOKEN_MULTIPLIER);
-    const stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, {
+    const config = {
       accounts: {
         config: _tideState.tide,
         stake: _tideState.stake,
@@ -350,8 +333,15 @@ const useLPStore = create((set: any, get: any) => ({
         systemProgram: anchor.web3.SystemProgram.programId,
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       },
-    });
-    console.log("stakeDeposit", stakeDeposit);
+    };
+    let stakeDeposit = null;
+    if(_tideStats.stakeAccount) {
+      stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, config);
+      console.log("stakeDeposit", stakeDeposit);
+    } else {
+      stakeDeposit = await _tideState.program.rpc.stakeInit(_shell, config);
+      console.log("stakeInit", stakeDeposit);
+    }
   },
   stakeRedeem: async () => {
     await get().getTideStats();

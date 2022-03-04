@@ -1,64 +1,26 @@
 import {useState, useRef} from "react";
 import useLPStore from "../../hooks/useLPStore";
+import LoaderModal from "./LoaderModal";
 
 export default function Stake() {
+    // TODO when clicked disable and change button text
     const accountStats = useLPStore((state => state.accountStats));
+    const stakeDeposit = useLPStore((state => state.stakeDeposit));
+    const getAccountStats = useLPStore((state => state.getAccountStats));
+    const getPsdnStats = useLPStore((state => state.getPsdnStats));
+    const getTideStats = useLPStore((state => state.getTideStats));
 
     const [shellAmount, setShellAmount] = useState(1.0);
-
-    const loaderRef = useRef<HTMLAnchorElement>(null);
-    const modalRef = useRef<HTMLAnchorElement>(null);
-    const [loader, setLoader] = useState(0);
-
-    const txTimeout = 10000;
-
-    const refresh = async () => {
-        setLoader(0);
-        loaderRef?.current?.click();
-        const downloadTimer = setInterval(() => {
-            if (loader >= 5000) {
-                clearInterval(downloadTimer);
-            }
-            setLoader((prevLoader) => prevLoader + 10);
-        }, 10);
-        setTimeout(() => {
-            modalRef?.current?.click();
-            // forceUpdate();
-            // setRefreshStateCounter(refreshStateCounter + 1);
-            // window.location.reload();
-            // refreshData();
-        }, txTimeout + 10);
-    };
+    const [showLoaderModal, setShowLoaderModal] = useState(false);
 
     return (
         <div>
-            {/* Loading Modal */}
-            <a
-                href="#loader"
-                className="btn btn-primary hidden text-[Montserrat]"
-                ref={loaderRef}
-            >
-                open loader
-            </a>
-            <div id="loader" className="modal">
-                <div className="modal-box stat">
-                    <div className="stat-figure text-primary text-[Montserrat]">
-                        <button className="btn loading btn-circle btn-lg bg-base-200 btn-ghost"/>
-                    </div>
-                    <p style={{fontFamily: "Montserrat"}}>Loading...</p>
-                    <div className="stat-desc max-w-[90%]">
-                        <progress value={loader} max="5000" className="progress progress-black"/>
-                    </div>
-                    <a
-                        href="#"
-                        style={{fontFamily: "Montserrat"}}
-                        className="btn hidden"
-                        ref={modalRef}
-                    >
-                        Close
-                    </a>
-                </div>
-            </div>
+            <LoaderModal isOpen={showLoaderModal} handleFinished={() => {
+                setShowLoaderModal(false);
+                getAccountStats();
+                getPsdnStats();
+                getTideStats();
+            }} />
             <div>
                 <h2>Stake $SHELL</h2>
                 <p className="text-base w-9/12">
@@ -92,8 +54,9 @@ export default function Stake() {
                 <div className="mt-4 gap-2">
                     <button
                         className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
-                        onClick={() => {
-                            // TODO call RPC
+                        onClick={async () => {
+                            await stakeDeposit(shellAmount);
+                            setShowLoaderModal(true);
                         }}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

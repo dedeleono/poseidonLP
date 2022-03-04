@@ -113,6 +113,7 @@ export default function Home() {
                           {" "}
                           {wallet?.publicKey ? (
                             <CountUp
+                              preserveValue
                               end={psdnRatio}
                               start={0}
                               duration={0.5}
