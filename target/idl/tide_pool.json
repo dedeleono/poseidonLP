@@ -94,6 +94,47 @@
       ]
     },
     {
+      "name": "configFund",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "authTrtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trtnAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "trtnAmount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "stakeInit",
       "accounts": [
         {
@@ -104,7 +145,7 @@
         {
           "name": "stake",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "authority",
@@ -210,7 +251,7 @@
         },
         {
           "name": "authority",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -266,7 +307,7 @@
         },
         {
           "name": "authority",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -382,6 +423,10 @@
           {
             "name": "rewardsPaid",
             "type": "u64"
+          },
+          {
+            "name": "stakeBump",
+            "type": "u8"
           }
         ]
       }
@@ -403,5 +448,8 @@
         }
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "address": "TideNjRo78A11YtA4QV3BiH43SBqWASWaCJxrvTAGwo"
+  }
 }

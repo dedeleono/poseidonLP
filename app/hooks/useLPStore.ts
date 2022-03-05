@@ -222,7 +222,7 @@ const useLPStore = create((set: any, get: any) => ({
 
     // main data account generation (pda)
     const [tide, _tideBump] = await anchor.web3.PublicKey.findProgramAddress(
-      [Buffer.from("tide_config")],
+      [Buffer.from("tide_config_fixed")],
       program.programId
     );
 
@@ -234,7 +234,7 @@ const useLPStore = create((set: any, get: any) => ({
       program.programId
     );
 
-    // console.log("stake", stake.toString());
+    console.log("stake", stake.toString());
 
     // Get PDA accounts for triton
     // const trtnToken = new anchor.web3.PublicKey(
@@ -242,7 +242,7 @@ const useLPStore = create((set: any, get: any) => ({
     // );
     // devnet
     const trtnToken = new anchor.web3.PublicKey(
-      "7RDibaGCRPSNBecU34AQPDioVYtgz1adYzPVaF4uryd9"
+      "7mGmeTRqdgJdM3QZYUqUXFh5uqb1Yh3JwzygM6jDvtDg"
     );
 
     const [tideTrtnAccount, tideTrtnBump] =
@@ -275,7 +275,7 @@ const useLPStore = create((set: any, get: any) => ({
     // offical shell token on mainnet:
     // mock shell on devnet: CJGjnKBx1E5dWUhDUn2J2HHAse5qGBDtd2wKAAN4s1M8
     const shellToken = new anchor.web3.PublicKey(
-      "CJGjnKBx1E5dWUhDUn2J2HHAse5qGBDtd2wKAAN4s1M8"
+      "D8S8dtDmPeyCTmbhCXKz6pojhCfwQjqBSR4dGmpTf2ot"
     );
 
     const [tideShellAccount, _tideShellBump] =
@@ -298,7 +298,7 @@ const useLPStore = create((set: any, get: any) => ({
     const walletShellAccount = await Token.getAssociatedTokenAddress(
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
-      tideShellAccount,
+      shellToken,
       program.provider.wallet.publicKey
     );
     // console.log("walletShellAccount", walletShellAccount.toString());
@@ -321,7 +321,15 @@ const useLPStore = create((set: any, get: any) => ({
     await get().getTideStats();
     const _tideState = get().tideState;
     const _tideStats = get().tideStats;
-    const _shell = new BN(shellAmount * TOKEN_MULTIPLIER);
+    const _shell = new BN(shellAmount * 1e9);
+    // console.log(
+    //   "_tideState.walletShellAccount.toString()",
+    //   _tideState.walletShellAccount.toString()
+    // );
+    // console.log(
+    //   "_tideState.tideShellAccount.toString()",
+    //   _tideState.tideShellAccount.toString()
+    // );
     const config = {
       accounts: {
         config: _tideState.tide,
@@ -335,7 +343,7 @@ const useLPStore = create((set: any, get: any) => ({
       },
     };
     let stakeDeposit = null;
-    if(_tideStats.stakeAccount) {
+    if (_tideStats.stakeAccount) {
       stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, config);
       console.log("stakeDeposit", stakeDeposit);
     } else {
@@ -595,10 +603,33 @@ const useLPStore = create((set: any, get: any) => ({
       stakeAccount = await get().tideState.program.account.stake.fetch(
         get().tideState.stake
       );
+      // console.log("stakeAccount", stakeAccount);
+      // console.log(
+      //   "stakeAccount.timestamp.toString()",
+      //   stakeAccount.timestamp.toString()
+      // );
+      // console.log(
+      //   "stakeAccount.rewards.toString()",
+      //   stakeAccount.rewards.toString()
+      // );
+      // console.log(
+      //   "stakeAccount.shellAmount.toString()",
+      //   stakeAccount.shellAmount.toString()
+      // );
     } catch (e) {
       console.log("no stake account");
     }
-    set({ tideStats: { tideAccount, stakeAccount } });
+    const totalStakedShell = tideAccount.shellAmount.toNumber() / 1e9;
+    const walletStakedShell = stakeAccount.shellAmount.toNumber() / 1e9;
+    // TODO: Run trtn harvest function approximater here
+    set({
+      tideStats: {
+        tideAccount,
+        stakeAccount,
+        totalStakedShell,
+        walletStakedShell,
+      },
+    });
   },
   getAccountStats: async () => {
     const usdcBalance = await get()
