@@ -376,20 +376,20 @@ const useLPStore = create((set: any, get: any) => ({
     const _tideState = get().tideState;
 
     const tx = new anchor.web3.Transaction();
-    // let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
-    //   accounts: {
-    //     config: _tideState.tide,
-    //     stake: _tideState.stake,
-    //     authority: _tideState.program.provider.wallet.publicKey,
-    //     authTrtnAccount: _tideState.walletTrtnAccount,
-    //     tideTrtnAccount: _tideState.tideTrtnAccount,
-    //     trtnMint: _tideState.trtnToken,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     systemProgram: anchor.web3.SystemProgram.programId,
-    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-    //   },
-    // });
+    let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
+      accounts: {
+        config: _tideState.tide,
+        stake: _tideState.stake,
+        authority: _tideState.program.provider.wallet.publicKey,
+        authTrtnAccount: _tideState.walletTrtnAccount,
+        tideTrtnAccount: _tideState.tideTrtnAccount,
+        trtnMint: _tideState.trtnToken,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+      },
+    });
     let stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
       accounts: {
         config: _tideState.tide,
@@ -405,7 +405,7 @@ const useLPStore = create((set: any, get: any) => ({
       },
     });
 
-    // tx.add(stakeRedeem_ix);
+    tx.add(stakeRedeem_ix);
     tx.add(stakeWithdraw_ix);
 
     try {
