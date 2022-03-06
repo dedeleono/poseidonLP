@@ -38,4 +38,3 @@ function ReactPortal({ children, wrapperId = "react-portal-wrapper" }: any) {
 }
 
 export default ReactPortal;
-
