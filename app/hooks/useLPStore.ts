@@ -226,7 +226,7 @@ const useLPStore = create((set: any, get: any) => ({
       program.programId
     );
 
-    // console.log("tide", tide.toString());
+    console.log("tide", tide.toString());
 
     // stake data account generation (pda)
     const [stake, _stakeBump] = await anchor.web3.PublicKey.findProgramAddress(
@@ -343,6 +343,7 @@ const useLPStore = create((set: any, get: any) => ({
       },
     };
     let stakeDeposit = null;
+    console.log("Is there a _tideStats.stakeAccount?", _tideStats.stakeAccount);
     if (_tideStats.stakeAccount) {
       stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, config);
       console.log("stakeDeposit", stakeDeposit);
@@ -368,12 +369,28 @@ const useLPStore = create((set: any, get: any) => ({
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       },
     });
-    console.log("stakeRedeem", stakeRedeem);
+    // console.log("stakeRedeem", stakeRedeem);
   },
   stakeWithdraw: async () => {
     await get().getTideStats();
     const _tideState = get().tideState;
-    const stakeWithdraw = await _tideState.program.rpc.stakeWithdraw({
+
+    const tx = new anchor.web3.Transaction();
+    // let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
+    //   accounts: {
+    //     config: _tideState.tide,
+    //     stake: _tideState.stake,
+    //     authority: _tideState.program.provider.wallet.publicKey,
+    //     authTrtnAccount: _tideState.walletTrtnAccount,
+    //     tideTrtnAccount: _tideState.tideTrtnAccount,
+    //     trtnMint: _tideState.trtnToken,
+    //     tokenProgram: TOKEN_PROGRAM_ID,
+    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+    //     systemProgram: anchor.web3.SystemProgram.programId,
+    //     rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+    //   },
+    // });
+    let stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
       accounts: {
         config: _tideState.tide,
         stake: _tideState.stake,
@@ -387,7 +404,16 @@ const useLPStore = create((set: any, get: any) => ({
         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       },
     });
-    console.log("stakeWithdraw", stakeWithdraw);
+
+    // tx.add(stakeRedeem_ix);
+    tx.add(stakeWithdraw_ix);
+
+    try {
+      // console.log("sendingTx");
+      await _tideState.program.provider.send(tx);
+    } catch (err) {
+      console.log(err);
+    }
   },
   provideLiquidity: async (trtn: number, usdc: number) => {
     await get().getPsdnStats();
@@ -598,11 +624,30 @@ const useLPStore = create((set: any, get: any) => ({
     const tideAccount = await get().tideState.program.account.config.fetch(
       get().tideState.tide
     );
+
+    console.log("tideAccoun.shellAmount", tideAccount.shellAmount.toString());
+    console.log("tideAccoun.trtnAmount", tideAccount.trtnAmount.toString());
+    console.log(
+      "tideAccount.rewardPerTokenStored",
+      tideAccount.rewardPerTokenStored.toString()
+    );
+    console.log("tideAccoun.rewardRate", tideAccount.rewardRate.toString());
+    console.log(
+      "tideAccoun.lastUpdatedTime",
+      tideAccount.lastUpdatedTime.toString()
+    );
+
     let stakeAccount = null;
+    let walletStakedShell = null;
+    const totalStakedShell = tideAccount.shellAmount.toString();
     try {
       stakeAccount = await get().tideState.program.account.stake.fetch(
         get().tideState.stake
       );
+      walletStakedShell = stakeAccount.shellAmount.toNumber() / 1e9;
+
+      // TODO: Run trtn harvest function approximater here
+
       // console.log("stakeAccount", stakeAccount);
       // console.log(
       //   "stakeAccount.timestamp.toString()",
@@ -619,9 +664,6 @@ const useLPStore = create((set: any, get: any) => ({
     } catch (e) {
       console.log("no stake account");
     }
-    const totalStakedShell = tideAccount.shellAmount.toNumber() / 1e9;
-    const walletStakedShell = stakeAccount.shellAmount.toNumber() / 1e9;
-    // TODO: Run trtn harvest function approximater here
     set({
       tideStats: {
         tideAccount,

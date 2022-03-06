@@ -82,16 +82,7 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "trtnAmount",
-          "type": "u64"
-        },
-        {
-          "name": "shellAmount",
-          "type": "u64"
-        }
-      ]
+      "args": []
     },
     {
       "name": "configFund",
@@ -346,12 +337,7 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "shellAmount",
-          "type": "u64"
-        }
-      ]
+      "args": []
     }
   ],
   "accounts": [
