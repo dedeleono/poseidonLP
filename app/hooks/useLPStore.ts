@@ -322,7 +322,7 @@ const useLPStore = create((set: any, get: any) => ({
     await get().getTideStats();
     const _tideState = get().tideState;
     const _tideStats = get().tideStats;
-    const _shell = new BN(shellAmount * 1e9);
+    const _shell = new BN(shellAmount * 1e6);
     // console.log(
     //   "_tideState.walletShellAccount.toString()",
     //   _tideState.walletShellAccount.toString()
@@ -645,7 +645,7 @@ const useLPStore = create((set: any, get: any) => ({
       stakeAccount = await get().tideState.program.account.stake.fetch(
         get().tideState.stake
       );
-      walletStakedShell = stakeAccount.shellAmount.toNumber() / 1e9;
+      walletStakedShell = stakeAccount.shellAmount.toNumber() / 1e6;
 
       // TODO: Run trtn harvest function approximater here
 
