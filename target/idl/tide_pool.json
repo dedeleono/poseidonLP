@@ -418,23 +418,6 @@
       }
     }
   ],
-  "events": [
-    {
-      "name": "ConfigUpdated",
-      "fields": [
-        {
-          "name": "newTrtnAmount",
-          "type": "u64",
-          "index": false
-        },
-        {
-          "name": "newShellAmount",
-          "type": "u64",
-          "index": false
-        }
-      ]
-    }
-  ],
   "metadata": {
     "address": "TideNjRo78A11YtA4QV3BiH43SBqWASWaCJxrvTAGwo"
   }

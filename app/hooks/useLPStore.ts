@@ -75,7 +75,7 @@ const useLPStore = create((set: any, get: any) => ({
   setupPoseidon: async (wallet: AnchorWallet) => {
     const psdnIdl = poseidonIDL as anchor.Idl;
     const opts = {
-      preflightCommitment: "processed" as ConfirmOptions,
+      preflightCommitment: "finalized" as ConfirmOptions,
     };
     const endpoint =
       "https://bold-withered-pond.solana-mainnet.quiknode.pro/608c8586df23a01f2bdbfd77fd8d54b5f87f3211/";
@@ -113,7 +113,7 @@ const useLPStore = create((set: any, get: any) => ({
 
     // Get PDA accounts for triton
     const trtnToken = new PublicKey(
-      "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
+      "9orxGYrDdQzuNQdUGfHTVS2xWyGC6snFDf13eezaZCbv"
     );
 
     const [psdnTrtnAccount, psdnTrtnBump] =
@@ -201,9 +201,10 @@ const useLPStore = create((set: any, get: any) => ({
   setupTide: async (wallet: AnchorWallet) => {
     const tideIdl = tideIDL as anchor.Idl;
     const opts = {
-      preflightCommitment: "processed" as ConfirmOptions,
+      preflightCommitment: "finalized" as ConfirmOptions,
     };
-    const endpoint = "https://api.devnet.solana.com";
+    const endpoint =
+      "https://crimson-withered-water.solana-mainnet.quiknode.pro/1fe9db637760863cd9720e3f325a1f6d6f15a5c9/";
     const connection = new anchor.web3.Connection(
       endpoint,
       opts.preflightCommitment
@@ -238,11 +239,11 @@ const useLPStore = create((set: any, get: any) => ({
 
     // Get PDA accounts for triton
     // const trtnToken = new anchor.web3.PublicKey(
-    //   "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
+    //   "7mGmeTRqdgJdM3QZYUqUXFh5uqb1Yh3JwzygM6jDvtDg"
     // );
-    // devnet
+    // mainnet
     const trtnToken = new anchor.web3.PublicKey(
-      "7mGmeTRqdgJdM3QZYUqUXFh5uqb1Yh3JwzygM6jDvtDg"
+      "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
     );
 
     const [tideTrtnAccount, tideTrtnBump] =
@@ -256,7 +257,7 @@ const useLPStore = create((set: any, get: any) => ({
     //   trtnToken,
     //   program.programId
     // );
-    // console.log("tideTrtnAccount", tideTrtnAccount.toString());
+    console.log("tideTrtnAccount", tideTrtnAccount.toString());
     // console.log("tideTrtnBump", tideTrtnBump);
 
     // const tideTrtnAccountBalance =
@@ -275,7 +276,7 @@ const useLPStore = create((set: any, get: any) => ({
     // offical shell token on mainnet:
     // mock shell on devnet: CJGjnKBx1E5dWUhDUn2J2HHAse5qGBDtd2wKAAN4s1M8
     const shellToken = new anchor.web3.PublicKey(
-      "D8S8dtDmPeyCTmbhCXKz6pojhCfwQjqBSR4dGmpTf2ot"
+      "9orxGYrDdQzuNQdUGfHTVS2xWyGC6snFDf13eezaZCbv"
     );
 
     const [tideShellAccount, _tideShellBump] =
