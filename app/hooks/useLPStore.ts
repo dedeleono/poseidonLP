@@ -113,7 +113,7 @@ const useLPStore = create((set: any, get: any) => ({
 
     // Get PDA accounts for triton
     const trtnToken = new PublicKey(
-      "9orxGYrDdQzuNQdUGfHTVS2xWyGC6snFDf13eezaZCbv"
+      "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
     );
 
     const [psdnTrtnAccount, psdnTrtnBump] =
