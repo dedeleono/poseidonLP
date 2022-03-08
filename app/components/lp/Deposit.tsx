@@ -1,15 +1,11 @@
 import {useState, useEffect, useRef} from "react";
 import DepositConfirmModal from "./DepositConfirmModal";
 import useLPStore from "../../hooks/useLPStore";
-import LoaderModal from "./LoaderModal";
 
 export default function Deposit() {
-
     const provideLiquidity = useLPStore((state => state.provideLiquidity));
     const psdnRatio = useLPStore((state => state.psdnRatio));
     const accountStats = useLPStore((state => state.accountStats));
-    const getAccountStats = useLPStore((state => state.getAccountStats));
-    const getPsdnStats = useLPStore((state => state.getPsdnStats));
 
     const [swapAmounts, setSwapAmounts] = useState({
         trtn: 1.0,
@@ -18,7 +14,7 @@ export default function Deposit() {
     });
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [showLoaderModal, setShowLoaderModal] = useState(false);
+    const [isPending, setIsPending] = useState(false);
 
     const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
         // console.log("_trtnAmount", _trtnAmount);
@@ -56,19 +52,15 @@ export default function Deposit() {
         <div>
             <DepositConfirmModal
                 isOpen={showConfirmModal}
+                isPending={isPending}
                 handleConfirm={async () => {
+                    setIsPending(true);
                     await provideLiquidity(swapAmounts.trtn, swapAmounts.usdc);
+                    setIsPending(false);
                     setShowConfirmModal(false)
-                    setShowLoaderModal(true);
-
                 }}
                 handleClose={() => setShowConfirmModal(false)}
             />
-            <LoaderModal isOpen={showLoaderModal} handleFinished={() => {
-                setShowLoaderModal(false);
-                getAccountStats();
-                getPsdnStats();
-            }} />
             <div>
                 <h2>Deposit Liquidity</h2>
                 <p className="text-base w-10/12">
@@ -130,7 +122,7 @@ export default function Deposit() {
                 </label>
                 <div className="mt-4 gap-2">
                     <button
-                        className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
+                        className={`btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow ${isPending ? 'loading' : ''}`}
                         onClick={() => setShowConfirmModal(true)}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

@@ -40,18 +40,24 @@ const Navigation: FC<NavigationProps>  = ({activeId}) => {
                     Shanties
                 </div>
             </div>
-            <div className="flex sm:flex-grow md:basis-1/2 gap-6 md:gap-6 xl:gap-12 items-center md:flex-grow lg:place-content-center">
+            <div className="flex sm:flex-grow md:basis-1/2 gap-3 md:gap-6 xl:gap-12 items-center md:flex-grow lg:place-content-center">
                 {navigationItems.map((item) => (
                     <a
                         key={item.id}
                         href={item.href}
-                        className={`relative flex items-center h-full font-scratchy text-2xl md:text-4xl xl:text-5xl ${activeId === item.id ? 'text-yellow border-b-4 border-yellow' : 'text-secondary-content  hover:text-yellow'}`}>
+                        className={`relative flex items-center h-full font-scratchy text-2xl md:text-4xl ${activeId === item.id ? 'text-yellow border-b-4 border-yellow' : 'text-secondary-content  hover:text-yellow'}`}>
                         {item.title}
                     </a>
                 ))}
             </div>
-            <div className="sm:basis-1/4  items-center place-content-end pr-4 hidden sm:flex">
-                <WalletMultiButtonStyled className="!btn-xs !w-[140px] md:!btn-md md:!w-[170px]" />
+            <div className="lg:basis-1/4  items-center place-content-end pr-4 hidden sm:flex">
+                <a href="https://discord.com/invite/AA66Ayk5Dz" target="_blank" rel="noopener noreferrer">
+                    <img src="/images/discord.svg" className="w-4 md:w-6 m-1 md:m-2" />
+                </a>
+                <a href="https://twitter.com/SeaShantiesSol" target="_blank" rel="noopener noreferrer">
+                    <img src="/images/twitter.svg" className="w-4 md:w-6 m-1 md:m-2" />
+                </a>
+                <WalletMultiButtonStyled className="!btn-xs !w-[130px] ml-2 md:!btn-md md:!w-[170px]" />
             </div>
         </div>
     );

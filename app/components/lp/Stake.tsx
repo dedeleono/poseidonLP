@@ -1,26 +1,15 @@
 import {useState, useRef} from "react";
 import useLPStore from "../../hooks/useLPStore";
-import LoaderModal from "./LoaderModal";
 
 export default function Stake() {
-    // TODO when clicked disable and change button text
     const accountStats = useLPStore((state => state.accountStats));
     const stakeDeposit = useLPStore((state => state.stakeDeposit));
-    const getAccountStats = useLPStore((state => state.getAccountStats));
-    const getPsdnStats = useLPStore((state => state.getPsdnStats));
-    const getTideStats = useLPStore((state => state.getTideStats));
 
     const [shellAmount, setShellAmount] = useState(1.0);
-    const [showLoaderModal, setShowLoaderModal] = useState(false);
+    const [isPending, setIsPending] = useState(false);
 
     return (
         <div>
-            <LoaderModal isOpen={showLoaderModal} handleFinished={() => {
-                setShowLoaderModal(false);
-                getAccountStats();
-                getPsdnStats();
-                getTideStats();
-            }} />
             <div>
                 <h2>Stake $SHELL</h2>
                 <p className="text-base w-9/12">
@@ -53,10 +42,11 @@ export default function Stake() {
                 </label>
                 <div className="mt-4 gap-2">
                     <button
-                        className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
+                        className={`btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow ${isPending ? 'loading' : ''}`}
                         onClick={async () => {
+                            setIsPending(true);
                             await stakeDeposit(shellAmount);
-                            setShowLoaderModal(true);
+                            setIsPending(false);
                         }}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

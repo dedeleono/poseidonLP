@@ -4,6 +4,7 @@ import tideIDL from "../../target/idl/tide_pool.json";
 import * as anchor from "@project-serum/anchor";
 import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
 import { BN, Program, Provider } from "@project-serum/anchor";
+import { toast } from 'react-toastify';
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   Token,
@@ -27,6 +28,8 @@ type TideState = {
 type TideStats = {
   tideAccount: PublicKey;
   stakeAccount: PublicKey;
+  totalStakedShell: BN;
+  walletStakedShell: number;
 };
 
 type PsdnState = {
@@ -65,7 +68,27 @@ type AccountStats = {
 
 const TOKEN_MULTIPLIER = 1e6;
 
-const useLPStore = create((set: any, get: any) => ({
+interface UseLPStore {
+  tideState: TideState;
+  tideStats: TideStats;
+  psdnState: PsdnState;
+  psdnStats: PsdnStats;
+  psdnRatio: number;
+  accountStats: AccountStats;
+  setupPoseidon: (wallet: AnchorWallet) => void;
+  setupTide: (wallet: AnchorWallet) => void;
+  stakeDeposit: (shellAmount: number) => void;
+  stakeRedeem: () => void;
+  stakeWithdraw: () => void;
+  provideLiquidity: (trtn: number, usdc: number) => void;
+  removeLiquidity: () => void;
+  swap: (trtn: number, usdc: number, swapType: string, confirmed: boolean) => void;
+  getPsdnStats: () => void;
+  getTideStats: () => void;
+  getAccountStats: () => void;
+}
+
+const useLPStore = create<UseLPStore>((set: any, get: any) => ({
   tideState: {} as TideState,
   tideStats: {} as TideStats,
   psdnState: {} as PsdnState,
@@ -345,75 +368,85 @@ const useLPStore = create((set: any, get: any) => ({
     };
     let stakeDeposit = null;
     console.log("Is there a _tideStats.stakeAccount?", _tideStats.stakeAccount);
-    if (_tideStats.stakeAccount) {
-      stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, config);
-      console.log("stakeDeposit", stakeDeposit);
-    } else {
-      stakeDeposit = await _tideState.program.rpc.stakeInit(_shell, config);
-      console.log("stakeInit", stakeDeposit);
+    try {
+      if (_tideStats.stakeAccount) {
+        stakeDeposit = await _tideState.program.rpc.stakeDeposit(_shell, config);
+        console.log("stakeDeposit", stakeDeposit);
+      } else {
+        stakeDeposit = await _tideState.program.rpc.stakeInit(_shell, config);
+        console.log("stakeInit", stakeDeposit);
+      }
+      showRpcSuccessMessage();
+    } catch (e) {
+      showRpcErrorMessage(e);
     }
   },
   stakeRedeem: async () => {
     await get().getTideStats();
     const _tideState = get().tideState;
-    const stakeRedeem = await _tideState.program.rpc.stakeRedeem({
-      accounts: {
-        config: _tideState.tide,
-        stake: _tideState.stake,
-        authority: _tideState.program.provider.wallet.publicKey,
-        authTrtnAccount: _tideState.walletTrtnAccount,
-        tideTrtnAccount: _tideState.tideTrtnAccount,
-        trtnMint: _tideState.trtnToken,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
-    // console.log("stakeRedeem", stakeRedeem);
+    try {
+      const stakeRedeem = await _tideState.program.rpc.stakeRedeem({
+        accounts: {
+          config: _tideState.tide,
+          stake: _tideState.stake,
+          authority: _tideState.program.provider.wallet.publicKey,
+          authTrtnAccount: _tideState.walletTrtnAccount,
+          tideTrtnAccount: _tideState.tideTrtnAccount,
+          trtnMint: _tideState.trtnToken,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+      // console.log("stakeRedeem", stakeRedeem);
+      showRpcSuccessMessage();
+    } catch (e) {
+      showRpcErrorMessage(e);
+    }
   },
   stakeWithdraw: async () => {
     await get().getTideStats();
     const _tideState = get().tideState;
-
     const tx = new anchor.web3.Transaction();
-    let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
-      accounts: {
-        config: _tideState.tide,
-        stake: _tideState.stake,
-        authority: _tideState.program.provider.wallet.publicKey,
-        authTrtnAccount: _tideState.walletTrtnAccount,
-        tideTrtnAccount: _tideState.tideTrtnAccount,
-        trtnMint: _tideState.trtnToken,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
-    let stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
-      accounts: {
-        config: _tideState.tide,
-        stake: _tideState.stake,
-        authority: _tideState.program.provider.wallet.publicKey,
-        authShellAccount: _tideState.walletShellAccount,
-        tideShellAccount: _tideState.tideShellAccount,
-        shellMint: _tideState.shellToken,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
-
-    tx.add(stakeRedeem_ix);
-    tx.add(stakeWithdraw_ix);
 
     try {
-      // console.log("sendingTx");
+      let stakeRedeem_ix = await _tideState.program.instruction.stakeRedeem({
+        accounts: {
+          config: _tideState.tide,
+          stake: _tideState.stake,
+          authority: _tideState.program.provider.wallet.publicKey,
+          authTrtnAccount: _tideState.walletTrtnAccount,
+          tideTrtnAccount: _tideState.tideTrtnAccount,
+          trtnMint: _tideState.trtnToken,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+      let stakeWithdraw_ix = await _tideState.program.instruction.stakeWithdraw({
+        accounts: {
+          config: _tideState.tide,
+          stake: _tideState.stake,
+          authority: _tideState.program.provider.wallet.publicKey,
+          authShellAccount: _tideState.walletShellAccount,
+          tideShellAccount: _tideState.tideShellAccount,
+          shellMint: _tideState.shellToken,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+
+      tx.add(stakeRedeem_ix);
+      tx.add(stakeWithdraw_ix);
+
       await _tideState.program.provider.send(tx);
-    } catch (err) {
-      console.log(err);
+      showRpcSuccessMessage();
+    } catch (e) {
+      showRpcErrorMessage(e);
     }
   },
   provideLiquidity: async (trtn: number, usdc: number) => {
@@ -424,25 +457,30 @@ const useLPStore = create((set: any, get: any) => ({
     // console.log("usdc", usdc.toNumber());
     // console.log("run simulate");
     const _psdnState = get().psdnState;
-    const events = await _psdnState.program.rpc.provideLiquidity(_trtn, _usdc, {
-      accounts: {
-        config: _psdnState.poseidon,
-        authority: _psdnState.program.provider.wallet.publicKey,
-        usdcAccount: _psdnState.psdnUsdcAccount,
-        trtnAccount: _psdnState.psdnTrtnAccount,
-        usdcMint: _psdnState.usdcToken,
-        trtnMint: _psdnState.trtnToken,
-        shellMint: _psdnState.psdnShellAccount,
-        authUsdcAccount: _psdnState.walletUsdcAccount,
-        authTrtnAccount: _psdnState.walletTrtnAccount,
-        authShellAccount: _psdnState.walletShellAccount,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
-    console.log("events", events);
+    try {
+      const events = await _psdnState.program.rpc.provideLiquidity(_trtn, _usdc, {
+        accounts: {
+          config: _psdnState.poseidon,
+          authority: _psdnState.program.provider.wallet.publicKey,
+          usdcAccount: _psdnState.psdnUsdcAccount,
+          trtnAccount: _psdnState.psdnTrtnAccount,
+          usdcMint: _psdnState.usdcToken,
+          trtnMint: _psdnState.trtnToken,
+          shellMint: _psdnState.psdnShellAccount,
+          authUsdcAccount: _psdnState.walletUsdcAccount,
+          authTrtnAccount: _psdnState.walletTrtnAccount,
+          authShellAccount: _psdnState.walletShellAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+      console.log("events", events);
+      showRpcSuccessMessage();
+    } catch (e) {
+      showRpcErrorMessage(e);
+    }
   },
   removeLiquidity: async () => {
     await get().getPsdnStats();
@@ -460,24 +498,29 @@ const useLPStore = create((set: any, get: any) => ({
       );
     const shell = new BN(authShellBalance.value.amount);
     console.log("shell", shell.toNumber() / TOKEN_MULTIPLIER);
-    await _psdnState.program.rpc.removeLiquidity(shell, {
-      accounts: {
-        config: _psdnState.poseidon,
-        authority: _psdnState.program.provider.wallet.publicKey,
-        usdcAccount: _psdnState.psdnUsdcAccount,
-        trtnAccount: _psdnState.psdnTrtnAccount,
-        usdcMint: _psdnState.usdcToken,
-        trtnMint: _psdnState.trtnToken,
-        shellMint: _psdnState.psdnShellAccount,
-        authUsdcAccount: _psdnState.walletUsdcAccount,
-        authShellAccount: _psdnState.walletShellAccount,
-        authTrtnAccount: _psdnState.walletTrtnAccount,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-      },
-    });
+    try {
+      await _psdnState.program.rpc.removeLiquidity(shell, {
+        accounts: {
+          config: _psdnState.poseidon,
+          authority: _psdnState.program.provider.wallet.publicKey,
+          usdcAccount: _psdnState.psdnUsdcAccount,
+          trtnAccount: _psdnState.psdnTrtnAccount,
+          usdcMint: _psdnState.usdcToken,
+          trtnMint: _psdnState.trtnToken,
+          shellMint: _psdnState.psdnShellAccount,
+          authUsdcAccount: _psdnState.walletUsdcAccount,
+          authShellAccount: _psdnState.walletShellAccount,
+          authTrtnAccount: _psdnState.walletTrtnAccount,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        },
+      });
+      showRpcSuccessMessage();
+    } catch (e) {
+      showRpcErrorMessage(e);
+    }
     await get().getPsdnStats();
     _psdnStats = get().psdnStats;
     console.log("psdnStats", _psdnStats);
@@ -526,43 +569,54 @@ const useLPStore = create((set: any, get: any) => ({
         // console.log("swapping usdc to trtn");
         const usdcToSwap = new BN(usdc * TOKEN_MULTIPLIER);
         // console.log("usdcToSwap", usdcToSwap.toNumber());
-        await _psdnState.program.rpc.swapToTriton(usdcToSwap, {
-          accounts: {
-            config: _psdnState.poseidon,
-            authority: _psdnState.program.provider.wallet.publicKey,
-            usdcAccount: _psdnState.psdnUsdcAccount,
-            trtnAccount: _psdnState.psdnTrtnAccount,
-            usdcMint: _psdnState.usdcToken,
-            trtnMint: _psdnState.trtnToken,
-            authTrtnAccount: _psdnState.walletTrtnAccount,
-            authUsdcAccount: _psdnState.walletUsdcAccount,
-            systemProgram: anchor.web3.SystemProgram.programId,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-          },
-        });
+        try {
+          await _psdnState.program.rpc.swapToTriton(usdcToSwap, {
+            accounts: {
+              config: _psdnState.poseidon,
+              authority: _psdnState.program.provider.wallet.publicKey,
+              usdcAccount: _psdnState.psdnUsdcAccount,
+              trtnAccount: _psdnState.psdnTrtnAccount,
+              usdcMint: _psdnState.usdcToken,
+              trtnMint: _psdnState.trtnToken,
+              authTrtnAccount: _psdnState.walletTrtnAccount,
+              authUsdcAccount: _psdnState.walletUsdcAccount,
+              systemProgram: anchor.web3.SystemProgram.programId,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+              rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+            },
+          });
+          showRpcSuccessMessage();
+        } catch (e) {
+          showRpcErrorMessage(e);
+        }
+
         /// await refresh();
       } else if (swapType === "trtn") {
         // console.log("swapping triton to usdc");
         const trtnToSwap = new BN(trtn * TOKEN_MULTIPLIER);
         // console.log("trtnToSwap", trtnToSwap.toNumber());
-        await _psdnState.program.rpc.swapToUsdc(trtnToSwap, {
-          accounts: {
-            config: _psdnState.poseidon,
-            authority: _psdnState.program.provider.wallet.publicKey,
-            usdcAccount: _psdnState.psdnUsdcAccount,
-            trtnAccount: _psdnState.psdnTrtnAccount,
-            usdcMint: _psdnState.usdcToken,
-            trtnMint: _psdnState.trtnToken,
-            authUsdcAccount: _psdnState.walletUsdcAccount,
-            authTrtnAccount: _psdnState.walletTrtnAccount,
-            systemProgram: anchor.web3.SystemProgram.programId,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-            rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-          },
-        });
+        try {
+          await _psdnState.program.rpc.swapToUsdc(trtnToSwap, {
+            accounts: {
+              config: _psdnState.poseidon,
+              authority: _psdnState.program.provider.wallet.publicKey,
+              usdcAccount: _psdnState.psdnUsdcAccount,
+              trtnAccount: _psdnState.psdnTrtnAccount,
+              usdcMint: _psdnState.usdcToken,
+              trtnMint: _psdnState.trtnToken,
+              authUsdcAccount: _psdnState.walletUsdcAccount,
+              authTrtnAccount: _psdnState.walletTrtnAccount,
+              systemProgram: anchor.web3.SystemProgram.programId,
+              tokenProgram: TOKEN_PROGRAM_ID,
+              associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+              rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+            },
+          });
+          showRpcSuccessMessage();
+        } catch (e) {
+          showRpcErrorMessage(e);
+        }
         /// await refresh();
       }
     }
@@ -640,7 +694,7 @@ const useLPStore = create((set: any, get: any) => ({
 
     let stakeAccount = null;
     let walletStakedShell = null;
-    const totalStakedShell = tideAccount.shellAmount.toString();
+    const totalStakedShell = tideAccount.shellAmount;
     try {
       stakeAccount = await get().tideState.program.account.stake.fetch(
         get().tideState.stake
@@ -708,6 +762,15 @@ const useLPStore = create((set: any, get: any) => ({
     });
   },
 }));
+
+
+function  showRpcErrorMessage(e:unknown) {
+  toast.error("Transaction failed");
+}
+
+function showRpcSuccessMessage() {
+  toast.success("Transaction completed!");
+}
 
 export default useLPStore;
 export class SlippageToHighError extends Error {}

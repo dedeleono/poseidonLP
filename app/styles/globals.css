@@ -38,9 +38,14 @@
     font-family: Jangkuy, serif;
   }
   h2 {
-    @apply text-2xl;
+    @apply text-xl;
     font-weight: bold;
     font-family: Jangkuy, serif;
+  }
+  @media (min-width: 768px) {
+    h2 {
+      @apply text-2xl;
+    }
   }
 }
 .input-lg {
@@ -56,6 +61,19 @@
   background-color: red !important;
   font-size: 14px !important;
 }
+.wallet-adapter-button .wallet-adapter-button-start-icon {
+  margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+  .Toastify__toast-container--top-center {
+    top: 4em !important;
+  }
+}
+.Toastify__toast-container--top-center .Toastify__toast-theme--dark {
+  background-color: #181830;
+}
+
 #__next
   > div
   > main
