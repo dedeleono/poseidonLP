@@ -75,7 +75,7 @@ const useLPStore = create((set: any, get: any) => ({
   setupPoseidon: async (wallet: AnchorWallet) => {
     const psdnIdl = poseidonIDL as anchor.Idl;
     const opts = {
-      preflightCommitment: "finalized" as ConfirmOptions,
+      preflightCommitment: "processed" as ConfirmOptions,
     };
     const endpoint =
       "https://bold-withered-pond.solana-mainnet.quiknode.pro/608c8586df23a01f2bdbfd77fd8d54b5f87f3211/";
@@ -201,7 +201,7 @@ const useLPStore = create((set: any, get: any) => ({
   setupTide: async (wallet: AnchorWallet) => {
     const tideIdl = tideIDL as anchor.Idl;
     const opts = {
-      preflightCommitment: "finalized" as ConfirmOptions,
+      preflightCommitment: "processed" as ConfirmOptions,
     };
     const endpoint =
       "https://crimson-withered-water.solana-mainnet.quiknode.pro/1fe9db637760863cd9720e3f325a1f6d6f15a5c9/";
