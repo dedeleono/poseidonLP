@@ -5,25 +5,24 @@ interface DepositConfirmModalProps {
     isOpen: boolean,
     handleClose?: () => void,
     handleConfirm?: () => void,
+    isPending: boolean,
 }
 
 /**
  * Component that contains the global menu
  */
-const DepositConfirmModal: FC<DepositConfirmModalProps>  = ({isOpen,handleClose, handleConfirm}) => {
+const DepositConfirmModal: FC<DepositConfirmModalProps>  = ({isOpen,handleClose, handleConfirm, isPending}) => {
     return (
         <Modal isOpen={isOpen} handleClose={handleClose}>
             <div className="flex justify-around">
                 <h4
-                    className="text-center text-xl font-bold mt-6"
-                    style={{ fontFamily: "Jangkuy", color: "white" }}
+                    className="text-center font-jangkuy text-xl font-bold mt-6"
                 >
                     ADD LIQUIDITY
                 </h4>
             </div>
             <p
-                className="font-extralight text-sm py-2 text-justify"
-                style={{ fontFamily: "Montserrat", color: "white" }}
+                className="text-sm py-2 text-justify"
             >
                 By depositing USDC and Triton liquidity with Poseidon
                 LP, you acknowledge that you understand the risks
@@ -50,8 +49,7 @@ const DepositConfirmModal: FC<DepositConfirmModalProps>  = ({isOpen,handleClose,
                 </a>
             </p>
             <p
-                className="font-extralight text-sm py-2 text-justify"
-                style={{ fontFamily: "Montserrat", color: "white" }}
+                className="text-sm py-2 text-justify"
             >
                 Once you have deposited funds, you will begin earning a
                 portion of the 1% fee charged on every swap performed in
@@ -66,7 +64,7 @@ const DepositConfirmModal: FC<DepositConfirmModalProps>  = ({isOpen,handleClose,
             </p>
             <div className="pt-4 pb-4">
                 <button
-                    className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
+                    className={`btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow ${isPending ? 'loading' : ''}`}
                     onClick={handleConfirm}
                 >
                     <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

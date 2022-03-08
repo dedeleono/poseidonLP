@@ -9,6 +9,7 @@ module.exports = {
         yellow: "#FEFF05",
         green: "#01A47B",
         "green-light": "#05D5A1",
+        "body": "#1b527b",
       },
       fontFamily: {
         scratchy: ['Scratchy', 'serif'],

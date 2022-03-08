@@ -1,21 +1,20 @@
 import { useState, useRef } from "react";
 import useLPStore from "../../hooks/useLPStore";
 import WithdrawConfirmModal from "./WithdrawConfirmModal";
-import LoaderModal from "./LoaderModal";
 
 export default function WithDrawButton() {
     // TODO disable when shell is staked or chain calls to unstake + withdraw
     const removeLiquidity = useLPStore((state => state.removeLiquidity));
-    const getAccountStats = useLPStore((state => state.getAccountStats));
-    const getPsdnStats = useLPStore((state => state.getPsdnStats));
+    const shellBalance = useLPStore((state => state.accountStats?.shellBalance));
 
     const [infoState, setInfoState] = useState(false);
-    const [showLoaderModal, setShowLoaderModal] = useState(false);
+    const [isPending, setIsPending] = useState(false);
 
     return (
         <>
             <button
-                className="btn rounded-full btn-outline btn-md btn-accent relative shadow"
+                className={`btn rounded-full btn-outline btn-md relative shadow ${isPending ? 'loading' : ''} ${shellBalance ? 'btn-accent' : ''}`}
+                disabled={!shellBalance}
                 onClick={() => {
                     setInfoState(true)
                 }}
@@ -24,21 +23,14 @@ export default function WithDrawButton() {
             </button>
             <WithdrawConfirmModal
                 isOpen={infoState}
+                isPending={isPending}
                 handleConfirm={async () => {
-                  try {
-                    await removeLiquidity();
-                    setShowLoaderModal(true);
-                  } catch (err) {
-                    console.log(err);
-                  }
+                  setIsPending(true);
+                  await removeLiquidity();
+                  setIsPending(false);
                 }}
                 handleClose={() => setInfoState(false)}
             />
-            <LoaderModal isOpen={showLoaderModal} handleFinished={() => {
-                setShowLoaderModal(false);
-                getAccountStats();
-                getPsdnStats();
-            }} />
         </>
     );
 }

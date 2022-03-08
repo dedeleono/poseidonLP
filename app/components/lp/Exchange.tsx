@@ -1,14 +1,12 @@
 import arrows from "../../public/images/arrows1.svg";
+import arrowsWhite from "../../public/images/arrows1-white.svg";
 
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect} from "react";
 import useLPStore, {SlippageToHighError} from "../../hooks/useLPStore";
 import SlippageConfirmModal from "./SlippageConfirmModal";
-import LoaderModal from "./LoaderModal";
 
 export default function Exchange() {
     const psdnRatio = useLPStore((state => state.psdnRatio));
-    const getAccountStats = useLPStore((state => state.getAccountStats));
-    const getPsdnStats = useLPStore((state => state.getPsdnStats));
     const accountStats = useLPStore((state => state.accountStats));
     const swap = useLPStore((state => state.swap));
     const [swapAmounts, setSwapAmounts] = useState({
@@ -16,8 +14,8 @@ export default function Exchange() {
         usdc: 1.0,
         type: "usdc",
     });
-    const [showLoaderModal, setShowLoaderModal] = useState(false);
     const [showSlippageModal, setShowSlippageModal] = useState(false);
+    const [isPending, setIsPending] = useState(false);
     const [slippageAmount, setSlippageAmount] = useState(0);
 
     const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
@@ -52,9 +50,11 @@ export default function Exchange() {
     const handleSwap = async (confirmed: boolean = false) => {
         try {
             setShowSlippageModal(false);
+            setIsPending(true);
             await swap(swapAmounts.trtn, swapAmounts.usdc, swapAmounts.type, confirmed);
-            setShowLoaderModal(true);
+            setIsPending(false);
         } catch (e) {
+            setIsPending(false);
             if (e instanceof SlippageToHighError) {
                 // User needs to confirm
                 setSlippageAmount(Number(e.message));
@@ -124,13 +124,9 @@ export default function Exchange() {
                 isOpen={showSlippageModal}
                 handleClose={() => setShowSlippageModal(false)}
                 handleConfirm={() => handleSwap(true)}
+                isPending={isPending}
                 slippageAmount={slippageAmount}
             />
-            <LoaderModal isOpen={showLoaderModal} handleFinished={() => {
-                setShowLoaderModal(false);
-                getAccountStats();
-                getPsdnStats();
-            }} />
             <div>
                 <h2>Exchange</h2>
                 <p className="text-base">
@@ -150,18 +146,19 @@ export default function Exchange() {
                 </div>
                 {swapAmounts.type === "trtn" ? trtnField : usdField}
                 <button
-                    className="btn bg-white bg-opacity-30 border-0 btn-circle btn-lg -mt-5 ml-8"
+                    className="btn group bg-white bg-opacity-30 border-0 btn-circle btn-lg -mt-5 ml-8"
                     onClick={() => {
                         changeSwapType();
                     }}
                 >
-                    <img src={arrows.src} className="h-6"/>
+                    <img src={arrows.src} className="h-6 block group-hover:hidden"/>
+                    <img src={arrowsWhite.src} className="h-6 hidden group-hover:block"/>
                 </button>
                 <div className="pb-2">For</div>
                 {swapAmounts.type === "trtn" ? usdField : trtnField}
                 <div className="mt-4 gap-2">
                     <button
-                        className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
+                        className={`btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow ${isPending ? 'loading' : ''}`}
                         onClick={() => handleSwap(false)}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

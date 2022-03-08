@@ -60,10 +60,10 @@ const TidePool: FC  = () => {
                         <div className="text-base md:text-2xl">{tideStats?.walletStakedShell ? tideStats.walletStakedShell : '-'}</div>
                     </div>
                     <div className="flex-grow">
-                        {!!tideStats?.walletStakedShell && <HarvestButton />}
+                        <HarvestButton />
                     </div>
                     <div className="">
-                        {!!tideStats?.walletStakedShell && <UnstakeButton />}
+                        <UnstakeButton />
                     </div>
                 </div>
             </div>

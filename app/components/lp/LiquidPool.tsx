@@ -84,7 +84,7 @@ const LiquidPool: FC  = () => {
                         <div className="text-base md:text-2xl">{accountStats?.shellBalance ? <CountUpValue value={accountStats.shellBalance} showCents={true} /> : '-'}</div>
                     </div>
                     <div className="">
-                        {!!accountStats?.shellBalance && (<WithDrawButton />)}
+                        <WithDrawButton />
                     </div>
                 </div>
             </div>
