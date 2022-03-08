@@ -41,26 +41,22 @@ export default function Home() {
   }, [wallet]);
 
   useEffect(() => {
-    if (psdnState.poseidon) {
+    if (psdnState?.poseidon && tideState?.tide) {
       getPsdnStats();
       getAccountStats();
+      getTideStats();
       if (!refreshStatsTimer) {
         refreshStatsTimer = setInterval(() => {
           getPsdnStats();
           getAccountStats();
+          getTideStats();
         }, 10000);
       }
     }
     return function cleanup() {
       clearInterval(refreshStatsTimer);
     };
-  }, [psdnState]);
-
-  useEffect(() => {
-    if (tideState.tide) {
-      getTideStats();
-    }
-  }, [tideState]);
+  }, [psdnState, tideState]);
 
   return (
     <div>
@@ -69,19 +65,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navigation activeId="poseidon-lp" />
-      <main className="justify-center min-h-screen relative">
+      <main className="justify-center min-h-screen relative bg-slate-800 md:bg-transparent">
         <video
           autoPlay
           muted
           loop
+          playsInline
           id="myVideo"
-          className="absolute inset-0 max-w-none w-full h-full object-cover -z-10 "
+          className="absolute inset-0 max-w-none w-full h-full object-cover -z-10 hidden md:block"
         >
           <source src="/videos/bg.mp4" type="video/mp4" />
         </video>
         <img
           src="/images/long.jpg"
-          className="mix-blend-lighten w-full absolute bottom-0 left-0 right-0"
+          style={{zIndex: '-9'}}
+          className="mix-blend-lighten w-full hidden md:block absolute bottom-0 left-0 right-0"
         />
         <div
           style={{ backgroundImage: `url(${WavesBg.src})` }}
@@ -160,10 +158,10 @@ export default function Home() {
         <div className="px-4 container mx-auto max-w-screen-xl text-neutral-content bg-center">
           <ConnectDialog />
           <div className="flex gap-4 xl:gap-8 flex-col-reverse lg:flex-row">
-            <div className="md:flex-1">
+            <div className="md:flex-1 mb-6">
               <LiquidPool />
             </div>
-            <div className="flex flex-col lg:w-[380px] ">
+            <div className="flex flex-col lg:w-[380px] mb-6">
               <div className="tabs divide-x divide-black divide-opacity-10 bg-black bg-opacity-25 rounded-box rounded-b-none w-full grid grid-cols-3 backdrop-blur-sm">
                 {Object.entries(Tabs).map(([key, value]) => (
                   <div
@@ -209,7 +207,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <footer className="h-[180px] lg:h-[300px] relative">
+        <footer className="h-[180px] lg:h-[300px] hidden md:block relative">
           <img
             src="/images/squid.png"
             className="w-[200px] lg:w-[400px]  absolute -bottom-5 lg:-bottom-10"

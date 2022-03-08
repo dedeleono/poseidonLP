@@ -27,6 +27,8 @@ type TideState = {
 type TideStats = {
   tideAccount: PublicKey;
   stakeAccount: PublicKey;
+  totalStakedShell: BN;
+  walletStakedShell: number;
 };
 
 type PsdnState = {
@@ -65,7 +67,27 @@ type AccountStats = {
 
 const TOKEN_MULTIPLIER = 1e6;
 
-const useLPStore = create((set: any, get: any) => ({
+interface UseLPStore {
+  tideState: TideState;
+  tideStats: TideStats;
+  psdnState: PsdnState;
+  psdnStats: PsdnStats;
+  psdnRatio: number;
+  accountStats: AccountStats;
+  setupPoseidon: (wallet: AnchorWallet) => void;
+  setupTide: (wallet: AnchorWallet) => void;
+  stakeDeposit: (shellAmount: number) => void;
+  stakeRedeem: () => void;
+  stakeWithdraw: () => void;
+  provideLiquidity: (trtn: number, usdc: number) => void;
+  removeLiquidity: () => void;
+  swap: (trtn: number, usdc: number, swapType: string, confirmed: boolean) => void;
+  getPsdnStats: () => void;
+  getTideStats: () => void;
+  getAccountStats: () => void;
+}
+
+const useLPStore = create<UseLPStore>((set: any, get: any) => ({
   tideState: {} as TideState,
   tideStats: {} as TideStats,
   psdnState: {} as PsdnState,
@@ -409,12 +431,7 @@ const useLPStore = create((set: any, get: any) => ({
     tx.add(stakeRedeem_ix);
     tx.add(stakeWithdraw_ix);
 
-    try {
-      // console.log("sendingTx");
-      await _tideState.program.provider.send(tx);
-    } catch (err) {
-      console.log(err);
-    }
+    await _tideState.program.provider.send(tx);
   },
   provideLiquidity: async (trtn: number, usdc: number) => {
     await get().getPsdnStats();
@@ -640,7 +657,7 @@ const useLPStore = create((set: any, get: any) => ({
 
     let stakeAccount = null;
     let walletStakedShell = null;
-    const totalStakedShell = tideAccount.shellAmount.toString();
+    const totalStakedShell = tideAccount.shellAmount;
     try {
       stakeAccount = await get().tideState.program.account.stake.fetch(
         get().tideState.stake

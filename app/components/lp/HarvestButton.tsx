@@ -22,12 +22,18 @@ export default function HarvestButton() {
                 getTideStats();
             }} />
             <button
-                className="btn rounded-full btn-outline btn-md btn-accent relative shadow"
+                className="btn rounded-full btn-block btn-md btn-accent relative overflow-hidden shadow"
                 onClick={async () => {
+                  try {
                     await stakeRedeem();
                     setShowLoaderModal(true);
+                  } catch (err) {
+                    console.log(err);
+                  }
                 }}
             >
+              <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />
+              <img src="/images/bubbles-2.svg" className="absolute top-0 left-0" />
                 Harvest
             </button>
         </>

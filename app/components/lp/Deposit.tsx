@@ -57,10 +57,13 @@ export default function Deposit() {
             <DepositConfirmModal
                 isOpen={showConfirmModal}
                 handleConfirm={async () => {
-                    await provideLiquidity(swapAmounts.trtn, swapAmounts.usdc);
-                    setShowConfirmModal(false)
-                    setShowLoaderModal(true);
-
+                    try {
+                        await provideLiquidity(swapAmounts.trtn, swapAmounts.usdc);
+                        setShowConfirmModal(false)
+                        setShowLoaderModal(true);
+                    } catch (err) {
+                        console.log(err);
+                    }
                 }}
                 handleClose={() => setShowConfirmModal(false)}
             />

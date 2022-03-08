@@ -24,8 +24,12 @@ export default function UnstakeButton() {
             <button
                 className="btn rounded-full btn-outline btn-md btn-accent relative shadow"
                 onClick={async () => {
+                  try {
                     await stakeWithdraw();
                     setShowLoaderModal(true);
+                  } catch (err) {
+                    console.log(err);
+                  }
                 }}
             >
                 Unstake

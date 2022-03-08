@@ -25,8 +25,12 @@ export default function WithDrawButton() {
             <WithdrawConfirmModal
                 isOpen={infoState}
                 handleConfirm={async () => {
+                  try {
                     await removeLiquidity();
                     setShowLoaderModal(true);
+                  } catch (err) {
+                    console.log(err);
+                  }
                 }}
                 handleClose={() => setInfoState(false)}
             />

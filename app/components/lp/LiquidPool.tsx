@@ -79,20 +79,16 @@ const LiquidPool: FC  = () => {
             </div>
             <div className="mt-3 p-5 xl:p-8">
                 <div className="flex flex-row flex-wrap  gap-4 md:gap-12">
-                    <div>
-                        <div className="text-xs md:text-base opacity-50">Your Liquidity</div>
-                        <div className="text-base md:text-2xl">-</div>
-                    </div>
                     <div className="flex-grow">
-                        <div className="text-xs md:text-base opacity-50">Your Pool tokens ($SHELL)</div>
-                        <div className="text-base md:text-2xl">{accountStats.shellBalance}</div>
+                        <div className="text-xs md:text-base opacity-50">Your unstaked $SHELL</div>
+                        <div className="text-base md:text-2xl">{accountStats?.shellBalance ? <CountUpValue value={accountStats.shellBalance} showCents={true} /> : '-'}</div>
                     </div>
-                    <div className="pr-8">
-                        <WithDrawButton />
+                    <div className="">
+                        {!!accountStats?.shellBalance && (<WithDrawButton />)}
                     </div>
                 </div>
             </div>
-            <div className="mt-3 p-5 xl:p-8">
+            <div className="p-5 xl:p-8">
                 <TidePool />
             </div>
         </div>

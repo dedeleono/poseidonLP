@@ -55,8 +55,12 @@ export default function Stake() {
                     <button
                         className="btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow"
                         onClick={async () => {
-                            await stakeDeposit(shellAmount);
-                            setShowLoaderModal(true);
+                            try {
+                                await stakeDeposit(shellAmount);
+                                setShowLoaderModal(true);
+                            } catch (err) {
+                                console.log(err);
+                            }
                         }}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />
