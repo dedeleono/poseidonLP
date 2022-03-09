@@ -31,18 +31,47 @@
   }
 }
 
+@layer base {
+  h1 {
+    @apply text-4xl;
+    font-weight: bold;
+    font-family: Jangkuy, serif;
+  }
+  h2 {
+    @apply text-xl;
+    font-weight: bold;
+    font-family: Jangkuy, serif;
+  }
+  @media (min-width: 768px) {
+    h2 {
+      @apply text-2xl;
+    }
+  }
+}
+.input-lg {
+  height: 3.5rem;
+}
+
+.spin-button-none::-webkit-outer-spin-button,
+.spin-button-none::-webkit-inner-spin-button {
+  appearance: none;
+}
+
 .wallet-adapter-button .wallet-adapter-button-trigger {
   background-color: red !important;
   font-size: 14px !important;
 }
+.wallet-adapter-button .wallet-adapter-button-start-icon {
+  margin-right: 5px;
+}
 
-.trade-label {
-  display: inline;
-  position: absolute;
-  font-size: 14px;
-  font-family: 'Montserrat';
-  margin-left: -2.5rem;
-  margin-top: -1.8rem;
+@media (min-width: 768px) {
+  .Toastify__toast-container--top-center {
+    top: 4em !important;
+  }
+}
+.Toastify__toast-container--top-center .Toastify__toast-theme--dark {
+  background-color: #181830;
 }
 
 #__next
