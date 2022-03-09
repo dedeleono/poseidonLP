@@ -147,8 +147,7 @@ export default function Home() {
                     $TRTN.
                     <br />
                     <strong>
-                      The Tide Pool disitributes 2000 $TRTN accross all users
-                      staking $SHELL.
+                      The Tide Pool distributes 2000 $TRTN daily across all users staking $SHELL.
                     </strong>
                   </span>
                 </p>
