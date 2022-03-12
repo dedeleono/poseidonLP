@@ -13,26 +13,28 @@ import Deposit from "../components/lp/Deposit";
 import ConnectDialog from "../components/shared/ConnectDialog";
 import useLPStore from "../hooks/useLPStore";
 import Stake from "../components/lp/Stake";
-import CountUp from "react-countup";
+import TokenPanel from "../components/shared/TokenPanel";
+import {useDocumentVisibility, useDocumentVisibilityChange} from "../hooks/useDocumentVisibility";
 
 enum Tabs {
   Exchange = "Exchange",
   Deposit = "Deposit",
   Stake = "Stake",
 }
+let refreshStatsTimer: any;
 
 export default function Home() {
   const wallet = useAnchorWallet();
-  let refreshStatsTimer: any;
   const tideState = useLPStore((state) => state.tideState);
   const psdnState = useLPStore((state) => state.psdnState);
-  const psdnRatio = useLPStore((state) => state.psdnRatio);
-  const [activeTab, setActiveTab] = useState(Tabs.Exchange);
+  const [activeTab, setActiveTab] = useState(Tabs.Deposit);
   const setupTide = useLPStore((state) => state.setupTide);
   const setupPoseidon = useLPStore((state) => state.setupPoseidon);
   const getTideStats = useLPStore((state) => state.getTideStats);
   const getPsdnStats = useLPStore((state) => state.getPsdnStats);
   const getAccountStats = useLPStore((state) => state.getAccountStats);
+
+  const documentIsHidden = useDocumentVisibility();
 
   useEffect(() => {
     if (wallet?.publicKey) {
@@ -42,22 +44,30 @@ export default function Home() {
   }, [wallet]);
 
   useEffect(() => {
-    if (psdnState?.poseidon && tideState?.tide) {
-      getPsdnStats();
-      getAccountStats();
-      getTideStats();
-      if (!refreshStatsTimer) {
-        refreshStatsTimer = setInterval(() => {
-          getPsdnStats();
-          getAccountStats();
-          getTideStats();
-        }, 10000);
+    // documentIsHidden = true if user is in another tab
+    if(documentIsHidden) {
+      if(refreshStatsTimer) {
+        clearInterval(refreshStatsTimer);
+        refreshStatsTimer = null;
+      }
+    } else {
+      if (psdnState?.poseidon && tideState?.tide) {
+        getPsdnStats();
+        getAccountStats();
+        getTideStats();
+        if (!refreshStatsTimer) {
+          refreshStatsTimer = setInterval(() => {
+            getPsdnStats();
+            getAccountStats();
+            getTideStats();
+          }, 10000);
+        }
       }
     }
     return function cleanup() {
       clearInterval(refreshStatsTimer);
     };
-  }, [psdnState, tideState]);
+  }, [psdnState, tideState, documentIsHidden]);
 
   return (
     <div>
@@ -100,57 +110,29 @@ export default function Home() {
                 <div className="flex w-full lg:w-auto flex-grow md:pt-4 md:pt-0">
                   <div className="font-jangkuy text-xl md:text-2xl mx-auto flex-auto text-secondary-content">
                     <div className="lg:max-w-sm text-center text-2xl md:text-3xl lg:text-left">
-                      STAKE $shell <br />
+                      Provide Liquidity <br />
                       and EARN $TRTN
-                    </div>
-                    <div className="flex flex-row gap-4 md:gap-7 pt-3">
-                      <div className="flex basis-1/2 text-center lg:text-left flex-col lg:basis-1/3">
-                        <div className="text-xs md:text-base opacity-50">
-                          TRTN price
-                        </div>
-                        <div className="text-base md:text-2xl">
-                          {" "}
-                          {wallet?.publicKey ? (
-                            <CountUp
-                              preserveValue
-                              end={psdnRatio}
-                              start={0}
-                              duration={0.5}
-                              decimals={5}
-                              decimal="."
-                              separator=","
-                              prefix="$"
-                            />
-                          ) : (
-                            `-`
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex basis-1/2 text-center lg:text-left flex-col lg:basis-1/2">
-                        <div className="text-xs md:text-base opacity-50">
-                          Daily Emissions
-                        </div>
-                        <div className="text-base md:text-2xl">2000 TRTN</div>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="pt-4 lg:pt-0 lg:flex text-center lg:text-left ">
-                <p className="lg:pl-10 lg:pt-0 opacity-90">
-                  <span>
-                    Welcome to the Poseidon Liquidity Pool.
-                    <br />
-                    1. Deposit $TRTN + $USDC and receive $SHELL.
-                    <br />
-                    2. Stake your $SHELL in the Tide Pool and start earning
-                    $TRTN.
-                    <br />
-                    <strong>
-                      The Tide Pool distributes 2000 $TRTN daily across all users staking $SHELL.
-                    </strong>
-                  </span>
-                </p>
+                <div className="lg:pl-0 lg:pt-0">
+                  <ul className="steps steps-vertical">
+                    <li className="step step-accent !text-left">
+                      <div className="pb-3">
+                        <strong>Deposit $TRTN + $USDC</strong>
+                        <br />Receive $SHELL and start earning 1% of transaction fees.
+                      </div>
+                    </li>
+                    <li className="step  step-accent !text-left">
+                      <div>
+                        <strong>Stake your $SHELL in the Tide Pool</strong>
+                        <br />Start earning your portion of the daily 2000 $TRTN emission.
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -204,6 +186,7 @@ export default function Home() {
               >
                 <Stake />
               </div>
+              <TokenPanel />
             </div>
           </div>
         </div>

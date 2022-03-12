@@ -2,7 +2,7 @@ import create from "zustand";
 import poseidonIDL from "../../target/idl/poseidon.json";
 import tideIDL from "../../target/idl/tide_pool.json";
 import * as anchor from "@project-serum/anchor";
-import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
+import {AccountInfo, ConfirmOptions, Connection, ParsedAccountData, PublicKey} from "@solana/web3.js";
 import { BN, Program, Provider } from "@project-serum/anchor";
 import { toast } from 'react-toastify';
 import {
@@ -729,30 +729,28 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     });
   },
   getAccountStats: async () => {
-    const usdcBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletUsdcAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
-    const shellBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletShellAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
-    const trtnBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletTrtnAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
+    const tokenAccounts = await get()
+      .psdnState.program.provider.connection.getParsedTokenAccountsByOwner(get()
+        .psdnState.program.provider.wallet.publicKey, {programId: TOKEN_PROGRAM_ID});
+    let usdcBalance = 0;
+    let shellBalance = 0;
+    let trtnBalance = 0;
+    if(tokenAccounts?.value?.length) {
+      tokenAccounts.value.forEach((tokenAccount: { pubkey:PublicKey , account:AccountInfo<ParsedAccountData>}) => {
+        const uiAmount = tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+        switch(tokenAccount.pubkey.toBase58()) {
+          case get().psdnState.walletUsdcAccount.toBase58():
+            usdcBalance = uiAmount;
+            break;
+          case get().psdnState.walletTrtnAccount.toBase58():
+            trtnBalance = uiAmount;
+            break;
+          case get().psdnState.walletShellAccount.toBase58():
+            shellBalance = uiAmount;
+            break;
+        }
+      })
+    }
     set({
       accountStats: {
         usdcBalance,

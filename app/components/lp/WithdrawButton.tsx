@@ -13,7 +13,7 @@ export default function WithDrawButton() {
     return (
         <>
             <button
-                className={`btn rounded-full btn-outline btn-md relative shadow ${isPending ? 'loading' : ''} ${shellBalance ? 'btn-accent' : ''}`}
+                className={`btn rounded-full btn-outline btn-sm relative shadow ${isPending ? 'loading' : ''} ${shellBalance ? 'btn-accent' : ''}`}
                 disabled={!shellBalance}
                 onClick={() => {
                     setInfoState(true)

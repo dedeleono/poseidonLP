@@ -14,11 +14,13 @@ const LiquidPool: FC  = () => {
     const psdnStats = useLPStore((state => state.psdnStats));
     const accountStats = useLPStore((state => state.accountStats));
     const psdnRatio = useLPStore((state => state.psdnRatio));
+    const tideStats = useLPStore((state => state.tideStats));
 
     let totalIssuedShell = null;
     let totalPooledTrtn = null;
     let totalPooledUsdc = null;
     let totalLiquidity = null;
+    let yourLiquidity = null;
     if(wallet?.publicKey && !!psdnStats?.trtnAmount) {
         const totalTrtn = (psdnStats.trtnAmount as any / 1e6);
         const totalUsdc = (psdnStats.usdcAmount as any / 1e6);
@@ -26,6 +28,10 @@ const LiquidPool: FC  = () => {
         totalPooledTrtn = getNumber(psdnStats.trtnAmount, 6);
         totalPooledUsdc = getNumber(psdnStats.usdcAmount, 6);
         totalIssuedShell = getNumber(psdnStats.shellAmount, 6);
+        const accountShell = accountStats?.shellBalance || 0;
+        const walletStakedShell = tideStats?.walletStakedShell|| 0;
+        // totalLiquidity * (unstakedShell+stakedShell) / issuedShell
+        yourLiquidity = (totalLiquidity * (accountShell + walletStakedShell)) / totalIssuedShell;
     }
     // TODO "your liquidity"
     // TODO "your pool tokens" should also contain staked shell
@@ -50,7 +56,7 @@ const LiquidPool: FC  = () => {
                         <span> Liquidity Pool</span>
                     </h2>
                 </div>
-                <div className="flex flex-row gap-4 md:gap-12">
+                <div className="flex flex-row gap-4 md:gap-6">
                     <div>
                         <div className="text-xs md:text-base opacity-50">Total liquidity</div>
                         <div className="text-base md:text-2xl">
@@ -70,6 +76,12 @@ const LiquidPool: FC  = () => {
                         </div>
                     </div>
                     <div>
+                        <div className="text-xs md:text-base opacity-50">$TRTN price</div>
+                        <div className="text-base md:text-2xl">
+                            {psdnRatio ? <CountUpValue value={psdnRatio} decimals={3}  prefix="$" />: '-'}
+                        </div>
+                    </div>
+                    <div>
                         <div className="text-xs md:text-base opacity-50">Issued $SHELL</div>
                         <div className="text-base md:text-2xl">
                             {totalIssuedShell ? <CountUpValue value={totalIssuedShell} showCents={false} />: '-'}
@@ -77,11 +89,11 @@ const LiquidPool: FC  = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-3 p-5 xl:p-8">
-                <div className="flex flex-row flex-wrap  gap-4 md:gap-12">
+            <div className="mt-3 p-5 md:p-8 md:pb-1">
+                <div className="flex flex-row flex-wrap items-center  gap-4 md:gap-12">
                     <div className="flex-grow">
-                        <div className="text-xs md:text-base opacity-50">Your unstaked $SHELL</div>
-                        <div className="text-base md:text-2xl">{accountStats?.shellBalance ? <CountUpValue value={accountStats.shellBalance} showCents={true} /> : '-'}</div>
+                        <div className="text-xs md:text-base opacity-50">Your liquidity</div>
+                        <div className="text-base md:text-2xl">{yourLiquidity ? <CountUpValue value={yourLiquidity} prefix="$" showCents={true} /> : '-'}</div>
                     </div>
                     <div className="">
                         <WithDrawButton />
