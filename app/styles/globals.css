@@ -1,3 +1,5 @@
+@import "rc-tooltip/assets/bootstrap_white.css";
+@import "react-toastify/dist/ReactToastify.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -70,8 +72,23 @@
     top: 4em !important;
   }
 }
+
+/* Toastify overwrites */
 .Toastify__toast-container--top-center .Toastify__toast-theme--dark {
   background-color: #181830;
+}
+
+/* rc-tooltip overwrites */
+.rc-tooltip {
+  opacity: 1;
+  max-width: 350px;
+}
+.rc-tooltip-placement-top .rc-tooltip-arrow, .rc-tooltip-placement-topLeft .rc-tooltip-arrow, .rc-tooltip-placement-topRight .rc-tooltip-arrow{
+  border-top-color: #fff;
+}
+.rc-tooltip-inner {
+  border: none;
+  color: #181830;
 }
 
 #__next

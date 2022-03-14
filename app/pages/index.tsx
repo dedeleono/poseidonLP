@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import WavesBg from "../public/images/wave.svg";
 
@@ -14,7 +13,8 @@ import ConnectDialog from "../components/shared/ConnectDialog";
 import useLPStore from "../hooks/useLPStore";
 import Stake from "../components/lp/Stake";
 import TokenPanel from "../components/shared/TokenPanel";
-import {useDocumentVisibility, useDocumentVisibilityChange} from "../hooks/useDocumentVisibility";
+import {useDocumentVisibility} from "../hooks/useDocumentVisibility";
+import useShillCityCaptitalStore from "../hooks/useShillCityCaptitalStore";
 
 enum Tabs {
   Exchange = "Exchange",
@@ -31,6 +31,7 @@ export default function Home() {
   const setupTide = useLPStore((state) => state.setupTide);
   const setupPoseidon = useLPStore((state) => state.setupPoseidon);
   const getTideStats = useLPStore((state) => state.getTideStats);
+  const getSccStats = useShillCityCaptitalStore((state) => state.getSccStats);
   const getPsdnStats = useLPStore((state) => state.getPsdnStats);
   const getAccountStats = useLPStore((state) => state.getAccountStats);
 
@@ -40,6 +41,7 @@ export default function Home() {
     if (wallet?.publicKey) {
       setupPoseidon(wallet);
       setupTide(wallet);
+      getSccStats(wallet);
     }
   }, [wallet]);
 

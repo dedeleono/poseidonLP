@@ -2,15 +2,19 @@ import {FC} from "react";
 import HarvestButton from "./HarvestButton";
 import UnstakeButton from "./UnstakeButton";
 import useLPStore from "../../hooks/useLPStore";
-import {formatNumberToUSD, getNumber} from "../../utils/format";
+import {getNumber} from "../../utils/format";
 import {useAnchorWallet} from "@solana/wallet-adapter-react";
 import CountUpValue from "../shared/CountUpValue";
+import Tooltip from "rc-tooltip";
+import useShillCityCaptitalStore from "../../hooks/useShillCityCaptitalStore";
+import {AiOutlineQuestionCircle} from "react-icons/ai";
 
 const TidePool: FC  = () => {
     const wallet = useAnchorWallet();
     const tideStats = useLPStore((state => state.tideStats));
     const psdnStats = useLPStore((state => state.psdnStats));
     const accountShellBalance = useLPStore((state => state.accountStats.shellBalance));
+    const sccStats = useShillCityCaptitalStore((state) => state.sccStats);
 
     let totalStakedShell = null;
     let totalStakedPercentage = null;
@@ -19,7 +23,7 @@ const TidePool: FC  = () => {
         totalStakedShell = getNumber(tideStats.totalStakedShell, 6);
         const totalPooledTrtn = getNumber(psdnStats.trtnAmount, 6);
         const totalIssuedShell = getNumber(psdnStats.shellAmount, 6);
-        totalStakedPercentage = totalStakedShell/totalIssuedShell * 100;
+        totalStakedPercentage = totalStakedShell/(totalIssuedShell - sccStats.shellBalance) * 100;
         const shellValue = 2 * (totalPooledTrtn / totalIssuedShell);
         const tidePoolYield = 2000 / totalStakedShell;
         APY = 100 * 365 * (tidePoolYield / shellValue)
@@ -45,7 +49,9 @@ const TidePool: FC  = () => {
                 </div>
                 <div className="flex flex-row gap-4 md:gap-12">
                     <div>
-                        <div className="text-xs md:text-base opacity-50">Total staked $SHELL</div>
+                        <div className="text-xs md:text-base opacity-50 flex items-center">
+                            Community staked $SHELL
+                        </div>
                         <div className="text-base md:text-2xl">
                             {(totalStakedShell && totalStakedPercentage) ? (
                               <>
@@ -65,7 +71,18 @@ const TidePool: FC  = () => {
                         </div>
                     </div>
                     <div>
-                        <div className="text-xs md:text-base opacity-50">APY</div>
+                        <div className="text-xs md:text-base opacity-50">
+                            <Tooltip
+                              placement="top"
+                              trigger={['hover']}
+                              overlay={<span>Annual Percentage Yield: the rate of return gained over the course of a year</span>}
+                            >
+                                <div className="flex items-center">
+                                    APY
+                                    <AiOutlineQuestionCircle className="inline ml-0.5" />
+                                </div>
+                            </Tooltip>
+                        </div>
                         <div className="text-base md:text-2xl">
                             {APY ? <><CountUpValue value={APY} showCents={false} />%</>: '-'}
                         </div>
