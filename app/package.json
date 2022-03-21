@@ -15,6 +15,7 @@
     "@solana/web3.js": "^1.31.0",
     "@types/react-dom": "^17.0.13",
     "daisyui": "^1.24.3",
+    "lightweight-charts": "^3.8.0",
     "next": "latest",
     "postcss-import": "^14.0.2",
     "rc-tooltip": "^5.1.1",
@@ -24,6 +25,7 @@
     "react-icons": "^4.3.1",
     "react-toastify": "^8.2.0",
     "react-transition-group": "^4.4.2",
+    "serverless-mysql": "^1.5.4",
     "zustand": "^3.7.0"
   },
   "devDependencies": {

@@ -1,10 +1,13 @@
 import Head from "next/head";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { ToastContainer } from 'react-toastify';
+import dynamic from 'next/dynamic';
+
+const ChartTrtnUsdcDynamic = dynamic(() => import('../components/lp/ChartTrtnUsdc'), { ssr: false });
 
 import WavesBg from "../public/images/wave.svg";
 
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Navigation from "../components/lp/Navigation";
 import LiquidPool from "../components/lp/LiquidPool";
 import Exchange from "../components/lp/Exchange";
@@ -15,6 +18,7 @@ import Stake from "../components/lp/Stake";
 import TokenPanel from "../components/shared/TokenPanel";
 import {useDocumentVisibility} from "../hooks/useDocumentVisibility";
 import useShillCityCaptitalStore from "../hooks/useShillCityCaptitalStore";
+import ChartTrtnUsdc from "../components/lp/ChartTrtnUsdc";
 
 enum Tabs {
   Exchange = "Exchange",
@@ -189,6 +193,14 @@ export default function Home() {
                 <Stake />
               </div>
               <TokenPanel />
+            </div>
+          </div>
+          <div>
+            <div className="card bg-neutral/90 backdrop-blur-sm">
+              <div className="card-body">
+                <h2 className="mb-2">TRTN Price + Circulating Supply</h2>
+                {wallet?.publicKey && (<ChartTrtnUsdcDynamic />)}
+              </div>
             </div>
           </div>
         </div>
