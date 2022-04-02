@@ -11,15 +11,15 @@ export default async function handler(
 ) {
   const db = mysql({
     config: {
-      host: 'api.shill-city.com',
+      host: 'data.shill-city.com',
       port: 3306,
-      database: 'trtn_db',
+      database: 'hydra_tokens',
       user: 'shantiesdev',
       password: 'hailhydra'
     }
   });
   try {
-    const results = await db.query("SELECT UNIX_TIMESTAMP(timestamp) as time, circ as value FROM trtn_circ GROUP BY hour(timestamp) , day( timestamp )");
+    const results = await db.query("SELECT UNIX_TIMESTAMP(timestamp) as time, circulating as value FROM circulating_tokens WHERE token = 1 GROUP BY hour(timestamp) , day( timestamp ) ORDER BY timestamp");
     await db.end();
     // Cache 1 hour
     res.setHeader('Cache-Control', 's-maxage=3600');
@@ -32,5 +32,3 @@ export default async function handler(
   }
 
 }
-
-
