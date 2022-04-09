@@ -102,7 +102,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
       preflightCommitment: "processed" as ConfirmOptions,
     };
     const endpoint =
-      "https://bold-withered-pond.solana-mainnet.quiknode.pro/608c8586df23a01f2bdbfd77fd8d54b5f87f3211/";
+    "https://bold-fragrant-cloud.solana-mainnet.quiknode.pro/6c6aa8c19e1c474208e30db3fa3a74c4a12ffff9/";
     const connection = new anchor.web3.Connection(
       endpoint,
       opts.preflightCommitment
