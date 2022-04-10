@@ -199,7 +199,7 @@ export default function Home() {
             <div className="card bg-neutral/90 backdrop-blur-sm">
               <div className="card-body">
                 <h2 className="mb-2">TRTN Price + Circulating Supply</h2>
-                {wallet?.publicKey && (<ChartTrtnUsdcDynamic />)}
+                <ChartTrtnUsdcDynamic />
               </div>
             </div>
           </div>
