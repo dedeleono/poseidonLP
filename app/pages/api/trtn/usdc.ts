@@ -19,7 +19,7 @@ export default async function handler(
     }
   });
   try {
-    const results = await db.query("SELECT UNIX_TIMESTAMP(timestamp) as time, value as value FROM token_values where token_pair = 1 GROUP BY hour(timestamp) , day( timestamp ) ORDER BY timestamp");
+    const results = await db.query("SELECT UNIX_TIMESTAMP(timestamp) as time, value as value FROM token_values where token_pair = 1 GROUP BY hour(timestamp) , day( timestamp ), month(timestamp) ORDER BY timestamp");
     await db.end();
     // Cache 1 hour
     res.setHeader('Cache-Control', 's-maxage=3600');
