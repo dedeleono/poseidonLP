@@ -13,6 +13,12 @@ export function getSccAccount2(): PublicKey {
     );
 }
 
+export function getSccAccount3(): PublicKey {
+    return new anchor.web3.PublicKey(
+      "7TxDAdJ3LdBd2mEHWrFrqFNmSs6JBiP6FXVNBKVduAx4"
+    );
+}
+
 export function getSccAccounts(): PublicKey[] {
-    return [getSccAccount1(), getSccAccount2()];
+    return [getSccAccount1(), getSccAccount2(), getSccAccount3()];
 }
