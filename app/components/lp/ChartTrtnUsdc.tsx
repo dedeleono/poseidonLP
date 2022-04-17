@@ -1,8 +1,12 @@
-import {FC, useEffect, useRef, useState} from "react";
+import React, {FC, useEffect, useRef} from "react";
 import {createChart} from "lightweight-charts";
 import {getDbTrtnCirc, getDbTrtnUsdc} from "../../utils/db";
-
-const ChartTrtnUsdc: FC  = () => {
+interface ChartTrtnUsdcProps {
+    className?: string;
+}
+const ChartTrtnUsdc: FC<ChartTrtnUsdcProps> = (
+  {className}
+) => {
     const chartContainerRef = useRef(null);
 
     useEffect(() => {
@@ -74,7 +78,7 @@ const ChartTrtnUsdc: FC  = () => {
 
     }, [chartContainerRef]);
 
-    return (<div ref={chartContainerRef} className="w-full h-96" />);
+    return (<div ref={chartContainerRef} className={className || "w-full h-96"} />);
 }
 
 

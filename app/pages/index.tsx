@@ -18,7 +18,6 @@ import Stake from "../components/lp/Stake";
 import TokenPanel from "../components/shared/TokenPanel";
 import {useDocumentVisibility} from "../hooks/useDocumentVisibility";
 import useShillCityCaptitalStore from "../hooks/useShillCityCaptitalStore";
-import ChartTrtnUsdc from "../components/lp/ChartTrtnUsdc";
 
 enum Tabs {
   Exchange = "Exchange",
