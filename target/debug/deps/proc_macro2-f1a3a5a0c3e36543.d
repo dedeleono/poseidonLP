@@ -1,0 +1,12 @@
+/Users/loser/projects/poseidonLP/target/debug/deps/proc_macro2-f1a3a5a0c3e36543.rmeta: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/marker.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/parse.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/detection.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/fallback.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/wrapper.rs
+
+/Users/loser/projects/poseidonLP/target/debug/deps/libproc_macro2-f1a3a5a0c3e36543.rlib: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/marker.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/parse.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/detection.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/fallback.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/wrapper.rs
+
+/Users/loser/projects/poseidonLP/target/debug/deps/proc_macro2-f1a3a5a0c3e36543.d: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/marker.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/parse.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/detection.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/fallback.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/wrapper.rs
+
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/lib.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/marker.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/parse.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/detection.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/fallback.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.36/src/wrapper.rs:

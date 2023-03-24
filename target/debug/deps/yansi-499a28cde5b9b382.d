@@ -1,0 +1,13 @@
+/Users/loser/projects/poseidonLP/target/debug/deps/yansi-499a28cde5b9b382.rmeta: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/docify.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/macros.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/windows.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/paint.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/style.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/color.rs
+
+/Users/loser/projects/poseidonLP/target/debug/deps/libyansi-499a28cde5b9b382.rlib: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/docify.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/macros.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/windows.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/paint.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/style.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/color.rs
+
+/Users/loser/projects/poseidonLP/target/debug/deps/yansi-499a28cde5b9b382.d: /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/lib.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/docify.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/macros.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/windows.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/paint.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/style.rs /Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/color.rs
+
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/lib.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/docify.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/macros.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/windows.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/paint.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/style.rs:
+/Users/loser/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.0/src/color.rs:
