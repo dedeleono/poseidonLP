@@ -8,8 +8,8 @@ export default function Deposit() {
     const accountStats = useLPStore((state => state.accountStats));
 
     const [swapAmounts, setSwapAmounts] = useState({
-        trtn: 1.0,
-        usdc: 0.0,
+        trtn: null,
+        usdc: null,
         type: "trtn",
     });
 
@@ -18,7 +18,7 @@ export default function Deposit() {
 
     const calculateSwap = (_trtnAmount?: any, _usdcAmount?: any) => {
         // console.log("_trtnAmount", _trtnAmount);
-        if (_trtnAmount) {
+        if (_trtnAmount !== null) {
             // console.log("triton swap");
             const usdcAmount = _trtnAmount * psdnRatio;
             setSwapAmounts({
@@ -26,13 +26,19 @@ export default function Deposit() {
                 trtn: _trtnAmount as any,
                 usdc: usdcAmount as any,
             });
-        } else if (_usdcAmount) {
+        } else if (_usdcAmount !== null) {
             // console.log("usdc swap");
             const trtnAmount = _usdcAmount / psdnRatio;
             setSwapAmounts({
                 ...swapAmounts,
                 trtn: trtnAmount as any,
                 usdc: _usdcAmount as any,
+            });
+        } else {
+            setSwapAmounts({
+                ...swapAmounts,
+                trtn: null,
+                usdc: null,
             });
         }
     };
@@ -54,10 +60,12 @@ export default function Deposit() {
                 isOpen={showConfirmModal}
                 isPending={isPending}
                 handleConfirm={async () => {
-                    setIsPending(true);
-                    await provideLiquidity(swapAmounts.trtn, swapAmounts.usdc);
-                    setIsPending(false);
-                    setShowConfirmModal(false)
+                    if(swapAmounts.trtn && swapAmounts.usdc) {
+                        setIsPending(true);
+                        await provideLiquidity(swapAmounts.trtn, swapAmounts.usdc);
+                        setIsPending(false);
+                        setShowConfirmModal(false)
+                    }
                 }}
                 handleClose={() => setShowConfirmModal(false)}
             />
@@ -80,14 +88,11 @@ export default function Deposit() {
                     </div>
                     <input
                         type="number"
-                        value={swapAmounts.trtn}
+                        placeholder="0"
+                        value={swapAmounts.trtn || ''}
                         onChange={(e) => {
-                            const amount = parseFloat(e.target.value);
-                            if (amount > 0) {
-                                calculateSwap(amount, null);
-                            } else {
-                                calculateSwap(0.000001, null);
-                            }
+                            const amount = e.target.value ? parseFloat(e.target.value) : null;
+                            calculateSwap(amount, null);
                         }}
                         className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
                     />
@@ -108,21 +113,18 @@ export default function Deposit() {
                     </div>
                     <input
                         type="number"
-                        value={swapAmounts.usdc}
+                        placeholder="0"
+                        value={swapAmounts.usdc || ''}
                         onChange={(e) => {
-                            const amount = parseFloat(e.target.value);
-                            if (amount > 0) {
-                                calculateSwap(null, amount);
-                            } else {
-                                calculateSwap(null, 0.000001);
-                            }
+                            const amount = e.target.value ? parseFloat(e.target.value) : null;
+                            calculateSwap(null, amount);
                         }}
                         className="input w-full rounded-3xl bg-opacity-50 spin-button-none"
                     />
                 </label>
                 <div className="mt-4 gap-2">
                     <button
-                        className={`btn rounded-full btn-block btn-lg btn-accent relative overflow-hidden shadow ${isPending ? 'loading' : ''}`}
+                        className={`btn rounded-full btn-block btn-lg relative overflow-hidden shadow ${isPending ? 'loading' : ''}  ${!swapAmounts.trtn ? 'btn-disabled' : 'btn-accent'}`}
                         onClick={() => setShowConfirmModal(true)}
                     >
                         <img src="/images/bubbles-1.svg" className="absolute top-0 -right-10" />

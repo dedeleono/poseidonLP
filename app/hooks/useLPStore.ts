@@ -2,7 +2,7 @@ import create from "zustand";
 import poseidonIDL from "../../target/idl/poseidon.json";
 import tideIDL from "../../target/idl/tide_pool.json";
 import * as anchor from "@project-serum/anchor";
-import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js";
+import {AccountInfo, ConfirmOptions, Connection, ParsedAccountData, PublicKey} from "@solana/web3.js";
 import { BN, Program, Provider } from "@project-serum/anchor";
 import { toast } from "react-toastify";
 import {
@@ -11,6 +11,7 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
+import {getShellToken, getTrtnToken, getUsdcToken} from "../utils/token";
 
 type TideState = {
   program: PublicKey;
@@ -140,9 +141,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     // console.log("psdnBump", psdnBump);
 
     // Get PDA accounts for triton
-    const trtnToken = new PublicKey(
-      "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
-    );
+    const trtnToken = getTrtnToken();
 
     const [psdnTrtnAccount, psdnTrtnBump] =
       await anchor.web3.PublicKey.findProgramAddress(
@@ -164,9 +163,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     // Get PDA accounts for usdc
     // offical usdc token on mainnet: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
     // mock usdc on devnet: DM5nx4kDo7E2moAkie97C32FSaZUCx9rTx1rwwRfm9VM
-    const usdcToken = new PublicKey(
-      "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-    );
+    const usdcToken = getUsdcToken();
 
     const [psdnUsdcAccount, psdnUsdcBump] =
       await anchor.web3.PublicKey.findProgramAddress(
@@ -270,9 +267,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     //   "7mGmeTRqdgJdM3QZYUqUXFh5uqb1Yh3JwzygM6jDvtDg"
     // );
     // mainnet
-    const trtnToken = new anchor.web3.PublicKey(
-      "8rDACnycUMGFvndX74ZM9sxjEbR3gUpVHDjDbL4qW6Zf"
-    );
+    const trtnToken = getTrtnToken();
 
     const [tideTrtnAccount, tideTrtnBump] =
       await anchor.web3.PublicKey.findProgramAddress(
@@ -303,9 +298,7 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     // Get PDA accounts for shell
     // offical shell token on mainnet:
     // mock shell on devnet: CJGjnKBx1E5dWUhDUn2J2HHAse5qGBDtd2wKAAN4s1M8
-    const shellToken = new anchor.web3.PublicKey(
-      "9orxGYrDdQzuNQdUGfHTVS2xWyGC6snFDf13eezaZCbv"
-    );
+    const shellToken = getShellToken();
 
     const [tideShellAccount, _tideShellBump] =
       await anchor.web3.PublicKey.findProgramAddress(
@@ -852,30 +845,28 @@ const useLPStore = create<UseLPStore>((set: any, get: any) => ({
     });
   },
   getAccountStats: async () => {
-    const usdcBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletUsdcAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
-    const shellBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletShellAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
-    const trtnBalance = await get()
-      .psdnState.program.provider.connection.getTokenAccountBalance(
-        get().psdnState.walletTrtnAccount
-      )
-      .then((balance: { value: { uiAmount: any } }) =>
-        balance?.value?.uiAmount ? balance.value.uiAmount : 0
-      )
-      .catch(() => 0);
+    const tokenAccounts = await get()
+      .psdnState.program.provider.connection.getParsedTokenAccountsByOwner(get()
+        .psdnState.program.provider.wallet.publicKey, {programId: TOKEN_PROGRAM_ID});
+    let usdcBalance = 0;
+    let shellBalance = 0;
+    let trtnBalance = 0;
+    if(tokenAccounts?.value?.length) {
+      tokenAccounts.value.forEach((tokenAccount: { pubkey:PublicKey , account:AccountInfo<ParsedAccountData>}) => {
+        const uiAmount = tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+        switch(tokenAccount.pubkey.toBase58()) {
+          case get().psdnState.walletUsdcAccount.toBase58():
+            usdcBalance = uiAmount;
+            break;
+          case get().psdnState.walletTrtnAccount.toBase58():
+            trtnBalance = uiAmount;
+            break;
+          case get().psdnState.walletShellAccount.toBase58():
+            shellBalance = uiAmount;
+            break;
+        }
+      })
+    }
     set({
       accountStats: {
         usdcBalance,

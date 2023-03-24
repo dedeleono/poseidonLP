@@ -9,7 +9,7 @@ export default function UnstakeButton() {
 
     return (
       <button
-        className={`btn rounded-full btn-outline btn-md relative shadow ${isPending ? 'loading' : ''}  ${walletStakedShell ? 'btn-accent' : ''}`}
+        className={`btn rounded-full btn-outline btn-sm relative shadow ${isPending ? 'loading' : ''}  ${walletStakedShell ? 'btn-accent' : ''}`}
         disabled={!walletStakedShell}
         onClick={async () => {
           setIsPending(true);
