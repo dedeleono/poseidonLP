@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/loser/projects/poseidonLP/target/debug/build/typenum-fd5f751d0daeb118/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/Users/loser/projects/poseidonLP/target/debug/build/typenum-fd5f751d0daeb118/out/op.rs
